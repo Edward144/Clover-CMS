@@ -1,0 +1,47 @@
+@import "../bootstrap-5.0.1/scss/_functions.scss";
+@import "../bootstrap-5.0.1/scss/_variables.scss";
+
+$theme-colors: (
+	"primary" : #009688,
+	"secondary" : #005996,
+	"success" : $success,
+	"info" : $info,
+	"warning" : $warning,
+	"danger" : $danger,
+	"light" : $light,
+	"dark" : $dark
+);
+
+@import "../bootstrap-5.0.1/scss/bootstrap.scss";
+
+/* GENERAL */
+
+html, body {
+	height: 100%;
+}
+
+body {
+	font-family: "roboto", "open-sans", sans-serif;
+}
+
+.wrapper {
+	height: 100%;
+}
+
+.btn-primary, .btn-secondary{
+	color: var(--bs-white) !important;
+}
+
+/* ADMIN LOGIN */
+
+#adminLoginPage {
+	background-image: url('../images/admin-background.jpg');
+	background-color: #00963D;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.formHeader {
+	font-size: 100px;
+}
