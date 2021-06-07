@@ -2,7 +2,10 @@
 	require_once(dirname(__DIR__) . '/includes/database.php'); 
 	require_once(dirname(__DIR__) . '/includes/functions.php'); 
 
-	//If sessions are set redirect to admin
+	if(isset($_SESSION['adminid'])) {
+		header('Location: ../admin');
+		exit();
+	}
 
 	if(isset($_POST['sendreset'])) {
 		$findUser = $mysqli->prepare("SELECT id, first_name, last_name, email FROM `users` WHERE email = ? LIMIT 1");

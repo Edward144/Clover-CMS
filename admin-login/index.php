@@ -2,7 +2,10 @@
 	require_once(dirname(__DIR__) . '/includes/database.php'); 
 	require_once(dirname(__DIR__) . '/includes/functions.php'); 
 
-	//If sessions are set redirect to admin
+	if(isset($_SESSION['adminid'])) {
+		header('Location: ../admin');
+		exit();
+	}
 
 	if(isset($_POST['dologin'])) {
 		$checkUser = $mysqli->prepare("SELECT id, username, password FROM `users` WHERE username = ?");
