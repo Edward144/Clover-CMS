@@ -1,5 +1,6 @@
 <?php 
 	require_once(dirname(__DIR__) . '/includes/database.php'); 
+	require_once(dirname(__DIR__) . '/includes/functions.php'); 
 
 	//If sessions are set redirect to admin
 
