@@ -13,7 +13,7 @@
 	
 	$date = date('Y-m-d H:i:s', strtotime('-1 day'));
 	
-	$checkToken = $mysqli->prepare("SELECT * FROM `password_reset` WHERE token = ? AND date_generated >= ? AND expired = 0 LIMIT 1");
+	$checkToken = $mysqli->prepare("SELECT * FROM `password_reset` WHERE token = ? AND date_generated >= ? AND expired = 0 ORDER BY id DESC LIMIT 1");
 	$checkToken->bind_param('ss', $_GET['token'], $date);
 	$checkToken->execute();
 	$tokenResult = $checkToken->get_result();
@@ -36,6 +36,36 @@
 		}
 		elseif(isset($_POST['doreset'])) {
 
+		}
+	}
+
+	$expireTokens = $mysqli->prepare("UPDATE `password_reset` SET expired = 1 WHERE token = ? OR date_generated < ?");
+	$expireTokens->bind_param('ss', $_GET['token'], $date);
+	$expireTokens->execute();
+
+	//Update Password
+	if(isset($_POST['doreset'])) {
+		$getEmail = $mysqli->prepare("SELECT email FROM `password_reset` WHERE token = ? ORDER BY id DESC LIMIT 1");
+		$getEmail->bind_param('s', $_GET['token']);
+		$getEmail->execute();
+		$emailResult = $getEmail->get_result();
+		
+		if($emailResult->num_rows > 0) {
+			$email = $emailResult->fetch_array()[0];
+			$password = password_hash($_POST['password'], PASSWORD_BCRYPT);
+			
+			$updatePass = $mysqli->prepare("UPDATE `users` SET password = ? WHERE email = ?");
+			$updatePass->bind_param('ss', $password, $email);
+			$ex = $updatePass->execute();
+			
+			if($ex === false) {
+				$status = 'danger';
+				$resetmessage = 'Failed to reset password, you can <a href="admin-login/forgotten-password">request a new reset link</a> and try again';
+			}
+			else {
+				$status = 'success';
+				$resetmessage = 'Password reset successfully, <a href="admin-login">you can now return to login</a>';
+			}
 		}
 	}
 ?>
@@ -68,7 +98,7 @@
 			
 			<div class="main container-fluid flex-grow-1">				
 				<div class="content">
-					<form id="adminLogin" class="shadow rounded bg-white overflow-hidden mx-auto my-5" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
+					<form id="adminLogin" class="reset shadow rounded bg-white overflow-hidden mx-auto my-5" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
 						<input type="hidden" name="doreset">
 						
 						<div class="formHeader text-center bg-primary text-white p-3">
@@ -78,7 +108,13 @@
 
 						<div class="formBody border-right border-left border-right border-light p-3">
 							<?php if($expired == true) : ?>
-								<p class="mb-0">This link has expired, <a href="admin-login" class="ms-auto me-0">return to the login screen</a> and use the reset password option again.</p>
+								<?php if(empty($resetmessage)) : ?>
+									<p class="mb-0">This link has expired, <a href="admin-login" class="ms-auto me-0">return to the login screen</a> and use the reset password option again.</p>
+								<?php else : ?>
+									<div class="alert alert-<?php echo $status; ?> mb-0">
+										<?php echo $resetmessage; ?>	
+									</div>
+								<?php endif; ?>
 							<?php else : ?>
 								<p>Create your new password. Passwords must be at least 12 characters and contain at least one uppercase, one lowercase and one digit. You can also generate a random password.</p>
 
@@ -124,22 +160,5 @@
 		</div>
 	</body>
 	
-	<script>
-		$("input[name='generate']").click(function() {			
-			$.ajax({
-				url: window.location.pathname,
-				method: "post",
-				dataType: "json",
-				data: ({generate: true}),
-				success: function(data) {
-					$(".formBody .alert").remove();
-					$("input[name='password'],input[name='passwordConf']").val(data["password"]);
-					$(".formBody").append("<div class='alert alert-" + data["status"] + " mb-0 mt-3'>" + data["message"] + "</div>");
-				},
-				fail(a, b, c) {
-					alert(a);
-				}
-			});
-		});
-	</script>
+	<script src="js/adminLogin.min.js"></script>
 </html>

@@ -1,5 +1,6 @@
 <?php 
 	require_once(dirname(__DIR__) . '/includes/database.php'); 
+	require_once(dirname(__DIR__) . '/includes/functions.php'); 
 
 	//If sessions are set redirect to admin
 
@@ -10,7 +11,24 @@
 		$userResult = $findUser->get_result();
 		
 		if($userResult->num_rows > 0) {
-			if(!systememail()) {
+			$user = $userResult->fetch_assoc();
+			$token = randomstring(191);
+			
+			$genToken = $mysqli->prepare("INSERT INTO `password_reset` (email, token) VALUES(?, ?)");
+			$genToken->bind_param('ss', $user['email'], $token);
+			$genToken->execute();
+			
+			$to = $user['email'];
+			$subject = 'Password reset | ' . $_SERVER['SERVER_NAME'];
+			$content = 
+				'<p>Hi ' . $user['first_name'] . ' ' . $user['last_name'] . '</p>
+				
+				<p>You have requested to reset your password, click the link below to do so.
+				<br><small>(This link will expire after 24 hours)</small></p>
+				
+				<p><a style="background: #009688; color: #fff; padding: 0.5rem; border-radius: 4px; text-decoration: none;" href="https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . 'admin-login/reset-password?token=' . $token . '" target="_blank">Reset my password</a></p>';
+			
+			if(!systememail($to, $subject, $content)) {
 				$error = true;
 				$status = 'danger';
 				$loginmessage = 'An unexpected error has occurred';
