@@ -1,6 +1,8 @@
 @import "../bootstrap-5.0.1/scss/_functions.scss";
 @import "../bootstrap-5.0.1/scss/_variables.scss";
 
+$enable-negative-margins: true;
+
 $theme-colors: (
 	"primary" : #009688,
 	"secondary" : #005996,
@@ -33,6 +35,11 @@ body {
 }
 
 /* ADMIN LOGIN */
+
+#adminLogin {
+	width: 100%;
+	max-width: 768px;
+}
 
 #adminLoginPage {
 	background-image: url('../images/admin-background.jpg');

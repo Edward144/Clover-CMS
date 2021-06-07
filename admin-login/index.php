@@ -64,7 +64,7 @@
 			
 			<div class="main container-fluid flex-grow-1">				
 				<div class="content">
-					<form id="adminLogin" class="col-lg-6 shadow rounded bg-white overflow-hidden mx-auto my-5" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
+					<form id="adminLogin" class="shadow rounded bg-white overflow-hidden mx-auto my-5" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
 						<input type="hidden" name="dologin">
 						
 						<div class="formHeader text-center bg-primary text-white p-3">
@@ -90,7 +90,7 @@
 								</div>
 							</div>
 							
-							<div class="d-block d-md-flex align-items-center">
+							<div class="d-flex align-items-center">
 								<input type="submit" class="btn btn-primary me-3" value="Sign In">
 								
 								<a href="admin-login/forgotten-password" class="ms-auto me-0">Forgotten password?</a>
