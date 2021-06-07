@@ -68,7 +68,7 @@
 			
 			<div class="main container-fluid flex-grow-1">				
 				<div class="content">
-					<form id="adminLogin" class="col-lg-6 shadow rounded bg-white overflow-hidden mx-auto my-5" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
+					<form id="adminLogin" class="shadow rounded bg-white overflow-hidden mx-auto my-5" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
 						<input type="hidden" name="doreset">
 						
 						<div class="formHeader text-center bg-primary text-white p-3">
@@ -100,11 +100,11 @@
 									</div>
 								</div>
 
-								<div class="d-block d-md-flex align-items-center">
-									<input type="submit" class="btn btn-primary me-3" value="Update Password">
-									<input type="button" class="btn btn-secondary me-3" name="generate" value="Generate Password">
+								<div class="d-block d-sm-flex align-items-center mb-n3">
+									<input type="submit" class="btn btn-primary me-3 mb-3" value="Update Password">
+									<input type="button" class="btn btn-secondary me-3 mb-3" name="generate" value="Generate Password">
 
-									<a href="admin-login" class="ms-auto me-0">Return to login</a>
+									<a href="admin-login" class="d-block ms-auto me-0">Return to login</a>
 								</div>
 
 								<?php if(isset($loginmessage)) : ?>
