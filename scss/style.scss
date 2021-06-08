@@ -27,11 +27,28 @@ body {
 }
 
 .wrapper {
-	height: 100%;
+	height: 100vh;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+.wrapper > .main {
+	display: flex;
+	flex-grow: 1;
+	position: relative;
+	overflow-y: auto;
 }
 
 .btn-primary, .btn-secondary{
 	color: var(--bs-white) !important;
+}
+
+.collapse-left {
+	width: 0 !important;
+	white-space: nowrap;
+	transition: width .35s ease !important;
 }
 
 /* ADMIN LOGIN */
@@ -62,4 +79,68 @@ body {
 
 #pageHeader .h1 {
 	font-weight: lighter;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+	width: 100%;
+	max-width: 320px;
+	height: 100%;
+	background: var(--bs-dark);
+	color: var(--bs-white);
+	float: left;
+	z-index: 999;
+	transition: width .7s ease;
+}
+
+.sidebar > * {
+	overflow: hidden;
+}
+
+.sidebar .nav-link {
+	color: var(--bs-white);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	cursor: pointer;
+}
+
+.floatingToggle {
+	height: 0;
+	overflow: hidden;
+	visibility: hidden;
+	cursor: pointer;
+	text-decoration: none;
+	opacity: 0;
+	transition: opacity .7s ease;
+}
+
+.sidebar.collapse-left .floatingToggle {
+	height: auto;
+	background: var(--bs-dark);
+	color: var(--bs-white);
+	width: 50px;
+	height: 50px;
+	border-radius: 100%;
+	padding: $spacer;
+	top: $spacer;
+	left: $spacer;
+	display: flex;
+	visibility: visible;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	opacity: 1;
+}
+
+.floatingToggle > span:first-child:not(.fa) {
+	display: none;
+}
+
+@include media-breakpoint-down(md) {
+	.sidebar {
+		position: absolute;
+		top: 0;
+	}
 }
