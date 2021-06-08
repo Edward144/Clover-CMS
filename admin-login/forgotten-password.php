@@ -47,7 +47,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
 	<head>
 		<base href="<?php echo BASE_DIR; ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,7 +55,7 @@
 		<title>Admin Login | Forgotten Password</title>
 		
 		<link rel="preconnect" href="https://fonts.gstatic.com">
-		<link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="css/style.min.css">
 		
