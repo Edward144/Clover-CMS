@@ -52,3 +52,14 @@ body {
 .formHeader {
 	font-size: 100px;
 }
+
+/* HEADER */
+
+#pageHeader .logo > img {
+	max-width: 34px;
+	filter: drop-shadow(0 0 1px var(--bs-white))
+}
+
+#pageHeader .h1 {
+	font-weight: lighter;
+}
