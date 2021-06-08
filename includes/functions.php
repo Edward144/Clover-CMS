@@ -1,6 +1,62 @@
 <?php
 	
 	require_once(dirname(__DIR__) . '/includes/settings.php');
+	
+	//Check if admin user is logged in
+	function isloggedin() {
+		global $mysqli;
+		$valid = true;
+		
+		if(!empty($_SESSION['adminid'])) {			
+			$checkId = $mysqli->query("SELECT COUNT(*) FROM `users` WHERE id = {$_SESSION['adminid']}");
+			
+			if($checkId->fetch_array()[0] <= 0) {
+				$valid = false;
+			}
+		}
+		else {
+			$valid = false;
+		}
+		
+		if($valid == false) {
+			http_response_code(403);
+			header('Location: https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . 'admin-login');
+			exit();
+		}
+	}
+
+	//Create metadata
+	function adminmeta($title = '', $description = '', $keywords = '', $author = '') {
+		$metadata;
+		
+		
+		if(!empty($title) && is_string($title)) {
+			$metadata .= '<title>' . $title . ' | Clover CMS</title>';
+		}
+		else {
+			$metadata .= '<title>Clover CMS</title>';
+		}
+		
+		if(!empty($description) && is_string($description)) {
+			$metadata .= '<meta name="description" content="' . $description . '">';
+		}
+		
+		if(!empty($keywords) && is_string($keywords)) {
+			$metadata .= '<meta name="keywords" content="">';
+		}
+		
+		if(!empty($author) && is_string($author)) {
+			$metadata .= '<meta name="author" content="">';
+		}
+		
+		return $metadata;
+	}
+
+	function metadata() {
+		$metadata;
+		
+		return $metadata;
+	}
 
 	//Generate random alphanumeric string, for passwords
 	function randomstring($length = 12, $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') {
