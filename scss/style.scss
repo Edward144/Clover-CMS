@@ -131,6 +131,10 @@ body {
 	align-items: center;
 	justify-content: center;
 	position: absolute;
+	opacity: 0.25;
+}
+
+.sidebar.collapse-left .floatingToggle:hover {
 	opacity: 1;
 }
 
