@@ -71,7 +71,7 @@
 				<a href="./" class="d-inline-block text-primary">Return to site</a>
 			</header>
 			
-			<div class="main container-fluid flex-grow-1">				
+			<div class="main container-fluid flex-column flex-grow-1">				
 				<div class="content">
 					<form id="adminLogin" class="shadow rounded bg-white overflow-hidden mx-auto my-5" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
 						<input type="hidden" name="sendreset">
