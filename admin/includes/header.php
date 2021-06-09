@@ -38,7 +38,7 @@
 							
 							<h2 class="h1 mb-0">Clover CMS</h2>
 							
-							<a href="logout" class="logout text-white btn-dark p-3 ms-auto h-100"><span class="fa fa-sign-out-alt me-3"></span>Logout</a>
+							<a href="admin/includes/logout" class="logout text-white btn-dark p-3 ms-auto h-100"><span class="fa fa-sign-out-alt me-3"></span>Logout</a>
 						</div>
 					</div>
 				</div>
