@@ -31,12 +31,14 @@
 			<header id="pageHeader">
 				<div class="container-fluid">
 					<div class="row">						
-						<div class="col bg-secondary text-light d-flex align-items-center justify-content-start">
-							<div class="logo bg-primary ms-n3 me-2 p-2">
+						<div class="col bg-secondary text-light d-flex align-items-center justify-content-start px-0">
+							<div class="logo bg-primary me-2 p-2">
 								<img src="images/clover-cms-logo.png" alt="Clover CMS Logo" class="img-fluid">
 							</div>
 							
 							<h2 class="h1 mb-0">Clover CMS</h2>
+							
+							<a href="logout" class="logout text-white btn-dark p-3 ms-auto h-100"><span class="fa fa-sign-out-alt me-3"></span>Logout</a>
 						</div>
 					</div>
 				</div>
