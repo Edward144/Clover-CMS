@@ -26,6 +26,10 @@ body {
 	font-family: "roboto", "open-sans", sans-serif;
 }
 
+body#tinymce {
+	margin: $spacer * .75;
+}
+
 .wrapper {
 	height: 100vh;
 	overflow: hidden;
