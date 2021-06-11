@@ -38,6 +38,10 @@ body {
 	display: flex;
 	flex-grow: 1;
 	position: relative;
+	overflow: hidden;
+}
+
+.wrapper > .main > .content {
 	overflow-y: auto;
 }
 
@@ -50,6 +54,23 @@ body {
 	white-space: nowrap;
 	transition: width .35s ease !important;
 }
+
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background: tint-color($dark, 20);
+}
+
+::-webkit-scrollbar-thumb {
+	background: $dark;
+}
+
+::-webkit-scrollbar-thumb:hover, 
+::-webkit-scrollbar-thumb:active {
+	background: shade-color($dark, 20);
+} 
 
 /* ADMIN LOGIN */
 
@@ -87,6 +108,23 @@ body {
 
 /* SIDEBAR */
 
+.sidebar::-webkit-scrollbar {
+	width: 10px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+	background: tint-color(#607d8b, 20);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+	background: #607d8b;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover, 
+.sidebar::-webkit-scrollbar-thumb:active {
+	background: shade-color(#607d8b, 20);
+} 
+
 .sidebar {
 	width: 100%;
 	max-width: 320px;
@@ -96,6 +134,7 @@ body {
 	float: left;
 	z-index: 999;
 	transition: width .7s ease;
+	overflow-y: auto;
 }
 
 .sidebar > * {
@@ -108,6 +147,7 @@ body {
 	align-items: center;
 	justify-content: space-between;
 	cursor: pointer;
+	box-shadow: inset -20px 0 10px -6px #000;
 }
 
 .floatingToggle {
