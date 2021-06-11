@@ -1,4 +1,5 @@
 <?php
+
 $version = "9.14.0";
 if (session_id() == '') {
     session_start();
@@ -64,10 +65,10 @@ $config = array(
     | DON'T TOUCH (base url (only domain) of site).
     |--------------------------------------------------------------------------
     |
-    | without final / (DON'T TOUCH)
+    | without final / (DON'T TOUCH) - added after @$_SERVER['HTTP_HOST']
     |
     */
-    'base_url' => ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http"). "://". @$_SERVER['HTTP_HOST'],
+    'base_url' => ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "https" : "http"). "://". @$_SERVER['HTTP_HOST'] . '/' . basename(dirname(__FILE__, 5)),
     /*
     |--------------------------------------------------------------------------
     | path from base_url to base of upload folder
@@ -85,7 +86,7 @@ $config = array(
     | with final /
     |
     */
-    'current_path' => '../source/',
+    'current_path' => '../../../source/',
 
     /*
     |--------------------------------------------------------------------------
@@ -96,7 +97,7 @@ $config = array(
     | DO NOT put inside upload folder
     |
     */
-    'thumbs_base_path' => '../thumbs/',
+    'thumbs_base_path' => '../../../thumbs/',
 
     /*
     |--------------------------------------------------------------------------
