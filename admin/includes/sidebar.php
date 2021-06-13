@@ -20,12 +20,6 @@
 			'link' => 'admin/settings',
 			'icon' => 'fa-cogs'
 		],
-		[
-			'name' => 'Media Manager',
-			'link' => 'js/responsive_filemanager/filemanager/dialog.php',
-			'target' => 'popup',
-			'icon' => 'fa-photo-video'
-		],
 	];
 ?>
 
@@ -63,4 +57,11 @@
 			</a>
 		</li>
 	<?php endforeach; ?>
+	
+	<li class="nav-item">
+		<a class="nav-link btn-dark" data-fancybox="mediamanager" data-type="iframe" data-src="js/responsive_filemanager/filemanager/dialog.php" href="javascript:;">
+			<span>Media Manager</span>
+			<span class="fa fa-photo-video"></span>
+		</a>
+	</li>
 </ul>
