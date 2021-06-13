@@ -69,6 +69,25 @@
 		return $random;
 	}
 
+	//Custom MySQLI duplicate error message
+	function duplicateerror($value) {
+		preg_match_all('/\'(.*?)\'/', $value, $matches);
+		return ucwords(str_replace('_', ' ', $matches[1][1])) . ' "' . $matches[1][0] . '" already exists';	
+	}
+
+	//Validate that two passwords match
+	function validatepassword($pass = '', $passConf = '') {
+		if(empty($pass) || empty($passConf)) {
+			return ['status' => 'danger', 'message' => 'Failed to verify supplied passwords'];
+		}
+		elseif($pass != $passConf) {
+			return ['status' => 'danger', 'message' => 'Passwords do not match'];
+		}
+		else {
+			return password_hash($pass, PASSWORD_BCRYPT);
+		}
+	}
+
 	//PHP mail function with HTML template
 	function systememail($to, $subject, $content, $additionalHeaders = '', $from = '') {
 		$from = (empty($from) ? 'noreply@' . $_SERVER['SERVER_NAME'] : $from);
