@@ -25,6 +25,12 @@ function sidebarcollapse() {
 	}
 }
 
+//Split full url from media manager
+function responsive_filemanager_callback(field_id) {
+	var url = $("#" + field_id).val().split(root_dir)[1];
+	$("input[name='" + field_id + "']").val(url).trigger("change");
+}
+
 $(document).ready(function() {
 	sidebarcollapse();
 });
