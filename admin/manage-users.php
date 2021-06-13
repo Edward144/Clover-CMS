@@ -3,12 +3,10 @@
 	require_once(dirname(__FILE__) . '/includes/header.php'); 
 ?>
 
-<div class="col-lg-3 bg-light py-3">
-	<h1>Manage Users</h1>
+<div class="col-lg-3 bg-light py-3">	
+	<h3>Create New User</h3>
 	
-	<form id="createUser" action="" method="post">
-		<h3>Create New User</h3>
-		
+	<form id="createUser" action="" method="post">		
 		<div class="form-group mb-3">
 			<label>First Name</label>
 			<input type="text" class="form-control" name="firstName" required>
