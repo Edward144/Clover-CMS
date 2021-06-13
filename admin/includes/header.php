@@ -40,7 +40,7 @@
 								<img src="images/clover-cms-logo.png" alt="Clover CMS Logo" class="img-fluid">
 							</div>
 							
-							<h2 class="h1 mb-0">Clover CMS</h2>
+							<h2 class="h1 mb-0">Clover CMS<?php echo (!empty($title) ? '<small> &bull; ' . $title . '</small>': ''); ?></h2>
 							
 							<a href="admin/includes/logout" class="logout text-white btn-dark p-3 ms-auto h-100"><span class="fa fa-sign-out-alt me-3"></span>Logout</a>
 						</div>
