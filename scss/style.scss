@@ -80,6 +80,16 @@ body#tinymce {
 	height: 90vh !important;
 }
 
+.fullWidth {
+	width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+	margin-left: -50vw;
+	margin-right: -50vw;
+	max-width: initial;
+}
+
 /* ADMIN LOGIN */
 
 #adminLogin {
