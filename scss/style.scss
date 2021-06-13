@@ -74,7 +74,11 @@ body#tinymce {
 ::-webkit-scrollbar-thumb:hover, 
 ::-webkit-scrollbar-thumb:active {
 	background: shade-color($dark, 20);
-} 
+}
+
+.fancybox-slide--iframe .fancybox-content {
+	height: 90vh !important;
+}
 
 /* ADMIN LOGIN */
 
@@ -195,4 +199,10 @@ body#tinymce {
 		position: absolute;
 		top: 0;
 	}
+}
+
+/* ADMIN */
+
+.existingUserBody {
+	word-wrap: break-word;
 }

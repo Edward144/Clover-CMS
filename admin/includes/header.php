@@ -20,12 +20,14 @@
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
 		<link rel="stylesheet" href="css/style.min.css">
+		<link rel="stylesheet" href="css/jquery.fancybox.min.css">
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 		<script src="bootstrap-5.0.1/bootstrap.min.js"></script>
 		<script src="js/docRoot.min.js"></script>
 		<script src="js/tinymce/tinymce.min.js"></script>
+		<script src="js/jquery.fancybox.min.js"></script>
 	</head>
 	
 	<body>
@@ -52,5 +54,4 @@
 				</div>
 
 				<div class="content container-fluid">
-					<div class="contentInner">
-						<div class="row">
+					<div class="contentInner row h-100">
