@@ -21,6 +21,24 @@
 			'icon' => 'fa-cogs'
 		],
 	];
+
+	$postTypes = $mysqli->query("SELECT * FROM `post_types`");
+	$postItems = [];
+	$pi = 0;
+
+	if($postTypes->num_rows > 0) {
+		while($postType = $postTypes->fetch_assoc()) {
+			$postItems[$pi] = [
+				'name' => ucwords(str_replace('-', ' ', $postType['name'])),
+				'link' => 'admin/manage-content/' . $postType['name'],
+				'icon' => (!empty($postType['icon']) ? $postType['icon'] : 'fa-file-alt')
+			];
+			
+			$pi++;
+		}
+		
+		array_splice($menuItems, 1, 0, $postItems);
+	}
 ?>
 
 <ul class="nav flex-column">

@@ -1,0 +1,15 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+	
+	RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^manage-content/(.*)$ manage-content.php?post-type=$1 [L,QSA]
+	
+	#Remove PHP Extension
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^([^.]+)$ $1.php [NC,L]
+	
+	RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule .* 404.php [L]
+</IfModule>
