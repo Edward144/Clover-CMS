@@ -66,11 +66,35 @@
 		</div>
 	</form>
 </div>
+
+<div class="col-lg-3 py-3">
+	<h3>Page Settings</h3>
 	
+	<form id="pageSettings">
+		<div class="form-group mb-3">
+			<label>Homepage</label>
+			<select class="form-control" name="homepage">
+				<option selected disabled>--Select Homepage--</option>
+			</select>
+		</div>
+		
+		<div class="form-group mb-3">
+			<label>News Page</label>
+			<select class="form-control" name="newspage">
+				<option selected disabled>--Select News Page--</option>
+			</select>
+		</div>
+		
+		<div class="form-group">
+			<input type="submit" class="btn btn-primary" value="Save Pages">
+		</div>
+	</form>
+</div>
+
 <?php $socials = $mysqli->query("SELECT * FROM `social_links`"); ?>
 
 <?php if($socials->num_rows > 0) : ?>
-	<div class="col-lg-3 py-3">
+	<div class="col-lg-3 bg-light py-3">
 		<h3>Social Media</h3>
 		
 		<form id="socialLinks" action="" method="post">
@@ -88,7 +112,7 @@
 	</div>
 <?php endif; ?>
 
-<div class="col-lg-3 bg-light py-3">
+<div class="col-lg-3 py-3">
 	<h3>Other Settings</h3>
 	
 	<form id="otherSettings" action="" method="post">

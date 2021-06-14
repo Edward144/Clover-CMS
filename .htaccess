@@ -8,14 +8,14 @@ Options All -Indexes
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^(.*)/$ $1 [L,R=301]
 	
+	#Remove PHP Extension
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^([^.]+)$ $1.php [NC,L]
+	
 	#Redirect To Template
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule ^(.*)$ index.php?url=$1 [L,QSA]
-	
-	#Remove PHP Extension
-	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule ^([^.]+)$ $1.php [NC,L]
 	
 	#Force HTTPS
     RewriteCond %{HTTPS} off
