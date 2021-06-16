@@ -44,7 +44,7 @@ $("form").submit(function() {
 	$(this).find(".is-invalid").removeClass("is-invalid");
 	
 	//Validate Passwords
-	if($(this).find("input[name='password']") && $(this).find("input[name='passwordConf']")) {
+	if($(this).find("input[name='password']").length && $(this).find("input[name='passwordConf']").length) {
 		var pass = $(this).find("input[name='password']");
 		var passConf = $(this).find("input[name='passwordConf']");
 		
@@ -70,6 +70,18 @@ $("form").submit(function() {
 			}
 		}
 	}
+    
+    //Validate Urls
+    if($(this).find("input[name='url']").length) {
+        var url = $(this).find("input[name='url']");
+        
+        if(!/^[a-zA-Z0-9\:\/\-\_\+\?\&\=\#]+$/.test(url.val())) {
+            url.addClass("is-invalid");
+            $("<div class='invalid-feedback'>Url contains invalid characters. Allowed characters are A-Z, 0-9, :, /, -, _, +, ?, &, =, #</div>").insertAfter(url);
+            
+            valid = false;
+        }
+    }
 	
 	if(valid == false) {
 		event.preventDefault();
@@ -85,8 +97,8 @@ $("input[type='submit'][data-confirm]").click(function() {
 	}
 });
 
-//Clear search
-$("input[name='clearSearch']").click(function() {
+//Clear search || Return to list
+$("input[name='clearSearch'],input[name='returnList']").click(function() {
 	window.location.href = window.location.href.split("?")[0];
 });
 
@@ -120,4 +132,17 @@ $("input[name='deleteContent']").click(function() {
 			});
 		}
 	}
+});
+
+//Count input characters
+$(".countChars").keyup(function() {
+    var limit = $(this).attr("maxlength");
+    var chars = $(this).val().length;
+    
+    if($(this).siblings("small.charCount").length) {
+        $(this).siblings("small.charCount").text(chars + " of " + limit);
+    }
+    else {
+        $("<small class='charCount d-block text-end'>" + chars + " of " + limit + "</small>").insertAfter($(this));
+    }
 });
