@@ -89,7 +89,7 @@
 								
 								<div class="input-group">
 									<span class="input-group-text"><span class="fa fa-envelope"></span></span>
-									<input type="email" class="form-control" name="email" value="<?php echo $_POST['email']; ?>" required>
+									<input type="email" class="form-control" name="email" value="<?php echo $_POST['email']; ?>" required autofocus>
 								</div>
 							</div>
 							
