@@ -2,7 +2,7 @@ tinymce.init({
 	selector: 'textarea.tiny',
 	height: 800,
 	document_base_url: http_host + server_name + root_dir,
-	plugins: 'paste image imagetools table code save link responsivefilemanager media fullscreen lists template textcolor colorpicker visualblocks',
+	plugins: 'paste image imagetools table code save link responsivefilemanager media fullscreen lists template visualblocks',
 	external_plugins: { 'filemanager' : '../responsive_filemanager/filemanager/plugin.min.js'},
 	external_filemanager_path: 'js/responsive_filemanager/filemanager/',
 	menubar: 'file edit view format insert table',

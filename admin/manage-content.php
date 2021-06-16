@@ -1,6 +1,46 @@
 <?php
 	require_once(dirname(__FILE__, 2) . '/includes/database.php');
 	
+    class pagination {
+        public $firstPage = 1;
+        public $itemsPerPage = 10;
+        public $navButtonLimit = 9;
+        public $showFirst = true;    
+        public $showPrev = true;    
+        public $showNext = true;   
+        public $showLast = true;
+        public $showPageNumbers = true;
+        
+        private $items = 0;
+        private $lastPage;
+        private $offset;
+        private $pageUrl;
+        private $prefix = '?';
+        
+        public function __construct($numItems) {
+            if($numItems != null) {
+                $this->items = $numItems;
+                $this->pageUrl = explode($_SERVER['SERVER_NAME'] . ROOT_DIR)[1] . explode('?', $_SERVER['REQUEST_URI'])[0];
+            }
+            
+            //Remove existing page query
+			$queryString = preg_split('/(\?)/', $_SERVER['REQUEST_URI'], 0, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+            $this->prefix = preg_replace('/(\?|\&)page=\d+/', '', $queryString[1] . $queryString[2]);
+            
+            //Change first & to ?
+            $this->prefix = (strpos($this->prefix, '?') === false ? preg_replace('/\&/', '?', $this->prefix, 1) : $this->prefix);
+            
+            //Append ? or & 
+            $this->prefix = $this->prefix . (strpos($this->prefix, '?') !== false ? '&' : '?');
+        }
+        
+        public function load() {
+            if($this->items > 0) {
+                $this->lastPage = ceil($this->items / $this->itemsPerPage);
+            }
+        }
+    }
+
 	$checkType = $mysqli->prepare("SELECT id, name FROM `post_types` WHERE name = ?");
 	$checkType->bind_param('s', $_GET['post-type']);
 	$checkType->execute();
@@ -56,6 +96,22 @@
 		exit();
 	}
 
+    //Save Content
+    if(isset($_POST['saveContent'])) {
+        $save = $mysqli->prepare("UPDATE `posts` SET name = ?, url = ?, template = ?, author = ?, date_created = ?, state = ?, featured_image = ?, excerpt = ?, content = ?, meta_title = ?, meta_description = ?, meta_keywords = ?, meta_author = ? WHERE id = ?");
+        $save->bind_param('sssssisssssssi', $_POST['name'], $_POST['url'], $_POST['template'], $_POST['author'], $_POST['dateCreated'], $_POST['state'], $_POST['featuredImage'], $_POST['excerpt'], $_POST['content'], $_POST['metaTitle'], $_POST['metaDescription'], $_POST['metaKeywords'], $_POST['metaAuthor'], $_POST['id']);
+        $save->execute();
+        
+        if($save->error) {
+            $status = 'danger';
+            $message = 'Failed to save changes';
+        }
+        else {
+            $status = 'success';
+            $message = 'Saved changes successfully';
+        }
+    }
+
 	$title = 'Manage ' . ucwords(str_replace('-', ' ', $pt['name']));
 ?>
 
@@ -77,15 +133,116 @@
         require_once(dirname(__FILE__) . '/includes/header.php'); 
     ?>
 
-    <form id="manageContent" method="post">
+    <form id="manageContent" class="row" method="post">
         <input type="hidden" name="id" value="<?php echo $content['id']; ?>">
         
         <div class="col-lg-3 bg-light py-3">
+            <div class="form-group mb-3">
+                <input type="button" class="btn btn-dark" name="returnList" value="Return to List">
+            </div>
             
+            <div class="form-group mb-3">
+                <label>Name</label>
+                <input type="text" class="form-control" name="name" value="<?php echo $content['name']; ?>" required>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label>Url</label>
+                <input type="text" class="form-control" name="url" value="<?php echo $content['url']; ?>" required>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label>Template</label>
+                <select class="form-control" name="template">
+                    <option value="">Standard</option>
+                    
+                    <?php foreach(glob($_SERVER['DOCUMENT_ROOT'] . ROOT_DIR . 'includes/templates/*.php') as $template) : ?>
+                        <option value="<?php echo pathinfo($template)['filename']; ?>" <?php echo ($content['template'] == pathinfo($template)['filename'] ? 'selected' : ''); ?>><?php echo pathinfo($template)['filename']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label>Author</label>
+                <input type="text" class="form-control" name="author" value="<?php echo $content['author']; ?>">
+            </div>
+            
+            <div class="form-group mb-3">
+                <label>Date Created</label>
+                <input type="datetime-local" class="form-control" name="dateCreated" value="<?php echo date('Y-m-d\TH:i', strtotime($content['date_created'])); ?>" required>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label>Visiblity</label>
+                <select class="form-control" name="state" required>
+                    <option value="0">Hidden</option>
+                    <option value="1">Draft</option>
+                    <option value="2">Visible</option>
+                </select>
+            </div>
+            
+            <hr>
+            
+            <div class="form-group mb-3">
+                <label>Meta Title</label>
+                <input type="text" class="form-control" name="metaTitle" value="<?php echo $content['meta_title']; ?>">
+            </div>
+            
+            <div class="form-group mb-3">
+                <label>Meta Description</label>
+                <textarea type="textarea" class="form-control" name="metaDescription"><?php echo $content['meta_description']; ?></textarea>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label>Meta Keywords</label>
+                <input type="text" class="form-control" name="metaKeywords" value="<?php echo $content['meta_keywords']; ?>">
+            </div>
+            
+            <div class="form-group mb-3">
+                <label>Meta Author</label>
+                <input type="text" class="form-control" name="metaAuthor" value="<?php echo $content['meta_author']; ?>">
+            </div>
+            
+            <hr>
+            
+            <div class="form-group mb-3">
+                <label>Featured Image</label>
+                <input type="hidden" id="featuredImage" name="featuredImage" value="<?php echo $content['featured_image']; ?>">
+
+                <?php if(!empty($content['featured_image'])) : ?>
+                    <img src="<?php echo $content['featured_image']; ?>" class="d-block img-fluid">
+                <?php endif; ?>
+                
+                <div class="buttons mt-3 mb-n1">
+                    <a class="btn btn-secondary mb-1" data-fancybox="mediamanager" data-type="iframe" data-src="js/responsive_filemanager/filemanager/dialog.php?type=1&field_id=featuredImage">Select Image</a>
+                    <input type="button" class="btn btn-dark mb-1" name="clearImage" value="Clear Image">
+                </div>
+            </div>
+            
+            <hr>
+            
+            <div class="form-group mb-n1">
+                <input type="submit" class="btn btn-primary mb-1" name="saveContent" value="Save">
+                <input type="button" class="btn btn-danger mb-1" name="deleteContent" data-id="<?php echo $content['id']; ?>" value="Delete">
+            </div>
+            
+            <?php if(isset($message)) : ?>
+                <div class="alert alert-<?php echo $status; ?> mb-0">
+                    <?php echo $message; ?>
+                </div>
+            <?php endif; ?>
         </div>
 
         <div class="col py-3">
-
+            <div class="form-group mb-3">
+                <label>Excerpt</label>
+                <textarea class="form-control countChars" maxlength="500" name="excerpt"><?php echo $content['excerpt']; ?></textarea>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label>Content</label>
+                <textarea class="form-control tiny" name="content"><?php echo $content['content']; ?></textarea>
+            </div>
         </div>
     </form>
 <?php else : ?>
@@ -178,5 +335,20 @@
 		<?php endif; ?>
 	</div>
 <?php endif; ?>
+
+<script>
+	$("input[name='featuredImage']").change(function() {
+		$(this).val($(this).val().split("\"")[0]);
+		$(this).siblings("img").remove();
+		
+		if($(this).val() != "") {
+			$("<img src='" + $(this).val() + "' class='d-block img-fluid'>").insertAfter($(this));
+		}
+	});
+	
+	$("input[name='clearImage']").click(function() {
+		$(this).parents(".form-group").first().children("input[type='hidden']").val("").trigger("change");
+	});
+</script>
 
 <?php require_once(dirname(__FILE__) . '/includes/footer.php'); ?>
