@@ -126,7 +126,7 @@
 
 									<div class="input-group">
 										<span class="input-group-text"><span class="fa fa-key"></span></span>
-										<input type="password" class="form-control" name="password" value="<?php echo $_POST['password']; ?>" required>
+										<input type="password" class="form-control" name="password" value="<?php echo $_POST['password']; ?>" required autofocus>
 									</div>
 								</div>
 

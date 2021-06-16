@@ -81,7 +81,7 @@
 								
 								<div class="input-group">
 									<span class="input-group-text"><span class="fa fa-user"></span></span>
-									<input type="text" class="form-control" name="username" value="<?php echo $_POST['username']; ?>" required>
+									<input type="text" class="form-control" name="username" value="<?php echo $_POST['username']; ?>" required autofocus>
 								</div>
 							</div>
 
