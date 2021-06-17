@@ -166,3 +166,13 @@
 
 		return $content;
 	}
+
+    //Include class
+    $classes = scandir(dirname(__FILE__) . '/classes');
+
+    foreach($classes as $class) {
+        if(strpos($class, '.class') !== false) {
+            include_once(dirname(__FILE__) . '/classes/' . $class);
+        }
+    }
+    
