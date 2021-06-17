@@ -238,18 +238,28 @@
 		<?php 
 			$search = (!empty($_GET['search']) ? '%' . $_GET['search'] . '%' : '%');
 		
+            $contentCount = $mysqli->prepare(
+				"SELECT posts.* FROM `posts` AS posts
+					LEFT OUTER JOIN `post_types` AS post_types ON post_types.id = posts.post_type_id
+				WHERE post_types.name = ? AND (posts.name LIKE ? OR posts.id LIKE ? OR posts.author LIKE ? OR posts.excerpt LIKE ? OR posts.content LIKE ?) 
+				ORDER BY date_created DESC"
+			);
+			$contentCount->bind_param('ssssss', $pt['name'], $search, $search, $search, $search, $search);
+			$contentCount->execute();
+			$contentCountResult = $contentCount->get_result();
+        
+            $pagination = new pagination($contentCountResult->num_rows);
+			$pagination->load();
+        
 			$content = $mysqli->prepare(
 				"SELECT posts.* FROM `posts` AS posts
 					LEFT OUTER JOIN `post_types` AS post_types ON post_types.id = posts.post_type_id
 				WHERE post_types.name = ? AND (posts.name LIKE ? OR posts.id LIKE ? OR posts.author LIKE ? OR posts.excerpt LIKE ? OR posts.content LIKE ?) 
-				ORDER BY date_created DESC" //LIMIT OFFSET
+				ORDER BY date_created DESC LIMIT {$pagination->itemsPerPage} OFFSET {$pagination->offset}"
 			);
 			$content->bind_param('ssssss', $pt['name'], $search, $search, $search, $search, $search);
 			$content->execute();
-			$contentResult = $content->get_result();
-		
-			$pagination = new pagination(1000);
-			$pagination->load();
+			$contentResult = $content->get_result();			
 		?>
 		
 		<?php if($contentResult->num_rows > 0) : ?>
