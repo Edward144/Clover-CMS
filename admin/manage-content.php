@@ -4,14 +4,16 @@
     class pagination {
         public $firstPage = 1;
         public $itemsPerPage = 10;
-        public $navButtonLimit = 9;
+        public $navButtonLimit = 4;
         public $showFirst = true;    
         public $showPrev = true;    
         public $showNext = true;   
         public $showLast = true;
         public $showPageNumbers = true;
         
+        private $i;
         private $items = 0;
+        private $currentPage = 1;
         private $lastPage;
         private $offset;
         private $pageUrl;
@@ -23,21 +25,108 @@
                 $this->pageUrl = explode($_SERVER['SERVER_NAME'] . ROOT_DIR)[1] . explode('?', $_SERVER['REQUEST_URI'])[0];
             }
             
-            //Remove existing page query
-			$queryString = preg_split('/(\?)/', $_SERVER['REQUEST_URI'], 0, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
-            $this->prefix = preg_replace('/(\?|\&)page=\d+/', '', $queryString[1] . $queryString[2]);
+            //Remove existing page query         
+			$queryString = preg_replace('/((\?|\&)page=[^\&]+)/', '', '?' . explode('?', $_SERVER['REQUEST_URI'])[1]);
+            
+            
+            //Change first character to ? if &
+            if(strpos($queryString, '&') === 0) {
+                $queryString = '?' . substr($queryString, 1);
+            }
             
             //Change first & to ?
-            $this->prefix = (strpos($this->prefix, '?') === false ? preg_replace('/\&/', '?', $this->prefix, 1) : $this->prefix);
-            
-            //Append ? or & 
-            $this->prefix = $this->prefix . (strpos($this->prefix, '?') !== false ? '&' : '?');
+            $this->prefix = $queryString . (strpos($queryString, '?') === false ? $this->prefix = '?' : $this->prefix = '&');
         }
         
         public function load() {
             if($this->items > 0) {
                 $this->lastPage = ceil($this->items / $this->itemsPerPage);
             }
+            
+            if(isset($_GET['page']) && $_GET['page'] > $this->lastPage) {
+                $this->currentPage = $this->lastPage;
+            }
+            elseif(isset($_GET['page']) && $_GET['page'] < $this->firstPage) {
+                $this->currentPage = $this->firstPage;
+            }
+            elseif(isset($_GET['page']) && is_numeric($_GET['page'])) {
+                $this->currentPage = $_GET['page'];
+            }
+            else {
+                $this->currentPage = $this->firstPage;
+            }
+            
+            if($this->currentPage > $this->navButtonLimit) {
+                $this->i = $this->currentPage - $this->navButtonLimit;
+            }
+            else {
+                $this->i = $this->firstPage;
+            }
+        }
+        
+        public function display() {
+            $output =
+                '<nav aria-label="page-naviagtion">
+                    <ul class="pagination">';
+            
+            if($this->showFirst == true && $this->currentPage > $this->firstPage) {
+                $output .=
+                    '<li class="page-item">
+                        <a class="page-link" href="' . $this->pageUrl . $this->prefix . 'page=' . $this->firstPage . '">
+                            <span class="fas fa-chevron-left small"></span><span class="fas fa-chevron-left small"></span> First
+                        </a>
+                    </li>';
+            }
+            
+            if($this->showPrev == true && $this->currentPage > $this->firstPage) {
+                $output .=
+                    '<li class="page-item">
+                        <a class="page-link" href="' . $this->pageUrl . $this->prefix . 'page=' . ($this->currentPage - 1) . '">
+                            <span class="fas fa-chevron-left small"></span> Prev
+                        </a>
+                    </li>';
+            }
+            
+            if($this->showPageNumbers == true) {
+                $max = $this->currentPage + $this->navButtonLimit;
+                
+                if($max >= $this->lastPage) {
+                    $max = $this->lastPage;
+                }
+                
+                for($this->i; $this->i <= $max; $this->i++) {
+                    $output .=
+                        '<li class="page-item ' . ($this->currentPage == $this->i ? 'active' : '') . '">
+                            <a class="page-link" href="' . $this->pageUrl . $this->prefix . 'page=' . $this->i . '">'
+                                . $this->i .
+                            '</a>
+                        </li>';
+                }
+            }
+            
+            if($this->showNext == true && $this->currentPage < $this->lastPage) {
+                $output .=
+                    '<li class="page-item">
+                        <a class="page-link" href="' . $this->pageUrl . $this->prefix . 'page=' . ($this->currentPage + 1) . '">
+                            Next <span class="fas fa-chevron-right small"></span>
+                        </a>
+                    </li>';
+            }
+            
+            if($this->showLast == true && $this->currentPage < $this->lastPage) {
+                $output .=
+                    '<li class="page-item">
+                        <a class="page-link" href="' . $this->pageUrl . $this->prefix . 'page=' . $this->lastPage . '">
+                            Last <span class="fas fa-chevron-right small"></span><span class="fas fa-chevron-right small"></span>
+                        </a>
+                    </li>';
+            }
+            
+            $output .=
+                    '</ul>
+                </nav>';
+            
+            echo $output;
         }
     }
 
@@ -288,8 +377,8 @@
 			$content->execute();
 			$contentResult = $content->get_result();
 		
-			/*$pagination = new pagination($content->num_rows);
-			$pagination->load();*/
+			$pagination = new pagination(1000);
+			$pagination->load();
 		?>
 		
 		<?php if($contentResult->num_rows > 0) : ?>
@@ -330,6 +419,8 @@
 					</tbody>
 				</table>
 			</div>
+        
+            <?php $pagination->display(); ?>
 		<?php else : ?>
 			<div class="alert alert-info">No content could be found</div>
 		<?php endif; ?>

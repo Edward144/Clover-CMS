@@ -3,9 +3,12 @@
 
 $enable-negative-margins: true;
 
+$primary: #009688;
+$secondary: #005996;
+
 $theme-colors: (
-	"primary" : #009688,
-	"secondary" : #005996,
+	"primary" : $primary,
+	"secondary" : $secondary,
 	"success" : $success,
 	"info" : $info,
 	"warning" : $warning,
@@ -13,6 +16,10 @@ $theme-colors: (
 	"light" : $light,
 	"dark" : $dark
 );
+
+$pagination-color: $primary;
+$pagination-active-bg: $primary;
+$pagination-active-border-color: $pagination-active-bg;
 
 @import "../bootstrap-5.0.1/scss/bootstrap.scss";
 
