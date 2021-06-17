@@ -9,12 +9,12 @@
         public $showNext = true;   
         public $showLast = true;
         public $showPageNumbers = true;
+        public $offset;
         
         private $i;
         private $items = 0;
         private $currentPage = 1;
         private $lastPage;
-        private $offset;
         private $pageUrl;
         private $prefix = '?';
         
@@ -61,6 +61,8 @@
             else {
                 $this->i = $this->firstPage;
             }
+            
+            $this->offset = ($this->currentPage * $this->itemsPerPage) - $this->itemsPerPage;
         }
         
         public function display() {
