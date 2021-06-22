@@ -1,0 +1,230 @@
+@import "../bootstrap-5.0.1/scss/_functions.scss";
+@import "../bootstrap-5.0.1/scss/_variables.scss";
+
+$enable-negative-margins: true;
+
+$primary: #009688;
+$secondary: #005996;
+
+$theme-colors: (
+	"primary" : $primary,
+	"secondary" : $secondary,
+	"success" : $success,
+	"info" : $info,
+	"warning" : $warning,
+	"danger" : $danger,
+	"light" : $light,
+	"dark" : $dark
+);
+
+$pagination-color: $primary;
+$pagination-active-bg: $primary;
+$pagination-active-border-color: $pagination-active-bg;
+
+@import "../bootstrap-5.0.1/scss/bootstrap.scss";
+
+/* GENERAL */
+
+html, body {
+	height: 100%;
+}
+
+body {
+	font-family: "roboto", "open-sans", sans-serif;
+}
+
+body#tinymce {
+	margin: $spacer * .75;
+}
+
+.wrapper {
+	height: 100vh;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+}
+
+.wrapper > .main {
+	display: flex;
+	flex-grow: 1;
+	position: relative;
+	overflow: hidden;
+}
+
+.wrapper > .main > .content {
+	overflow-y: auto;
+}
+
+.btn-primary, .btn-secondary{
+	color: var(--bs-white) !important;
+}
+
+.collapse-left {
+	width: 0 !important;
+	white-space: nowrap;
+	transition: width .35s ease !important;
+}
+
+::-webkit-scrollbar {
+	width: 10px;
+}
+
+::-webkit-scrollbar-track {
+	background: tint-color($dark, 20);
+}
+
+::-webkit-scrollbar-thumb {
+	background: $dark;
+}
+
+::-webkit-scrollbar-thumb:hover, 
+::-webkit-scrollbar-thumb:active {
+	background: shade-color($dark, 20);
+}
+
+.fancybox-slide--iframe .fancybox-content {
+	height: 90vh !important;
+}
+
+.fullWidth {
+	width: 100vw;
+	position: relative;
+	left: 50%;
+	right: 50%;
+	margin-left: -50vw;
+	margin-right: -50vw;
+	max-width: initial;
+}
+
+/* ADMIN LOGIN */
+
+#adminLogin {
+	width: 100%;
+	max-width: 768px;
+}
+
+#adminLoginPage {
+	background-image: url('../images/admin-background.jpg');
+	background-color: #00963D;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+.formHeader {
+	font-size: 100px;
+}
+
+/* HEADER */
+
+#pageHeader .logo > img {
+	max-width: 40px;
+	filter: drop-shadow(0 0 1px var(--bs-white))
+}
+
+#pageHeader .h1 {
+	font-weight: lighter;
+}
+
+.logout {
+	text-decoration: none;
+}
+
+/* SIDEBAR */
+
+.sidebar::-webkit-scrollbar {
+	width: 10px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+	background: tint-color(#607d8b, 20);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+	background: #607d8b;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover, 
+.sidebar::-webkit-scrollbar-thumb:active {
+	background: shade-color(#607d8b, 20);
+} 
+
+.sidebar {
+	width: 100%;
+	max-width: 320px;
+	height: 100%;
+	background: var(--bs-dark);
+	color: var(--bs-white);
+	float: left;
+	z-index: 999;
+	transition: width .7s ease;
+	overflow-y: auto;
+}
+
+.sidebar > * {
+	overflow: hidden;
+}
+
+.sidebar .nav-link {
+	color: var(--bs-white);
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	cursor: pointer;
+	box-shadow: inset -20px 0 10px -6px #000;
+}
+
+.floatingToggle {
+	height: 0;
+	overflow: hidden;
+	visibility: hidden;
+	cursor: pointer;
+	text-decoration: none;
+	opacity: 0;
+	transition: opacity .7s ease;
+}
+
+.sidebar.collapse-left .floatingToggle {
+	height: auto;
+	background: var(--bs-dark);
+	color: var(--bs-white);
+	width: 50px;
+	height: 50px;
+	border-radius: 100%;
+	padding: $spacer;
+	top: $spacer;
+	left: $spacer;
+	display: flex;
+	visibility: visible;
+	align-items: center;
+	justify-content: center;
+	position: absolute;
+	opacity: 0.25;
+}
+
+.sidebar.collapse-left .floatingToggle:hover {
+	opacity: 1;
+}
+
+.floatingToggle > span:first-child:not(.fa) {
+	display: none;
+}
+
+@include media-breakpoint-down(md) {
+	.sidebar {
+		position: absolute;
+		top: 0;
+	}
+}
+
+/* ADMIN */
+
+.existingUserBody {
+	word-wrap: break-word;
+}
+
+.shorten {
+	width: 1%;
+	white-space: nowrap;
+}
