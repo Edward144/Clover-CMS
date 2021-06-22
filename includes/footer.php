@@ -1,6 +1,4 @@
-					</div>
-				</div>
-			</div>
+            </div>
 
 			<footer id="pageFooter">
 				footer
