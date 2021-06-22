@@ -75,7 +75,7 @@ $("form").submit(function() {
     if($(this).find("input[name='url']").length) {
         var url = $(this).find("input[name='url']");
         
-        if(!/^[a-zA-Z0-9\:\/\-\_\+\?\&\=\#]+$/.test(url.val())) {
+        if(!/^[a-zA-Z0-9\:\/\-\_\+\?\&\=\#\.]+$/.test(url.val())) {
             url.addClass("is-invalid");
             $("<div class='invalid-feedback'>Url contains invalid characters. Allowed characters are A-Z, 0-9, :, /, -, _, +, ?, &, =, #</div>").insertAfter(url);
             
