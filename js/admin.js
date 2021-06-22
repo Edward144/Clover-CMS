@@ -146,3 +146,21 @@ $(".countChars").keyup(function() {
         $("<small class='charCount d-block text-end'>" + chars + " of " + limit + "</small>").insertAfter($(this));
     }
 });
+
+//Validate other settings
+$("#otherSettings").submit(function() {
+    var valid = true;
+    var analytics = $(this).find("input[name='googleAnalytics']");
+    
+    if(analytics.val().length && !/^[A-Z]{2}\-[0-9]{8}\-[0-9]$/.test(analytics.val())) {
+        analytics.addClass("is-invalid");
+        $("<div class='invalid-feedback'>Value does not appear to be valid</div>").insertAfter(analytics);
+
+        valid = false;
+    }
+    
+    if(valid == false) {
+        event.preventDefault();
+        return;
+    }
+});
