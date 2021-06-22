@@ -1,73 +1,171 @@
 <?php 
 	$title = 'Settings';
-	require_once(dirname(__FILE__) . '/includes/header.php'); 
+	require_once(dirname(__FILE__) . '/includes/header.php');
+
+    //Save Website Details
+    if(isset($_POST['saveWebDetails'])) {
+        $details = $mysqli->prepare(
+            "INSERT INTO `settings` (name, value) VALUES
+                ('website_name', ?),
+                ('address_1', ?),
+                ('address_2', ?),
+                ('city', ?),
+                ('county', ?),
+                ('postcode', ?),
+                ('phone', ?),
+                ('email', ?),
+                ('logo', ?)
+            ON DUPLICATE KEY UPDATE name = VALUES(name), value = VALUES(value)"
+        );
+        $details->bind_param('sssssssss', $_POST['websiteName'], $_POST['address1'], $_POST['address2'], $_POST['city'], $_POST['county'], $_POST['postcode'], $_POST['phone'], $_POST['email'], $_POST['logo']);
+        $details->execute();
+        
+        if($other->error) {
+            $status = 'danger';
+            $detailsMessage = 'Failed to save changes';
+        }
+        else {
+            $status = 'success';
+            $detailsMessage = 'Settings saved successfully';
+        }
+    }
+
+    //Save Page Settings
+    if(isset($_POST['savePageSettings'])) {
+        
+    }
+
+    //Save Social Media
+    if(isset($_POST['saveSocialMedia'])) {
+        $social = $mysqli->prepare(
+            "INSERT INTO `social_links` (name, link) VALUES
+                ('facebook', ?),
+                ('twitter', ?),
+                ('instagram', ?),
+                ('youtube', ?),
+                ('linkedin', ?)
+            ON DUPLICATE KEY UPDATE name = VALUES(name), link = VALUES(link)"
+        );
+        $social->bind_param('sssss', $_POST['facebook'], $_POST['twitter'], $_POST['instagram'], $_POST['youtube'], $_POST['linkedin']);
+        $social->execute();
+        
+        if($other->error) {
+            $status = 'danger';
+            $socialMessage = 'Failed to save changes';
+        }
+        else {
+            $status = 'success';
+            $socialMessage = 'Settings saved successfully';
+        }
+    }
+
+    //Save Other Settings
+    if(isset($_POST['saveOtherSettings'])) {
+        $other = $mysqli->prepare(
+            "INSERT INTO `settings` (name, value) VALUES
+                ('google_analytics', ?),
+                ('recaptcha_sitekey', ?),
+                ('recaptcha_secretkey', ?)
+            ON DUPLICATE KEY UPDATE name = VALUES(name), value = VALUES(value)"
+        );
+        $other->bind_param('sss', $_POST['googleAnalytics'], $_POST['sitekey'], $_POST['secretkey']);
+        $other->execute();
+        
+        if($other->error) {
+            $status = 'danger';
+            $otherMessage = 'Failed to save changes';
+        }
+        else {
+            $status = 'success';
+            $otherMessage = 'Settings saved successfully';
+        }
+    }
+
+    $settings = $mysqli->query("SELECT * FROM `settings`");
+    $settingValues = [];
+
+    while($setting = $settings->fetch_assoc()) {
+        $settingValues[$setting['name']] = $setting['value'];
+    }
+
+    $socials = $mysqli->query("SELECT * FROM `social_links`");
 ?>
 
-<div class="col-lg-3 bg-light py-3">
+<div class="col-md-6 col-lg-3 bg-light py-3">
 	<h3>Website Details</h3>
 	
 	<form id="websiteDetails" action="" method="post">
 		<div class="form-group mb-3">
 			<label>Website Name</label>
-			<input type="text" class="form-control" name="websiteName" value="">
+			<input type="text" class="form-control" name="websiteName" value="<?php echo $settingValues['website_name']; ?>">
 		</div>
 		
 		<div class="form-group mb-3">
 			<label>Address Line 1</label>
-			<input type="text" class="form-control" name="address1" value="">
+			<input type="text" class="form-control" name="address1" value="<?php echo $settingValues['address_1']; ?>">
 		</div>
 		
 		<div class="form-group mb-3">
 			<label>Address Line 2</label>
-			<input type="text" class="form-control" name="address2" value="">
+			<input type="text" class="form-control" name="address2" value="<?php echo $settingValues['address_2']; ?>">
 		</div>
 		
 		<div class="form-group mb-3">
 			<label>City</label>
-			<input type="text" class="form-control" name="city" value="">
+			<input type="text" class="form-control" name="city" value="<?php echo $settingValues['city']; ?>">
 		</div>
 		
 		<div class="form-group mb-3">
 			<label>County</label>
-			<input type="text" class="form-control" name="county" value="">
+			<input type="text" class="form-control" name="county" value="<?php echo $settingValues['county']; ?>">
 		</div>
 		
 		<div class="form-group mb-3">
 			<label>Postcode</label>
-			<input type="text" class="form-control" name="postcode" value="">
+			<input type="text" class="form-control" name="postcode" value="<?php echo $settingValues['postcode']; ?>">
 		</div>
 		
 		<hr>
 		
 		<div class="form-group mb-3">
 			<label>Phone</label>
-			<input type="text" class="form-control" name="phone" value="">
+			<input type="text" class="form-control" name="phone" value="<?php echo $settingValues['phone']; ?>">
 		</div>
 		
 		<div class="form-group mb-3">
 			<label>Email</label>
-			<input type="email" class="form-control" name="email" value="">
+			<input type="email" class="form-control" name="email" value="<?php echo $settingValues['email']; ?>">
 		</div>
 		
 		<hr>
 		
 		<div class="form-group mb-3">
-			<label>Logo</label>
-			<input type="hidden" id="logo" name="logo" value="">
-			
-			<div class="buttons mt-3 mb-n1">
-				<a class="btn btn-secondary mb-1" data-fancybox="mediamanager" data-type="iframe" data-src="js/responsive_filemanager/filemanager/dialog.php?type=1&field_id=logo">Select Image</a>
-				<input type="button" class="btn btn-dark mb-1" name="clearImage" value="Clear Image">
-			</div>
-		</div>
+                <label>Logo</label>
+                <input type="hidden" id="logo" name="logo" value="<?php echo $settingValues['logo']; ?>">
+
+                <?php if(!empty($settingValues['logo'])) : ?>
+                    <img src="<?php echo $settingValues['logo']; ?>" class="d-block img-fluid">
+                <?php endif; ?>
+                
+                <div class="buttons mt-3 mb-n1">
+                    <a class="btn btn-secondary mb-1" data-fancybox="mediamanager" data-type="iframe" data-src="js/responsive_filemanager/filemanager/dialog.php?type=1&field_id=logo">Select Image</a>
+                    <input type="button" class="btn btn-dark mb-1" name="clearImage" value="Clear Image">
+                </div>
+            </div>
 		
 		<div class="form-group">
-			<input type="submit" class="btn btn-primary" value="Save Details">
+			<input type="submit" class="btn btn-primary" name="saveWebDetails" value="Save Details">
 		</div>
+        
+        <?php if(isset($detailsMessage)) : ?>
+            <div class="alert alert-<?php echo $status; ?> mt-3">
+                <?php echo $detailsMessage; ?>
+            </div>
+       <?php endif; ?>
 	</form>
 </div>
 
-<div class="col-lg-3 py-3">
+<div class="col-md-6 col-lg-3 py-3">
 	<h3>Page Settings</h3>
 	
 	<form id="pageSettings">
@@ -86,15 +184,19 @@
 		</div>
 		
 		<div class="form-group">
-			<input type="submit" class="btn btn-primary" value="Save Pages">
+			<input type="submit" class="btn btn-primary" name="savePageSettings" value="Save Pages">
 		</div>
+        
+        <?php if(isset($pageMessage)) : ?>
+            <div class="alert alert-<?php echo $status; ?> mt-3">
+                  <?php echo $pageMessage; ?>
+            </div>
+       <?php endif; ?>
 	</form>
 </div>
 
-<?php $socials = $mysqli->query("SELECT * FROM `social_links`"); ?>
-
 <?php if($socials->num_rows > 0) : ?>
-	<div class="col-lg-3 bg-light py-3">
+	<div class="col-md-6 col-lg-3 bg-light py-3">
 		<h3>Social Media</h3>
 		
 		<form id="socialLinks" action="" method="post">
@@ -106,34 +208,46 @@
 			<?php endwhile; ?>
 			
 			<div class="form-group">
-				<input type="submit" class="btn btn-primary" value="Save Socials">
+				<input type="submit" class="btn btn-primary" name="saveSocialMedia" value="Save Socials">
 			</div>
+            
+            <?php if(isset($socialMessage)) : ?>
+                <div class="alert alert-<?php echo $status; ?> mt-3">
+                    <?php echo $socialMessage; ?>
+                </div>
+           <?php endif; ?>
 		</form>
 	</div>
 <?php endif; ?>
 
-<div class="col-lg-3 py-3">
+<div class="col-md-6 col-lg-3 py-3">
 	<h3>Other Settings</h3>
 	
-	<form id="otherSettings" action="" method="post">
+	<form id="otherSettings" method="post">
 		<div class="form-group mb-3">
 			<label>Google Analytics</label>
-			<input type="text" class="form-control" name="googleAnalytics" placeholder="UA-12345678-9" value="">
+			<input type="text" class="form-control" name="googleAnalytics" placeholder="UA-12345678-9" value="<?php echo $settingValues['google_analytics']; ?>">
 		</div>
 		
 		<div class="form-group mb-3">
 			<label><span class="fab fa-google"></span> ReCaptcha<sub>v3</sub> Site Key</label>
-			<input type="text" class="form-control" name="siteKey" value="">
+			<input type="text" class="form-control" name="sitekey" value="<?php echo $settingValues['recaptcha_sitekey']; ?>">
 		</div>
 		
 		<div class="form-group mb-3">
 			<label><span class="fab fa-google"></span> ReCaptcha<sub>v3</sub> Secret Key</label>
-			<input type="text" class="form-control" name="secretKey" value="">
+			<input type="text" class="form-control" name="secretkey" value="<?php echo $settingValues['recaptcha_secretkey']; ?>">
 		</div>
 		
 		<div class="form-group">
-			<input type="submit" class="btn btn-primary" value="Save Settings">
+			<input type="submit" class="btn btn-primary" name="saveOtherSettings" value="Save Settings">
 		</div>
+        
+        <?php if(isset($otherMessage)) : ?>
+            <div class="alert alert-<?php echo $status; ?> mt-3">
+                <?php echo $otherMessage; ?>
+            </div>
+        <?php endif; ?>
 	</form>
 </div>
 
