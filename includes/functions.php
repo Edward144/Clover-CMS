@@ -27,8 +27,7 @@
 
 	//Create metadata
 	function adminmeta($title = '', $description = '', $keywords = '', $author = '') {
-		$metadata;
-		
+		$metadata = '';
 		
 		if(!empty($title) && is_string($title)) {
 			$metadata .= '<title>' . $title . ' | Clover CMS</title>';
@@ -42,19 +41,35 @@
 		}
 		
 		if(!empty($keywords) && is_string($keywords)) {
-			$metadata .= '<meta name="keywords" content="">';
+			$metadata .= '<meta name="keywords" content="' . $keywords . '">';
 		}
 		
 		if(!empty($author) && is_string($author)) {
-			$metadata .= '<meta name="author" content="">';
+			$metadata .= '<meta name="author" content="' . $author . '">';
 		}
 		
 		return $metadata;
 	}
 
-	function metadata() {
-		$metadata;
+	function metadata($title = '', $description = '', $keywords = '', $author = '') {
+		$metadata = '';
 		
+        if(!empty($title) && is_string($title)) {
+			$metadata .= '<title>' . $title . '</title>';
+		}
+		
+		if(!empty($description) && is_string($description)) {
+			$metadata .= '<meta name="description" content="' . $description . '">';
+		}
+		
+		if(!empty($keywords) && is_string($keywords)) {
+			$metadata .= '<meta name="keywords" content="' . $keywords . '">';
+		}
+		
+		if(!empty($author) && is_string($author)) {
+			$metadata .= '<meta name="author" content="' . $author . '">';
+		}
+        
 		return $metadata;
 	}
 
@@ -164,7 +179,7 @@
 			}
 		}
 
-		return $content;
+		echo $content;
 	}
 
     //Include class
