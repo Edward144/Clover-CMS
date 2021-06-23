@@ -39,8 +39,83 @@ $pagination-active-border-color: $pagination-active-bg;
 
 /* HEADER */
 
+.siteTitle {
+    color: $light !important;
+    text-decoration: none;
+}
+
+.siteTitle > .siteName {
+    margin-bottom: 0;
+}
+
+#pageHeader .contact a {
+    text-decoration: none;
+}
+
 /* NAVIGATION */
 
 /* FOOTER */
+
+#pageFooter address {
+    margin-bottom: 0;
+}
+
+#pageFooter .contact a {
+    text-decoration: none;
+}
+
+#pageFooter .socials .social {
+    font-size: 2rem;
+    margin-right: $spacer;
+}
+
+#pageFooter .socials .social a {
+    transition: color 0.35s ease;
+}
+
+.social#facebook a {
+    color: #1877f2;
+}
+
+.social#facebook a:hover,
+.social#facebook a:active {
+    color: shade-color(#1877f2, 20);
+}
+
+.social#twitter a {
+    color: #1da1f2;
+}
+
+.social#twitter a:hover,
+.social#twitter a:active {
+    color: shade-color(#1da1f2, 20);
+}
+
+.social#youtube a {
+    color: #ff0000;
+}
+
+.social#youtube a:hover,
+.social#youtube a:active {
+    color: shade-color(#ff0000, 20);
+}
+
+.social#linkedin a {
+    color: #2867b2;
+}
+
+.social#linkedin a:hover,
+.social#linkedin a:active {
+    color: shade-color(#2867b2, 20);
+}
+
+.social#instagram a {
+    color: #673eb8;
+}
+
+.social#instagram a:hover,
+.social#instagram a:active {
+    color: shade-color(#673eb8, 20);
+}
 
 /* MAIN */

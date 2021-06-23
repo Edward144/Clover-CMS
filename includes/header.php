@@ -1,6 +1,17 @@
 <?php 
 	require_once(dirname(__FILE__) . '/database.php'); 
 	require_once(dirname(__FILE__) . '/functions.php');
+
+    $settings = $mysqli->query("SELECT * FROM `settings`");
+    $settingsArray = [];
+
+    if($settings->num_rows > 0) {
+        while($setting = $settings->fetch_assoc()) {
+            $settingsArray[$setting['name']] = $setting['value'];
+        }
+    }
+
+    var_dump($settingsArray);
 ?>
 
 <!DOCTYPE html>
@@ -30,14 +41,47 @@
 	
 	<body>
 		<div class="wrapper">
-			<header id="pageHeader">
-				<div class="container-fluid">
-					<div class="row">						
-						<div class="col bg-secondary">
-							header
+			<header id="pageHeader" class="bg-secondary text-light">
+				<div class="headerInner container-xl">
+					<div class="row py-3">
+						<div class="col-sm-3">
+                            <a href="<?php echo ROOT_DIR; ?>" class="siteTitle">
+                                <?php if(!empty($settingsArray['logo'])) : ?>
+                                    <img src="<?php echo $settingsArray['logo']; ?>" class="siteLogo img-fluid" alt="<?php echo(!empty($settingsArray['website_name']) ? $settingsArray['website_name'] : 'Website '); ?>Logo">    
+                                <?php else : ?>
+                                    <h2 class="siteName"><?php echo (!empty($settingsArray['website_name']) ? $settingsArray['website_name'] : ''); ?></h2>
+                                <?php endif; ?>
+                            </a>
 						</div>
+                        
+                        <div class="col">
+                            <?php if(!empty($settingsArray['phone']) || !empty($settingsArray['email'])) : ?>
+                                <div class="contact d-flex align-items-center justify-content-end">
+                                    <?php if(!empty($settingsArray['phone'])) : ?>
+                                        <p class="phone">
+                                            <span class="fa fa-phone me-1"></span>
+                                            <a href="tel: <?php echo $settingsArray['phone']; ?>" class="link-light"><?php echo $settingsArray['phone']; ?></a>
+                                        </p>
+                                    <?php endif; ?>
+                                    
+                                    <?php if(!empty($settingsArray['phone'])) : ?>
+                                        <p class="email ms-3">
+                                            <span class="fa fa-envelope me-1"></span>
+                                            <a href="mailto: <?php echo $settingsArray['email']; ?>" class="link-light"><?php echo $settingsArray['email']; ?></a>
+                                        </p>
+                                    <?php endif; ?>                                    
+                                </div>
+                            <?php endif; ?>
+                            
+                            <nav class="text-end">
+                                Navigation
+                            </nav>
+                        </div>
 					</div>
 				</div>
 			</header>
 			
 			<div class="main">
+                <div class="container-xl">
+                    <div class="row">
+                        <div class="col">
