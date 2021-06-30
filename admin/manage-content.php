@@ -135,9 +135,9 @@
             <div class="form-group mb-3">
                 <label>Visiblity</label>
                 <select class="form-control" name="state" required>
-                    <option value="0">Hidden</option>
-                    <option value="1">Draft</option>
-                    <option value="2">Visible</option>
+                    <option value="0" <?php echo ($content['state'] == 0 ? 'selected' : ''); ?>>Hidden</option>
+                    <option value="1" <?php echo ($content['state'] == 1 ? 'selected' : ''); ?>>Draft</option>
+                    <option value="2" <?php echo ($content['state'] == 2 ? 'selected' : ''); ?>>Visible</option>
                 </select>
             </div>
             
