@@ -73,7 +73,12 @@
                         </div>
                         
                         <div class="links col">
-                            4
+                            <?php $links = ''; ?>
+                            
+                            <?php if(1 == 1) : ?>
+                                <h3>Useful Links</h3>
+                            
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
