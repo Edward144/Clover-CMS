@@ -1,6 +1,8 @@
 <IfModule mod_rewrite.c>
     RewriteEngine On
 	
+    RewriteRule ^manage-navigation/(.*)$ manage-navigation.php?id=$1 [L,QSA]
+    
 	RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule ^manage-content/(.*)$ manage-content.php?post-type=$1 [L,QSA]

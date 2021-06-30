@@ -164,3 +164,8 @@ $("#otherSettings").submit(function() {
         return;
     }
 });
+
+//Change navigation menu
+$("select[name='chooseMenu']").change(function() {
+    window.location.href = window.location.href.split('manage-navigation/')[0] + "manage-navigation/" + $(this).val();
+});
