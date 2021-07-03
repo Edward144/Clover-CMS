@@ -30,70 +30,31 @@
         $currMenu = $checkResult->fetch_assoc();
     }
 
-    class navigationTree {
-        private $id;
-        private $output;
-        private $levelInc = 0;
-        private $hasLevels = false;
+    //Insert new item
+    if(isset($_POST['insertItem'])) {
+        $getLastPosition = $mysqli->prepare("SELECT MAX(position) FROM `navigation_structure` WHERE parent_id = ? and menu_id = ?");
+        $getLastPosition->bind_param('ii', $_POST['parent'], $_POST['menuId']);
+        $getLastPosition->execute();
+        $lastPositionResult = $getLastPosition->get_result();
         
-        public function __construct($id = 0) {
-            if(isset($id) && is_numeric($id) && $id >= 0) {
-                $this->id = $id;
-            }
-            
-            $this->output =
-                '<div class="structure" id="structure' . $this->id . '">'
-                    . $this->createlevel($this->id) . 
-                '</div>';
+        if($lastPositionResult->num_rows > 0) {
+            $position = $lastPositionResult->fetch_array()[0] + 1;
+        }
+        else {
+            $position = 0;
         }
         
-        public function display() {
-            if($this->hasLevels == true) {
-                echo $this->output;
-            }
-            else {
-                echo '<div class="alert alert-info">There are currently no items in this menu</div>';
-            }
-        }
+        $insert = $mysqli->prepare("INSERT INTO `navigation_structure` (menu_id, name, url, parent_id, visible, position) VALUES(?, ?, ?, ?, ?, ?)");
+        $insert->bind_param('issiii', $_POST['menuId'], $_POST['name'], $_POST['url'], $_POST['parent'], $_POST['visible'], $position);
+        $insert->execute();
         
-        private function createlevel($menuId, $parentId = 0) {
-            global $mysqli;
-            $output = '';
-            
-            $getLevel = $mysqli->prepare("SELECT * FROM `navigation_structure` WHERE menu_id = ? AND parent_id = ? ORDER BY position ASC");
-            $getLevel->bind_param('ii', $menuId, $parentId);
-            $getLevel->execute();
-            $levelResult = $getLevel->get_result();
-            
-            if($levelResult->num_rows > 0) {
-                $this->hasLevels = true;
-                
-                if($parentId > 0) {
-                    $this->levelInc++;
-                }
-                else {
-                    $this->levelInc = 0;
-                }
-                
-                while($level = $levelResult->fetch_assoc()) {
-                    $output .=
-                        '<div class="navigationLevel bg-light p-3 rounded mb-3" ' . ($parentId > 0 ? 'style="margin-left: ' . $this->levelInc . 'rem;"' : '') . '>
-                            <div class="row">
-                                <div class="col-xl">
-                                    <span class="me-3">' . $level['name'] . '</span>
-                                    <small class="text-muted">' . $level['url'] . '</small>
-                                </div>
-
-                                <div class="col-xl-3 text-end mb-n1">
-                                    <button type="button" class="btn btn-primary mb-1">Edit</button>
-                                    <button type="button" class="btn btn-danger mb-1">Delete</button>
-                                </div>
-                            </div>
-                        </div>' . $this->createlevel($menuId, $level['id']);
-                }
-            }
-            
-            return $output;
+        if($insert->error) {
+            $status = 'danger';
+            $insertmessage = 'Failed to insert item into menu';
+        }
+        else {
+            $status = 'success';
+            $insertmessage = 'Item inserted successfully';
         }
     }
 ?>
@@ -116,6 +77,81 @@
     </div>
     
     <hr>
+    
+    <h3>Insert Item</h3>
+    
+    <form id="insertNavigation" method="post">
+        <input type="hidden" name="menuId" value="<?php echo $_GET['id']; ?>">
+        
+        <?php 
+            $existing = $mysqli->query(
+                "SELECT posts.id, posts.name, posts.url, post_types.name AS post_type FROM `posts`
+                    LEFT OUTER JOIN `post_types` AS post_types ON post_types.id = posts.post_type_id
+                ORDER BY posts.post_type_id, posts.name"
+            );
+        ?>
+        
+        <?php if($existing->num_rows > 0) : ?>
+            <div class="form-group mb-3">
+                <label>Choose Existing</label>
+                <select class="form-control" name="existing">
+                    <option selected disabled>--Select--</option>
+                    
+                    <?php while($existingItem = $existing->fetch_assoc()) : ?>
+                        <option value="<?php echo $existingItem['id']; ?>" data-name="<?php echo $existingItem['name']; ?>" data-url="<?php echo $existingItem['url']; ?>"><?php echo $existingItem['post_type'] . ': ' . $existingItem['name']; ?></option>
+                    <?php endwhile; ?>
+                </select>
+            </div>
+        <?php endif; ?>
+        
+        <div class="form-group mb-3">
+            <label>Name</label>
+            <input type="text" class="form-control" name="name" required>
+        </div>
+        
+        <div class="form-group mb-3">
+            <label>Url</label>
+            <input type="text" class="form-control" name="url">
+        </div>
+        
+        <div class="form-group mb-3">
+            <label>Parent</label>
+            <select class="form-control" name="parent">
+                <option value="0">No Parent</option>
+                
+                <?php 
+                    $items = $mysqli->prepare("SELECT id, name FROM `navigation_structure` WHERE menu_id = ? ORDER BY parent_id, position"); 
+                    $items->bind_param('i', $_GET['id']);
+                    $items->execute();
+                    $itemsResult = $items->get_result();
+                ?>
+                
+                <?php if($itemsResult->num_rows > 0) : ?>
+                    <?php while($item = $itemsResult->fetch_assoc()) : ?>
+                        <option value="<?php echo $item['id']; ?>"><?php echo $item['name']; ?></option>
+                    <?php endwhile; ?>
+                <?php endif; ?>
+            </select>
+        </div>
+        
+        <div class="form-group mb-3">
+            <label>Visible</label>
+            <select class="form-control" name="visible">
+                <option value="0">No</option>
+                <option value="1" selected>Yes</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" name="insertItem" value="Insert">
+        </div>
+        
+        <?php if(!empty($insertmessage)) : ?>
+            <div class="mt-3 alert alert-<?php echo $status; ?>">
+                <?php echo $insertmessage; ?>
+            </div>
+        <?php endif; ?>
+    </form>
 </div>
 
 <div class="col py-3">
