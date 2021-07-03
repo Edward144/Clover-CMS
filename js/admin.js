@@ -77,7 +77,7 @@ $("form").submit(function() {
         
         if(!/^[a-zA-Z0-9\:\/\-\_\+\?\&\=\#\.]+$/.test(url.val())) {
             url.addClass("is-invalid");
-            $("<div class='invalid-feedback'>Url contains invalid characters. Allowed characters are A-Z, 0-9, :, /, -, _, +, ?, &, =, #</div>").insertAfter(url);
+            $("<div class='invalid-feedback'>Url contains invalid characters. Allowed characters are A-Z, 0-9, :, /, -, _, +, ?, &, =, #, .</div>").insertAfter(url);
             
             valid = false;
         }
@@ -168,4 +168,48 @@ $("#otherSettings").submit(function() {
 //Change navigation menu
 $("select[name='chooseMenu']").change(function() {
     window.location.href = window.location.href.split('manage-navigation/')[0] + "manage-navigation/" + $(this).val();
+});
+
+//Select existing page to insert
+$("#insertNavigation select[name='existing']").change(function() {
+    var option = $(this).children(":selected");
+    var name = option.attr("data-name");
+    var url = option.attr("data-url");
+    
+    $("#insertNavigation").find("input[name='name']").val(name);
+    $("#insertNavigation").find("input[name='url']").val(url);
+});
+
+//Edit existing navigation item
+$(".structure").on("click", "button[name='edit']", function() {
+    $(this).parents(".navigationLevel").first().find(".modal").first().modal("show");
+});
+
+//Delete existing navigation item 
+$(".structure").on("click", "button[name='delete']", function() {
+    $(this).parents(".navigationLevel").first().find("input[name='delete']").first().val(1);
+    $(this).parents(".navigationLevel").first().remove();
+});
+
+//Re-order existing navigation items
+$(".structureItems").sortable({
+    items: ".navigationLevel",
+    connectWith: ".structureItems",
+    dropOnEmpty: true,
+    stop: function() {
+        $(".structure .navigationLevel").each(function() {
+            var position = $(this).prevAll(".navigationLevel").length;
+            var edit = $(this).find(".modal").first();
+            
+            if($(this).parent().is(".structure")) {
+                var parent = 0;
+            }
+            else {
+                var parent = $(this).parents(".navigationLevel").first().attr("data-id");
+            }
+                
+            edit.find("input[name='parent']").val(parent);
+            edit.find("input[name='position']").val(position);
+        });
+    }
 });

@@ -228,3 +228,16 @@ body#tinymce {
 	width: 1%;
 	white-space: nowrap;
 }
+
+.structure.structureItems {
+    padding-bottom: $spacer;
+}
+
+.navigationLevel > .structureItems {
+    margin-left: $spacer;
+    padding-bottom: $spacer;
+}
+
+.structureItems:not(.structure) > .navigationLevel:first-child {
+    margin-top: $spacer;
+}
