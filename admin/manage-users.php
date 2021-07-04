@@ -212,7 +212,7 @@
 									<div class="form-group mb-3">
 										<label>Confirm Password</label>
 										<input type="password" class="form-control" name="passwordConf" value="<?php echo $_POST['passwordConf']; ?>">
-										<small class="text-muted">Leave both password fields to </small>
+										<small class="text-muted">Leave both password fields if you do not wish to change the password</small>
 									</div>
 
 									<div class="form-group d-flex align-items-center mb-3">
