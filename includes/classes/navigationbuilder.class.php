@@ -7,14 +7,24 @@
         private $hasLevels = false;
         
         public function __construct($id = 0) {
+            global $structuremessage;
+            global $status;
+            
             if(isset($id) && is_numeric($id) && $id >= 0) {
                 $this->id = $id;
             }
             
             $this->output =
-                '<div class="structure structureItems" id="structure' . $this->id . '">'
+                '<form class="structure structureItems" id="structure' . $this->id . '" method="post">'
                     . $this->createlevel($this->id) . 
-                '</div>';
+                    '<div class="form-group">
+                        <input type="hidden" name="json">
+                        <input type="hidden" name="structureId" value="' . $this->id . '">
+                        <input type="submit" class="btn btn-primary" name="saveStructure" name="saveStructure" value="Save Navigation Structure">
+                    </div>'
+                    . (!empty($structuremessage[$this->id]) ? 
+                        '<div class="alert alert-' . $status[$this->id] . ' mt-3">' . $structuremessage[$this->id] . '</div>' : '') .
+                '</form>';
         }
         
         public function display() {
@@ -71,7 +81,7 @@
                                         </div>
                                         
                                         <div class="modal-body">
-                                            <form id="editItem">
+                                            <div id="editItem">
                                                 <input type="hidden" name="id" value="' . $level['id'] . '">
                                                 <input type="hidden" name="parent" value="' . $level['parent_id'] . '">
                                                 <input type="hidden" name="position" value="' . $level['position'] . '">
@@ -94,7 +104,7 @@
                                                         <option value="1" ' . ($level['visible'] == 1 ? 'selected' : '') . '>Yes</option>
                                                     </select>
                                                 </div>
-                                            </form>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

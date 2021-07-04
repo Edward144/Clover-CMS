@@ -89,6 +89,19 @@ $("form").submit(function() {
 	}
 });
 
+//Validate urls on keyup
+$("input[name='url']").keyup(function() {
+    var url = $(this);
+    
+    url.removeClass("is-invalid");
+    url.siblings(".invalid-feedback").remove();
+    
+    if(!/^[a-zA-Z0-9\:\/\-\_\+\?\&\=\#\.]+$/.test(url.val())) {
+        url.addClass("is-invalid");
+        $("<div class='invalid-feedback'>Url contains invalid characters. Allowed characters are A-Z, 0-9, :, /, -, _, +, ?, &, =, #, .</div>").insertAfter(url);
+    }
+});
+
 //Confirm inputs
 $("input[type='submit'][data-confirm]").click(function() {
 	if(!confirm($(this).attr("data-confirm"))) {
@@ -187,8 +200,10 @@ $(".structure").on("click", "button[name='edit']", function() {
 
 //Delete existing navigation item 
 $(".structure").on("click", "button[name='delete']", function() {
-    $(this).parents(".navigationLevel").first().find("input[name='delete']").first().val(1);
-    $(this).parents(".navigationLevel").first().remove();
+    if(confirm("Are you sure you want to delete this item?")) {
+        $(this).parents(".navigationLevel").first().find("input[name='delete']").first().val(1);
+        $(this).parents(".navigationLevel").first().hide();
+    }
 });
 
 //Re-order existing navigation items
@@ -213,3 +228,38 @@ $(".structureItems").sortable({
         });
     }
 });
+
+//Save navigation structure
+$(".structure input[name='saveStructure']").click(function() {
+    var json = {};
+    var btn = $(this);
+    var structure = $(this).parents(".structure").first();
+    var i = 0;
+    
+    structure.find(".alert").remove();
+    
+    structure.find(".navigationLevel").each(function() {
+        var form = $(this).children(".modal").first();
+        
+        json[i] = {
+            "id": form.find("input[name='id']").val(),
+            "name": form.find("input[name='name']").val(),
+            "url": form.find("input[name='url']").val(),
+            "visible": form.find("select[name='visible']").val(),
+            "parent": form.find("input[name='parent']").val(),
+            "position": form.find("input[name='position']").val(),
+            "delete": form.find("input[name='delete']").val()
+        }
+        
+        i++;
+    });
+    
+    if(structure.find(".is-invalid").length || structure.find(".invalid-feedback").length) {
+        event.preventDefault();
+        $("<div class='alert alert-danger mt-3'>You have entered invalid information. Please check your inputs and try again.</div>").insertAfter(btn.parent(".form-group"));
+        
+        return;
+    }
+    
+    structure.find("input[name='json']").val(JSON.stringify(json));
+})
