@@ -32,7 +32,23 @@
 
     //Save Page Settings
     if(isset($_POST['savePageSettings'])) {
+        $page = $mysqli->prepare(
+            "INSERT INTO `settings` (name, value) VALUES
+                ('homepage', ?),
+                ('newspage', ?)
+            ON DUPLICATE KEY UPDATE name = VALUES(name), value = VALUES(value)"
+        );
+        $page->bind_param('ss', $_POST['homepage'], $_POST['newspage']);
+        $page->execute();
         
+        if($page->error) {
+            $status = 'danger';
+            $pageMessage = 'Failed to save changes';
+        }
+        else {
+            $status = 'success';
+            $pageMessage = 'Settings saved successfully';
+        }
     }
 
     //Save Social Media
@@ -49,7 +65,7 @@
         $social->bind_param('sssss', $_POST['facebook'], $_POST['twitter'], $_POST['instagram'], $_POST['youtube'], $_POST['linkedin']);
         $social->execute();
         
-        if($other->error) {
+        if($social->error) {
             $status = 'danger';
             $socialMessage = 'Failed to save changes';
         }
@@ -94,7 +110,7 @@
 <div class="col-md-6 col-lg-3 bg-light py-3">
 	<h3>Website Details</h3>
 	
-	<form id="websiteDetails" action="" method="post">
+	<form id="websiteDetails" method="post">
 		<div class="form-group mb-3">
 			<label>Website Name</label>
 			<input type="text" class="form-control" name="websiteName" value="<?php echo $settingValues['website_name']; ?>">
@@ -168,18 +184,34 @@
 <div class="col-md-6 col-lg-3 py-3">
 	<h3>Page Settings</h3>
 	
-	<form id="pageSettings">
+	<form id="pageSettings" method="post">
 		<div class="form-group mb-3">
 			<label>Homepage</label>
 			<select class="form-control" name="homepage">
 				<option selected disabled>--Select Homepage--</option>
+                
+                <?php $pages = $mysqli->query("SELECT id, name FROM `posts` ORDER BY post_type_id, name ASC"); ?>
+                
+                <?php if($pages->num_rows > 0) : ?>
+                    <?php while($page = $pages->fetch_assoc()) : ?>
+                        <option value="<?php echo $page['id']; ?>" <?php echo ($page['id'] == $settingValues['homepage'] ? 'selected' : ''); ?>><?php echo $page['name']; ?></option>
+                    <?php endwhile; ?>
+                <?php endif; ?>
 			</select>
 		</div>
 		
 		<div class="form-group mb-3">
 			<label>News Page</label>
 			<select class="form-control" name="newspage">
-				<option selected disabled>--Select News Page--</option>
+				<option value="" selected>No News Page</option>
+                
+                <?php $pages = $mysqli->query("SELECT id, name FROM `posts` WHERE post_type_id <> 2 ORDER BY post_type_id, name ASC"); ?>
+                
+                <?php if($pages->num_rows > 0) : ?>
+                    <?php while($page = $pages->fetch_assoc()) : ?>
+                        <option value="<?php echo $page['id']; ?>" <?php echo ($page['id'] == $settingValues['newspage'] ? 'selected' : ''); ?>><?php echo $page['name']; ?></option>
+                    <?php endwhile; ?>
+                <?php endif; ?>
 			</select>
 		</div>
 		
@@ -199,7 +231,7 @@
 	<div class="col-md-6 col-lg-3 bg-light py-3">
 		<h3>Social Media</h3>
 		
-		<form id="socialLinks" action="" method="post">
+		<form id="socialLinks" method="post">
 			<?php while($social = $socials->fetch_assoc()) : ?>
 				<div class="form-group mb-3">
 					<label><span class="fab fa-<?php echo str_replace(' ', '-', strtolower($social['name'])); ?>"></span> <?php echo ucwords($social['name']); ?></label>
