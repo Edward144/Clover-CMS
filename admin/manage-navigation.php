@@ -57,7 +57,54 @@
             $insertmessage = 'Item inserted successfully';
         }
     }
-?>
+
+    //Save structure
+    if(isset($_POST['saveStructure'])) {
+        $json = json_decode($_POST['json'], true);
+        $success = true;
+        $partSuccess = false;
+        $errors = '';
+        
+        $update = $mysqli->prepare("UPDATE `navigation_structure` SET name = ?, url = ?, visible = ?, position = ?, parent_id = ? WHERE id = ?");
+        
+        foreach($json as $item) {
+            if($item['delete'] == 1) {
+                $delete = $mysqli->prepare("DELETE FROM `navigation_structure` WHERE id = ?");
+                $delete->bind_param('i', $item['id']);
+                $delete->execute();
+                
+                if($delete->error) {
+                    $success = false;
+                    $errors .= 'Item ' . $item['id'] . '(' . $item['name'] . '): Failed to delete<br>' ;
+                }
+                else {
+                    $partSuccess = true;
+                }
+            }
+            else {
+                $update->bind_param('ssiiii', $item['name'], $item['url'], $item['visible'], $item['position'], $item['parent'], $item['id']);
+                $update->execute();
+                
+                if($update->error) {
+                    $success = false;
+                    $errors .= 'Item ' . $item['id'] . '(' . $item['name'] . '): Failed to update<br>' ;
+                }
+                else {
+                    $partSuccess = true;
+                }
+            }
+        }
+        
+        if($success == true) {
+            $status[$_POST['structureId']] = 'success';
+            $structuremessage[$_POST['structureId']] = 'Changes saved successfully';
+        }
+        else {
+            $status[$_POST['structureId']] = 'danger';
+            $structuremessage[$_POST['structureId']] = ($partSuccess == true ? 'Changes saved with errors:<br>' . $errors : 'Changes failed to save');
+        }
+    }
+?> 
 
 <div class="col-lg-3 bg-light py-3">
     <h3>Manage Menu</h3>
