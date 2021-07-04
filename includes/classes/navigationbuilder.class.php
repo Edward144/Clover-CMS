@@ -17,7 +17,7 @@
             $this->output =
                 '<form class="structure structureItems" id="structure' . $this->id . '" method="post">'
                     . $this->createlevel($this->id) . 
-                    '<div class="form-group">
+                    '<div class="form-group text-end">
                         <input type="hidden" name="json">
                         <input type="hidden" name="structureId" value="' . $this->id . '">
                         <input type="submit" class="btn btn-primary" name="saveStructure" name="saveStructure" value="Save Navigation Structure">
