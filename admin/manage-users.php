@@ -79,8 +79,8 @@
 
 	//Delete User
 	if(isset($_POST['deleteUser'])) {
-		$delete = $mysqli->prepare("DELETE FROM `users` WHERE id = ?");
-		$delete->bind_param('i', $_POST['id']);
+		$delete = $mysqli->prepare("DELETE FROM `users` WHERE id = ? AND id <> ? AND (SELECT COUNT(*) FROM `users`) > 1");
+		$delete->bind_param('ii', $_POST['id'], $_SESSION['adminid']);
 		$delete->execute();
 		
 		if($delete->error) {
@@ -156,7 +156,7 @@
 						<div class="form-group mt-auto mb-n1">
 							<input type="button" class="btn btn-primary mb-1" name="editUser" data-id="<?php echo $user['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal<?php echo $user['id']; ?>" value="Edit User">
 
-							<?php if($users->num_rows > 1 && $i > 0) : ?>
+							<?php if($users->num_rows > 1 && $user['id'] != $_SESSION['adminid']) : ?>
 								<form id="deleteUser" class="d-inline" method="post">
 									<input type="hidden" name="id" value="<?php echo $user['id']; ?>">
 									<input type="submit" class="btn btn-danger mb-1" data-confirm="Are you sure you want to delete this user?" name="deleteUser" value="Delete User">
