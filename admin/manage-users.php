@@ -79,7 +79,7 @@
 
 	//Delete User
 	if(isset($_POST['deleteUser'])) {
-		$delete = $mysqli->prepare("DELETE FROM `users` WHERE id = ? AND id <> ? AND id <> 1 AND (SELECT COUNT(*) FROM `users`) > 1");
+		$delete = $mysqli->prepare("DELETE FROM `users` WHERE id = ? AND id <> ? AND id <> 1");
 		$delete->bind_param('ii', $_POST['id'], $_SESSION['adminid']);
 		$delete->execute();
 		
