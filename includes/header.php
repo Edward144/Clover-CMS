@@ -10,8 +10,6 @@
             $settingsArray[$setting['name']] = $setting['value'];
         }
     }
-
-    var_dump($settingsArray);
 ?>
 
 <!DOCTYPE html>
@@ -54,7 +52,7 @@
                             </a>
 						</div>
                         
-                        <div class="col">
+                        <div class="col d-flex flex-column justify-content-between">
                             <?php if(!empty($settingsArray['phone']) || !empty($settingsArray['email'])) : ?>
                                 <div class="contact d-flex align-items-center justify-content-end">
                                     <?php if(!empty($settingsArray['phone'])) : ?>
@@ -73,9 +71,7 @@
                                 </div>
                             <?php endif; ?>
                             
-                            <nav class="text-end">
-                                Navigation
-                            </nav>
+                            <?php new navbar(); ?>
                         </div>
 					</div>
 				</div>
