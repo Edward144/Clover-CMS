@@ -31,12 +31,12 @@
             }
             
             $this->output =
-                '<nav class="navbar navbar-expand-xl navbar-dark py-0">
-                    <button class="navbar-toggler ms-auto me-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbar' . $this->menuId . '" aria-expanded="false" aria-label="Toggle navigation">
+                '<nav class="navbar navbar-expand-xl navbar-dark py-0" id="navbar' . $this->menuId . '">
+                    <button class="navbar-toggler ms-auto me-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse' . $this->menuId . '" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
-                    <div class="collapse navbar-collapse" id="navbar' . $this->menuId . '">'
+                    <div class="collapse navbar-collapse" id="navbarCollapse' . $this->menuId . '">'
                         . $this->createlevel() .
                     '</div>
                 </nav>';
@@ -54,34 +54,20 @@
             $itemsResult = $items->get_result();
             
             if($itemsResult->num_rows > 0) {
-                if($parentId == 0) {
-                    $output .= 
-                        '<ul class="navbar-nav ms-auto mb-2 mb-xl-0 text-end">';
-                    
-                    while($item = $itemsResult->fetch_assoc()) {
-                        $output .=
-                            '<li class="nav-item' . ($this->checkchildren($item['id']) ? ' dropdown' : '') . '">'
-                                . ($this->checkchildren($item['id']) ? '<a class="nav-link dropdown-toggle ms-2 ms-xl-0 float-end" href="#" id="dropdown' . $item['id'] . '" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>' . $this->createlevel($item['id']) : '') .
-                                '<a class="nav-link" href="' . $item['url'] . '" ' . (!empty($item['target']) ? 'target="' . $item['target'] . '"' : '') . '>' . $item['name'] . '</a></li>';
-                    }
-                    
-                    $output .=    
-                        '</ul>';
-                }
-                else {
+                $output .= 
+                    '<ul class="' . ($parentId == 0 ? 'navbar-nav ms-auto mb-2 mb-xl-0' : 'navbar-nav subMenu w-100') . '">';
+
+                while($item = $itemsResult->fetch_assoc()) {
                     $output .=
-                        '<ul class="dropdown-menu" aria-labelledby="dropdown' . $parentId . '">';
-                    
-                    while($item = $itemsResult->fetch_assoc()) {
-                        $output .=
-                            '<li' . ($this->checkchildren($item['id']) ? ' class="dropdown"' : '') . '>
-                                <a class="dropdown-item" href="' . $item['url'] . '" ' . (!empty($item['target']) ? 'target="' . $item['target'] . '"' : '') . '>' . $item['name'] . '</a>
-                            </li>';
-                    }
-                    
-                    $output .=        
-                        '</ul>';
+                        '<li class="nav-item' . ($this->checkchildren($item['id']) ? ' dropdown d-flex flex-wrap' : '') . '">
+                            <a class="nav-link ' . ($this->checkChildren($item['id']) ? 'd-inline-block ' : '') . 'flex-grow-1 px-3 px-xl-0" href="' . $item['url'] . '" ' . (!empty($item['target']) ? 'target="' . $item['target'] . '"' : '') . '>' . $item['name'] . '</a>'
+                            . ($this->checkChildren($item['id']) ? '<a class="nav-link d-inline-block dropdown-toggle float-end" href="#" id="dropdown' . $item['id'] . '" role="button" aria-expanded="false"></a>' : '')
+                            . ($this->checkchildren($item['id']) ? $this->createlevel($item['id']) : '') .
+                        '</li>';
                 }
+
+                $output .=    
+                    '</ul>';
                 
                 return $output;
             }
