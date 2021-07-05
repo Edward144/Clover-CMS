@@ -73,6 +73,30 @@
 		echo $metadata;
 	}
 
+    //Google analytics tracking code
+    function googleanalytics() {
+        global $mysqli;
+        
+        $checkAnalytics = $mysqli->query("SELECT value FROM `settings` WHERE name = 'google_analytics' LIMIT 1");
+        
+        if($checkAnalytics->num_rows > 0) {
+            if(preg_match('/^([A-Z]{2}\-[0-9]{8}\-[0-9]{1})$/', $checkAnalytics->fetch_array()[0], $matches)) {
+                $gaTag = $matches[0];
+                
+                echo 
+                    '<!-- Global site tag (gtag.js) - Google Analytics -->
+                    <script async src="https://www.googletagmanager.com/gtag/js?id=' . $gaTag . '"></script>
+                    <script>
+                      window.dataLayer = window.dataLayer || [];
+                      function gtag(){dataLayer.push(arguments);}
+                      gtag("js", new Date());
+
+                      gtag("config", "' . $gaTag . '");
+                    </script>';
+            }
+        }
+    }
+
 	//Generate random alphanumeric string, for passwords
 	function randomstring($length = 12, $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') {
 		$random = '';
