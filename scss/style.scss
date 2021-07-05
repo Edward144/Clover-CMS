@@ -54,6 +54,76 @@ $pagination-active-border-color: $pagination-active-bg;
 
 /* NAVIGATION */
 
+#navbar0 {
+    position: relative;
+}
+
+li.dropdown {
+    position: relative;
+}
+
+@include media-breakpoint-up(xl) {
+    li.dropdown:hover > .subMenu {
+        display: block;
+        width: 320px !important;
+    }
+    
+    li.dropdown:not(:hover) > .dropdown-toggle:after {
+        transform: rotate(90deg);
+    }
+}
+
+li.nav-item > .dropdown-toggle:after {
+    transition: transform 0.35s ease;
+}
+
+.navbar .subMenu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 320px;
+    background: shade-color($secondary, 5);
+}
+
+.subMenu .nav-link {
+    padding-left: $spacer !important;
+    padding-right: $spacer !important;
+}
+
+.subMenu .dropdown-toggle {
+    background-color: shade-color($secondary, 10);
+}
+
+@include media-breakpoint-down(xl) {
+    #navbar0 > .navbar-collapse {
+        position: absolute;
+        top: calc(100% + #{$spacer});
+        right: calc(var(--bs-gutter-x) / -2);
+        width: 100%;
+        max-width: 320px;
+        background-color: $secondary;
+    }
+    
+    #navbar0 .dropdown-toggle {
+        background-color: shade-color($secondary, 10);
+        padding-left: $spacer;
+        padding-right: $spacer;
+    }
+    
+    .navbar .subMenu {
+        position: static;
+    }
+    
+    li.nav-item:not(.exp) > .dropdown-toggle:after {
+        transform: rotate(90deg);
+    }
+    
+    li.dropdown.exp > .subMenu {
+        display: block;
+    }
+}
+
 /* FOOTER */
 
 #pageFooter address {
