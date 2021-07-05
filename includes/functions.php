@@ -48,7 +48,7 @@
 			$metadata .= '<meta name="author" content="' . $author . '">';
 		}
 		
-		return $metadata;
+		echo $metadata;
 	}
 
 	function metadata($title = '', $description = '', $keywords = '', $author = '') {
@@ -70,7 +70,7 @@
 			$metadata .= '<meta name="author" content="' . $author . '">';
 		}
         
-		return $metadata;
+		echo $metadata;
 	}
 
 	//Generate random alphanumeric string, for passwords
@@ -101,7 +101,7 @@
 		else {
 			return password_hash($pass, PASSWORD_BCRYPT);
 		}
-	}
+    }
 
 	//PHP mail function with HTML template
 	function systememail($to, $subject, $content, $additionalHeaders = '', $from = '') {
