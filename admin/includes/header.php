@@ -13,7 +13,10 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta charset="UTF-8">
 		
-		<?php adminmeta($title, $description, $keywords, $author); ?>
+		<?php 
+            adminmeta($title, $description, $keywords, $author); 
+            googleanalytics();
+        ?>
 		
 		<link rel="preconnect" href="https://fonts.gstatic.com">
 		<link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
