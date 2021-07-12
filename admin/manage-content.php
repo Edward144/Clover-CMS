@@ -301,7 +301,7 @@
 				</table>
 			</div>
         
-            <?php $pagination->display(); ?>
+            <?php echo $pagination->display(); ?>
 		<?php else : ?>
 			<div class="alert alert-info">No content could be found</div>
 		<?php endif; ?>
