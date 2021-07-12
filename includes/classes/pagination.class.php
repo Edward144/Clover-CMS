@@ -24,9 +24,13 @@
                 $this->pageUrl = explode($_SERVER['SERVER_NAME'] . ROOT_DIR)[1] . explode('?', $_SERVER['REQUEST_URI'])[0];
             }
             
-            //Remove existing page query         
+            //Remove existing page query
+            if(strlen(explode('?', $_SERVER['REQUEST_URI'])[1])) {
 			$queryString = preg_replace('/((\?|\&)page=[^\&]+)/', '', '?' . explode('?', $_SERVER['REQUEST_URI'])[1]);
-            
+            }
+            else {
+                $queryString = '';
+            }
             
             //Change first character to ? if &
             if(strpos($queryString, '&') === 0) {
@@ -127,7 +131,7 @@
                     '</ul>
                 </nav>';
             
-            echo $output;
+            return $output;
         }
     }
     
