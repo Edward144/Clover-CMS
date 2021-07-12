@@ -34,7 +34,8 @@ body {
 }
 
 body#tinymce {
-	margin: $spacer * .75;
+	margin: ($spacer * .75) auto;
+    padding: 0 ($spacer * .75);
 }
 
 .wrapper {
