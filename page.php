@@ -24,4 +24,10 @@
     <?php parsecontent($content['content']); ?>
 </div>
 
+<?php 
+    if($content['id'] == $settingsArray['newspage']) {
+        echo listposts();
+    }
+?>
+
 <?php require_once(dirname(__FILE__) . '/includes/footer.php'); ?>

@@ -206,6 +206,98 @@
 		echo $content;
 	}
 
+    //List posts with pagination
+    function listposts($postType = 2, $items = 12, $displayDate = true, $displayAuthor = true) {
+        global $mysqli;
+        
+        if(!is_numeric($postType) || $postType <= 0) {
+            $postType = 2;
+        }
+        
+        if(!is_numeric($items) || $items <= 0) {
+            $items = 12;
+        }
+        
+        if(isset($_SESSION['adminid'])) {
+            $visiblity = 1;
+        }
+        else {
+            $visiblity = 2;
+        }
+        
+        $newspage = $mysqli->query("SELECT value FROM `settings` WHERE name = 'newspage' LIMIT 1");
+        
+        if($newspage->num_rows > 0) {
+            $newspage = $newspage->fetch_array()[0];
+        }
+        else {
+            $newspage = 0;
+        }
+        
+        $countPosts = $mysqli->prepare("SELECT COUNT(*) FROM `posts` WHERE post_type_id = ? AND id <> ? AND state >= ?");
+        $countPosts->bind_param('iii', $postType, $newspage, $visiblity);
+        $countPosts->execute();
+        $postCount = $countPosts->get_result()->fetch_array()[0];
+        
+        $pagination = new pagination($postCount);
+        $pagination->itemsPerPage = $items;
+        $pagination->load();
+        
+        $checkPosts = $mysqli->prepare(
+            "SELECT posts.*, post_types.name AS post_type FROM `posts` AS posts 
+                LEFT OUTER JOIN `post_types` AS post_types ON post_types.id = posts.post_type_id
+            WHERE posts.post_type_id = ? AND posts.id <> ? AND posts.state >= ?
+            ORDER BY posts.date_created DESC LIMIT {$pagination->itemsPerPage} OFFSET {$pagination->offset}"
+        );
+        $checkPosts->bind_param('iii', $postType, $newspage, $visiblity);
+        $checkPosts->execute();
+        $posts = $checkPosts->get_result();
+        
+        if($posts->num_rows > 0) {
+            $output = 
+                '<div class="postsList row" id="postsList' . $postType . '">';
+            
+            while($post = $posts->fetch_assoc()) {
+                if($displayDate == true || $displayAuthor == true) {
+                    $details = 
+                        '<h5 class="postDetails">' .
+                            ($displayDate == true && !empty($post['date_created']) ? '<span class="postDate"><span class="fa fa-calendar"></span> ' . date('d/m/Y', strtotime($post['date_created'])) . '</span>' : '') .   
+                            ($displayAuthor == true && !empty($post['author']) ? '<span class="postAuthor"><span class="fa fa-user"></span> ' . $post['author'] . '</span>' : '') .   
+                        '</h5>';
+                }
+                else {
+                    $details = '';
+                }
+                
+                $output .=
+                    '<div class="col-sm-6 col-lg-3 mb-3">
+                        <div class="postItem" id="postItem' . $post['id'] . '">
+                            <div class="postImage">
+                                ' . (!empty($post['featured_image']) ? '<img src="' . $post['featured_image'] .'" alt="' . $post['name'] . ' Featured Image">' : '') . '
+                            </div>
+                            
+                            <div class="postBody">
+                                <h3 class="postTitle">' . $post['name'] . '</h3>' . 
+                                $details .
+                    
+                                (!empty($post['excerpt']) ? '<p class="postExcerpt">' . substr($post['excerpt'], 0, 100) . (strlen($post['excerpt']) > 100 ? '...' : '') . '</p>' : '') .
+                    
+                                (!empty($post['content']) ? '<div class="postLink"><a href="' . $post['post_type'] . '/' . $post['url'] . '" class="btn btn-primary text-white">Read More</a></div>' : '') .
+                            '</div>
+                        </div>
+                    </div>';
+            }
+            
+            $output .=
+                '</div>' . $pagination->display();
+        }
+        else {
+            $output = '<div class="alert alert-info">No posts could be found</div>';
+        }
+        
+        return $output;
+    }
+
     //Include class
     $classes = scandir(dirname(__FILE__) . '/classes');
 
