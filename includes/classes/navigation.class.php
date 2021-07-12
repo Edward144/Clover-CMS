@@ -86,7 +86,13 @@
     }
     
     class verticalnav extends navbar {
-    
+        private function display() {
+            
+        }
+        
+        private function createlevel($parentId = 0) {
+            
+        }
     }
 
 ?>
