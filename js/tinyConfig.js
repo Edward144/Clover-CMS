@@ -18,12 +18,17 @@ tinymce.init({
 		{
 			title: 'Two Columns',
 			description: 'Two reponsive columns',
-			url: 'tinymce/templates/two-column.html'
+			url: 'js/tinymce/templates/two-column.html'
 		},
 		{
 			title: 'Three Columns',
 			description: 'Three responsive columns',
-			url: 'tinymce/templates/three-column.html'
+			url: 'js/tinymce/templates/three-column.html'
+		},
+        {
+			title: 'Four Columns',
+			description: 'Four responsive columns',
+			url: 'js/tinymce/templates/four-column.html'
 		},
 	]
 });
