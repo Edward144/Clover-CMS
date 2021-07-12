@@ -187,7 +187,7 @@
             </div>
             
             <?php if(isset($message)) : ?>
-                <div class="alert alert-<?php echo $status; ?> mb-0">
+                <div class="alert alert-<?php echo $status; ?> mb-0 mt-3">
                     <?php echo $message; ?>
                 </div>
             <?php endif; ?>
