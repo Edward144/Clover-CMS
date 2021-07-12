@@ -25,6 +25,11 @@ $pagination-active-border-color: $pagination-active-bg;
 
 /* GENERAL */
 
+body#tinymce {
+	margin: ($spacer * .75) auto;
+    padding: 0 ($spacer * .75);
+}
+
 .wrapper {
     overflow-x: hidden;
     min-height: 100vh;
@@ -35,6 +40,15 @@ $pagination-active-border-color: $pagination-active-bg;
 
 .wrapper > .main {
     flex-grow: 1;
+}
+
+.fullWidth {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
 }
 
 /* HEADER */
