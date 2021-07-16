@@ -171,6 +171,20 @@ li.nav-item > .dropdown-toggle:after {
     }
 }
 
+.verticalnav .nav .nav {
+    padding-left: $spacer;
+}
+
+#pageFooter .verticalnav .nav-link {
+    color: $white;
+    padding: 0;
+}
+
+#pageFooter .verticalnav .nav-link:hover,
+#pageFooter .verticalnav .nav-link:active {
+    text-decoration: underline;
+}
+
 /* FOOTER */
 
 #pageFooter address {

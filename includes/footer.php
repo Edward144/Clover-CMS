@@ -73,12 +73,9 @@
                         </div>
                         
                         <div class="links col">
-                            <?php $links = ''; ?>
+                            <h3>Useful Links</h3>
                             
-                            <?php if(1 == 1) : ?>
-                                <h3>Useful Links</h3>
-                            
-                            <?php endif; ?>
+                            <?php new verticalnav(1); ?>
                         </div>
                     </div>
                 </div>

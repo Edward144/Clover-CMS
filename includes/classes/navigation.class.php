@@ -2,7 +2,7 @@
 
     class navbar {
         public $menuId;
-        private $output = '';
+        protected $output = '';
         
         public function __construct($menuId = 0) {
             if(is_numeric($menuId) && $menuId >= 0) {
@@ -85,13 +85,67 @@
         }
     }
     
-    class verticalnav extends navbar {
-        private function display() {
+    class verticalnav extends navbar {        
+        public function __construct($menuId = 0) {
+            if(is_numeric($menuId) && $menuId >= 0) {
+                $this->menuId = $menuId;
+            }
+            else {
+                $this->menuId = 0;
+            }
             
+            $this->display();
+        }
+        
+        private function display() {
+            global $mysqli;
+            
+            //Check menu exists 
+            if($this->menuId > 0) {
+                $checkMenu = $mysqli->prepare("SELECT COUNT(*) FROM `navigation_menus` WHERE id = ?");
+                $checkMenu->bind_param('i', $this->menuId);
+                $checkMenu->execute();
+                $checkResult = $checkMenu->get_result();
+                
+                if($checkResult->fetch_array()[0] <= 0) {
+                    return;
+                }
+            }
+            
+            $this->output =
+                '<nav class="verticalnav" id="nav' . $this->menuId . '">'
+                    . $this->createlevel() .
+                '</nav>';
+            
+            echo $this->output;
         }
         
         private function createlevel($parentId = 0) {
+            global $mysqli;
+            $output = '';
             
+            $items = $mysqli->prepare("SELECT * FROM `navigation_structure` WHERE menu_id = ? AND parent_id = ? AND visible = 1 ORDER BY position ASC");
+            $items->bind_param('ii', $this->menuId, $parentId);
+            $items->execute();
+            $itemsResult = $items->get_result();
+            
+            if($itemsResult->num_rows > 0) {
+                $output .=
+                    '<ul class="nav flex-column">';
+                
+                while($item = $itemsResult->fetch_assoc()) {
+                    $output .=
+                        '<li class="nav-item">
+                            <a class="nav-link" href="' . $item['url'] . '" ' . (!empty($item['target']) ? 'target="' . $item['target'] . '"' : '') . '>' . $item['name'] . '</a>'
+                            . ($this->checkchildren($item['id']) == true ? $this->createlevel($item['id']) : '') . 
+                        '</li>';
+                }
+                
+                $output .=    
+                    '</ul>';
+            }
+            
+            return $output;
         }
     }
 
