@@ -1,8 +1,9 @@
 <?php
 
     require_once(dirname(__FILE__, 2) . '/includes/database.php');
+    require_once(dirname(__FILE__, 2) . '/includes/functions.php');
 
-    if(file_exists(dirname(__FILE__, 2) . '/settings.php')) {
+    if(file_exists(dirname(__FILE__, 2) . '/includes/settings.php')) {
         header('Location: ' . ROOT_DIR);
         exit();
     }
@@ -28,7 +29,7 @@
             
             $mysqli->query(
                 "INSERT INTO `settings` (name, value) VALUES
-                ('setup_complete, 0),
+                ('setup_complete', 0),
                 ('website_name', ''),
                 ('address_1', ''),
                 ('address_2', ''),
@@ -144,10 +145,63 @@
             );
             
             //Create the settings file
-        
-            //Create the admin user
+            $settings = fopen(dirname(__FILE__, 2) . '/includes/settings.php', 'w');
             
-            //Mark as setup completed
+            if(!$settings) {
+                $status = 'danger';
+                $setupmessage = 'Failed to create settings file, ensure permissions are correct for /includes directory';
+            }
+            else {
+                $rootdir = '/' . explode('/', dirname(__FILE__, 2))[count(explode('/', dirname(__FILE__, 2))) - 1] . '/';
+                define(ROOT_DIR, $rootdir);
+                
+                fwrite($settings, 
+                    "<?php
+                        //Database Details
+                        \$hostname = '" . $_POST['hostname'] . "';
+                        \$database = '" . $_POST['database'] . "';
+                        \$username = '" . $_POST['username'] . "';
+                        \$password = '" . $_POST['password'] . "';
+
+                        define('ROOT_DIR', '" . $rootdir . "');
+                        define('BASE_DIR', (!empty(\$_SERVER['HTTPS']) ? 'https' : 'http') . '://' . \$_SERVER['SERVER_NAME'] . ROOT_DIR);
+                    ?>"
+                );
+
+                fclose($settings);
+                
+                //Create the admin user
+                $password = password_hash($_POST['aPassword'], PASSWORD_BCRYPT);
+                
+                $createAdmin = $mysqli->prepare("INSERT IGNORE INTO `users` (first_name, last_name, username, email, password) VALUES('Admin', 'User', 'admin', ?, ?)");
+                $createAdmin->bind_param('ss', $_POST['aEmail'], $password);
+                $createAdmin->execute();
+                
+                if($createAdmin->error) {
+                    $status = 'danger';
+                    $setupmessage = 'Failed to create admin user';
+                }
+                else {
+                    //Email confirmation to admin
+                    $to = $_POST['aEmail'];
+                    $subject = 'Clover CMS has finished setup';
+                    $content = 
+                        '<p>Welcome ' . $_POST['aEmail'] . ',</p>
+                        <p>Clover CMS has finished it\'s setup and you can now login using the link below. You can login with username <strong>admin</strong> and your chosen password.</p>
+                        
+                        <div style="margin: 1rem auto;">
+                            <a href="' . (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $rootdir . 'admin-login" target="_blank" style="border-radius: 10px; box-sizing: border-box; background: #009688; color: #fff; padding: 0.5rem; border: 0; text-decoration: none;">Click here to login</a>
+                        </div>';
+                    
+                    systememail($to, $subject, $content);
+                    
+                    //Mark as setup completed    
+                    $mysqli->query("UPDATE `settings` SET value = 1 WHERE name = 'setup_complete'");
+                    $status = 'success';
+                    $setupmessage = 'Setup is complete you can now login with username <strong>admin</strong> and your chosen password, by clicking <a href="../admin-login">here</a>';
+                }
+                
+            }
         }
     }
 
@@ -157,7 +211,6 @@
 
 <html lang="en">
 	<head>
-        <base href="<?php echo BASE_DIR; ?>">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
 		<title>Clover CMS Setup</title>
@@ -165,11 +218,11 @@
 		<link rel="preconnect" href="https://fonts.gstatic.com">
 		<link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-		<link rel="stylesheet" href="css/adminStyle.min.css">
+		<link rel="stylesheet" href="../css/adminStyle.min.css">
 		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-		<script src="bootstrap-5.0.1/bootstrap.min.js"></script>
+		<script src="../bootstrap-5.0.1/bootstrap.min.js"></script>
 		<script src="https://kit.fontawesome.com/a05d626b05.js" crossorigin="anonymous"></script>
     </head>
     
@@ -181,7 +234,7 @@
 						<input type="hidden" name="doSetup">
 						
 						<div class="formHeader text-center bg-primary text-white p-3">
-							<h1 class="mb-0"><img src="images/clover-cms-logo.png" alt="Clover CMS Logo" style="width: 50px;"> Clover CMS Setup</h1>
+							<h1 class="mb-0"><img src="../images/clover-cms-logo.png" alt="Clover CMS Logo" style="width: 50px;"> Clover CMS Setup</h1>
 						</div>
 
 						<div class="formBody border-right border-left border-right border-light p-3">
@@ -273,4 +326,60 @@
 			</div>
 		</div>
     </body>
+    
+    <script>
+        //Validate form
+        $("form").submit(function() {
+            var valid = true;
+            var passChar = 8;
+
+            $(this).find(".invalid-feedback").remove();
+            $(this).find(".is-invalid").removeClass("is-invalid");
+
+            //Validate Passwords
+            if($(this).find("input[name='aPassword']").length && $(this).find("input[name='aPasswordConf']").length) {
+                var pass = $(this).find("input[name='aPassword']");
+                var passConf = $(this).find("input[name='aPasswordConf']");
+
+                if(pass.val().length || passConf.val().length) {
+                    if(pass.val().length < passChar) {
+                        pass.addClass("is-invalid");
+                        $("<div class='invalid-feedback'>Password must be at least " + passChar + " characters</div>").insertAfter(pass);
+
+                        valid = false;
+                    }
+                    else if(!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/.test(pass.val())) {
+                        pass.addClass("is-invalid");
+                        $("<div class='invalid-feedback'>Password must contain at least one lowercase, one uppercase and one digit</div>").insertAfter(pass);
+
+                        valid = false;
+                    }
+                    else if(pass.val() != passConf.val()) {
+                        pass.addClass("is-invalid");
+                        passConf.addClass("is-invalid");
+                        $("<div class='invalid-feedback'>Passwords do not match</div>").insertAfter(passConf);
+
+                        valid = false;
+                    }
+                }
+            }
+
+            //Validate Urls
+            if($(this).find("input[name='url']").length) {
+                var url = $(this).find("input[name='url']");
+
+                if(!/^[a-zA-Z0-9\:\/\-\_\+\?\&\=\#\.]+$/.test(url.val())) {
+                    url.addClass("is-invalid");
+                    $("<div class='invalid-feedback'>Url contains invalid characters. Allowed characters are A-Z, 0-9, :, /, -, _, +, ?, &, =, #, .</div>").insertAfter(url);
+
+                    valid = false;
+                }
+            }
+
+            if(valid == false) {
+                event.preventDefault();
+                return;
+            }
+        });
+    </script>
 </html>
