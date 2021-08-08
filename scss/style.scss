@@ -28,6 +28,7 @@ $pagination-active-border-color: $pagination-active-bg;
 body#tinymce {
 	margin: ($spacer * .75) auto;
     padding: 0 ($spacer * .75);
+    max-width: map-get($grid-breakpoints, 'xl');
 }
 
 .wrapper {
