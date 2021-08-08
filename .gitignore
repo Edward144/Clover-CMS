@@ -1,2 +1,4 @@
 admin/template.php
 includes/settings.php
+includes/templates/*
+!includes/templates/.gitkeep
