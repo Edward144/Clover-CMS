@@ -100,12 +100,12 @@ body#tinymce {
 
 /* ADMIN LOGIN */
 
-#adminLogin {
+#adminLogin, #setup {
 	width: 100%;
 	max-width: 768px;
 }
 
-#adminLoginPage {
+#adminLoginPage, #setupPage {
 	background-image: url('../images/admin-background.jpg');
 	background-color: #00963D;
 	background-repeat: no-repeat;
