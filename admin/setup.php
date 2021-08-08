@@ -94,6 +94,7 @@
                     template VARCHAR(255),
                     date_created DATETIME DEFAULT CURRENT_TIMESTAMP(),
                     last_edited DATETIME DEFAULT CURRENT_TIMESTAMP(),
+                    last_edited_by INT,
                     state  INT DEFAULT 0,
                     meta_title VARCHAR(255),
                     meta_description VARCHAR(500),
