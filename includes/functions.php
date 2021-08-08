@@ -1,6 +1,6 @@
 <?php
 	
-	require_once(dirname(__DIR__) . '/includes/settings.php');
+	include_once(dirname(__DIR__) . '/includes/settings.php');
 	
 	//Check if admin user is logged in
 	function isloggedin() {
