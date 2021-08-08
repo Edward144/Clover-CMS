@@ -18,8 +18,8 @@
     if(isset($_POST['createContent'])) {
         $unique = rtrim(base64_encode(date('Y-m-d H:i:s')), '=');
                         
-        $create = $mysqli->prepare("INSERT INTO `posts` (post_type_id, name, url) VALUES(?, ?, ?)");
-        $create->bind_param('iss', $pt['id'], $pt['name'], $unique);
+        $create = $mysqli->prepare("INSERT INTO `posts` (post_type_id, name, url, last_edited_by) VALUES(?, ?, ?, ?)");
+        $create->bind_param('issi', $pt['id'], $pt['name'], $unique, $_SESSION['adminid']);
         $ex = $create->execute();
         
         if($ex === false) {
@@ -58,8 +58,8 @@
 
     //Save Content
     if(isset($_POST['saveContent'])) {
-        $save = $mysqli->prepare("UPDATE `posts` SET name = ?, url = ?, template = ?, author = ?, date_created = ?, state = ?, featured_image = ?, excerpt = ?, content = ?, meta_title = ?, meta_description = ?, meta_keywords = ?, meta_author = ? WHERE id = ?");
-        $save->bind_param('sssssisssssssi', $_POST['name'], $_POST['url'], $_POST['template'], $_POST['author'], $_POST['dateCreated'], $_POST['state'], $_POST['featuredImage'], $_POST['excerpt'], $_POST['content'], $_POST['metaTitle'], $_POST['metaDescription'], $_POST['metaKeywords'], $_POST['metaAuthor'], $_POST['id']);
+        $save = $mysqli->prepare("UPDATE `posts` SET name = ?, url = ?, template = ?, author = ?, date_created = ?, state = ?, featured_image = ?, excerpt = ?, content = ?, meta_title = ?, meta_description = ?, meta_keywords = ?, meta_author = ?, last_edited = NOW(), last_edited_by = ? WHERE id = ?");
+        $save->bind_param('sssssisssssssii', $_POST['name'], $_POST['url'], $_POST['template'], $_POST['author'], $_POST['dateCreated'], $_POST['state'], $_POST['featuredImage'], $_POST['excerpt'], $_POST['content'], $_POST['metaTitle'], $_POST['metaDescription'], $_POST['metaKeywords'], $_POST['metaAuthor'], $_SESSION['adminid'], $_POST['id']);
         $save->execute();
         
         if($save->error) {
