@@ -24,6 +24,19 @@
                 echo json_encode($method . ' does not exist');
             }
         }
+        elseif($_POST['method'] == 'addOptionRadio') {
+            $checked = ($_POST['isDefault'] === 'true' ? true : false);
+            $option = new formbuilder();
+            $o = $option->radio_option($_POST['inputId'], '', $checked);
+            
+            echo json_encode($o);
+        }
+        elseif($_POST['method'] == 'addOptionSelect') {
+            $option = new formbuilder();
+            $o = $option->select_option('');
+            
+            echo json_encode($o);
+        }
         
         exit();
     }
@@ -211,19 +224,12 @@
                 '<ul class="list-group options mt-2 ms-5">';
             
             foreach($data['options'] as $opt) {
-                $options .=
-                    '<li class="list-group-item option">
-                        <div class="input-group">
-                            <span class="input-group-text">Value</span>
-                            <input type="text" class="form-control" name="optionvalue" value="' . $opt['value'] . '" required>
-                            <input type="button" class="btn btn-danger" name="deleteOption" value="× Option">
-                        </div>
-                    </li>';
+                $options .= $this->select_option($opt['value']);
             }
             
             $options .= 
                     '<li class="list-group-item actions bg-light d-flex align-items-center justify-content-end">
-                        <input type="button" class="btn btn-primary" name="addOption" value="+ Option">
+                        <input type="button" class="btn btn-primary" name="addOptionSelect" value="+ Option">
                     </li>
                 </ul>';
             
@@ -237,28 +243,30 @@
             return $output;
         }
         
+        public function select_option($value) {
+            $output = 
+                '<li class="list-group-item option">
+                    <div class="input-group">
+                        <span class="input-group-text">Value</span>
+                        <input type="text" class="form-control" name="optionvalue" value="' . $value . '" required>
+                        <input type="button" class="btn btn-danger" name="deleteOption" value="× Option">
+                    </div>
+                </li>';
+            
+            return $output;
+        }
+        
         protected function input_radio($data = []) {
             $options = 
                 '<ul class="list-group options mt-2 ms-5">';
             
             foreach($data['options'] as $opt) {
-                $options .=
-                    '<li class="list-group-item option">
-                        <div class="input-group">
-                            <span class="input-group-text">Value</span>
-                            <input type="text" class="form-control" name="optionvalue" value="' . $opt['value'] . '" required>
-                            <div class="input-group-text">
-                                <input type="radio" class="form-check-input mt-0" name="' . $data['inputid'] . 'default" ' . ($opt['default'] == true ? 'checked' : '') . '>
-                            </div>
-                            <span class="input-group-text">Default?</span>
-                            <input type="button" class="btn btn-danger" name="deleteOption" value="× Option">
-                        </div>
-                    </li>';
+                $options .= $this->radio_option($data['inputid'], $opt['value'], $opt['default']);
             }
             
             $options .= 
                     '<li class="list-group-item actions bg-light d-flex align-items-center justify-content-end">
-                        <input type="button" class="btn btn-primary" name="addOption" value="+ Option">
+                        <input type="button" class="btn btn-primary" name="addOptionRadio" value="+ Option">
                     </li>
                 </ul>';
             
@@ -268,6 +276,27 @@
                     <span class="input-group-text">Label</span>
                     <input type="text" class="form-control" name="label" value="' . (!empty($data['label']) ? $data['label'] : '') . '">
                 </div>' . $options;
+            
+            return $output;
+        }
+        
+        public function radio_option($inputId, $value, $checked = false) {
+            $output = '';
+            
+            if(!empty($inputId)) {
+                $output .= 
+                    '<li class="list-group-item option">
+                        <div class="input-group">
+                            <span class="input-group-text">Value</span>
+                            <input type="text" class="form-control" name="optionvalue" value="' . $value . '" required>
+                            <div class="input-group-text">
+                                <input type="radio" class="form-check-input mt-0" name="' . $inputId . 'default" ' . ($checked == true ? 'checked' : '') . '>
+                            </div>
+                            <span class="input-group-text">Default?</span>
+                            <input type="button" class="btn btn-danger" name="deleteOption" value="× Option">
+                        </div>
+                    </li>';
+            }
             
             return $output;
         }
@@ -516,6 +545,13 @@
                         <div class="input-group me-2">
                             <span class="input-group-text">Form ID</span>
                             <input type="text" class="form-control bg-white" name="formid" value="' . $this->structure['formid'] . '" readonly>
+                            <span class="input-group-text">Action</span>
+                            <input type="text" class="form-control" name="action" value="' . $this->structure['action'] . '" placeholder="path/to/script.php">
+                            <span class="input-group-text">Method</span>
+                            <select class="form-control" name="method">
+                                <option value="post">POST</option>
+                                <option value="get">GET</option>
+                            </select>
                         </div>
                         <input type="button" class="btn btn-primary" name="addGroup" value="+ Group">
                     </li>
@@ -578,7 +614,7 @@
                             <span class="input-group-text">Input ID</span>
                             <input type="text" class="form-control bg-white" name="inputid" value="' . (isset($input['inputid']) ? $input['inputid'] : '') .'" readonly>
                             <span class="input-group-text">Input Type</span>
-                            <input type="text" class="form-control bg-white" name="inputtype" value="' . (isset($input['type']) ? str_replace('_', '-', $input['type']) : '') .'" readonly>
+                            <input type="text" class="form-control bg-white" name="type" value="' . (isset($input['type']) ? str_replace('_', '-', $input['type']) : '') .'" readonly>
                             <input type="button" class="btn btn-dark" data-bs-toggle="collapse" href="#input' . $input['inputid'] . '" role="button" aria-expanded=false value="Expand">
                             <input type="button" class="btn btn-danger" name="deleteInput" value="× Input">
                         </div>
