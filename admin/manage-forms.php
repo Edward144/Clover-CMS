@@ -1,256 +1,158 @@
 <?php 
-	$title = 'Manage Forms';
-	require_once(dirname(__FILE__) . '/includes/header.php'); 
+    require_once(dirname(__DIR__) . '/includes/database.php');
+    require_once(dirname(__DIR__) . '/includes/functions.php');
 ?>
 
-<div class="col-lg-3 bg-light py-3">	
+<?php if(isset($_GET['id'])) : ?>
+    <?php
+        $checkForm = $mysqli->prepare("SELECT * FROM `forms` WHERE id = ? LIMIT 1");
+        $checkForm->bind_param('i', $_GET['id']);
+        $checkForm->execute();
+        $formResult = $checkForm->get_result();
 
-</div>
-
-<div class="col py-3">
-	<?php $formbuilder = new formbuilder(1); echo $formbuilder->display(); ?>
-</div>
-
-<script>
-    function formbuilder_generaterandom() {
-        var random = btoa(new Date().getTime()).split("=")[0];
-        return random;
-    }
-    
-    //Save structure
-    function formbuilder_save(output, builder = "", debug = false) {
-        var structure = {};
-        
-        if(builder == "") {
-            builder = $(".formbuilder").first();
-        }
-        else {
-            builder = builder;
+        if($formResult->num_rows <= 0) {
+            header('Location: ./manage-forms');
+            exit();
         }
         
-        //Get form info
-        structure['formid'] = builder.children(".list-group").children(".actions").find("input[name='formid']").val();
-        structure['action'] = builder.children(".list-group").children(".actions").find("input[name='action']").val();
-        structure['method'] = builder.children(".list-group").children(".actions").find("select[name='method']").val();
-    
-        //Loop groups
-        var groups = [];
-        var gi = 0;
-        
-        builder.children(".list-group").children(".list-group-item:not(.actions)").each(function() {            
-            //Loop inputs
-            var inputs = [];
-            var ii = 0;
+        $form = $formResult->fetch_assoc();
+        $title = 'Manage Forms: ' . $form['name'];
+        require_once(dirname(__FILE__) . '/includes/header.php');
+
+        //Save Form
+        if(isset($_POST['saveForm'])) {
+            $save = $mysqli->prepare("UPDATE `forms` SET name = ?, structure = ? WHERE id = ?");
+            $save->bind_param('ssi', $_POST['name'], $_POST['structure'], $_POST['id']);
+            $save->execute();
             
-            $(this).children(".inputs").children(".input").each(function() {                
-                var inputValues = {};
-                
-                //Add parameters
-                $(this).find("input:not([type='button']):not([type='submit']), textarea, checkbox").each(function() {
-                    if(!$(this).parents(".list-group-item").first().hasClass("option")) {
-                        var index = $(this).attr("name");
+            if($save->error) {
+                $status = 'danger';
+                $savemsg = 'Failed to save form';
+            }
+            else {
+                $status = 'success';
+                $savemsg = 'Saved form successfully';
+            }
+        }
+    ?>
 
-                        if($(this).is(":checkbox")) {
-                            if($(this).is(":checked")) {
-                                var value = true;
-                            }
-                            else {
-                                var value = false;
-                            }
-                        }
-                        else {
-                            var value = $(this).val();
-                        }
+    <div class="col-lg-3 bg-light py-3">	
+        <div class="form-group mb-3">
+            <input type="button" class="btn btn-dark" name="returnList" value="Return to List">
+        </div>
+        
+        <form id="manageForm" method="post">
+            <input type="hidden" name="id" value="<?php echo $form['id']; ?>">
+            <input type="hidden" name="structure" value="<?php echo $form['structure']; ?>">
+            
+            <div class="form-group mb-3">
+                <label>Name</label>
+                <input type="text" class="form-control" name="name" value="<?php echo $form['name']; ?>" required>
+            </div>
+            
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" name="saveForm" value="Save Form">
+            </div>
+            
+            <?php if(!empty($savemsg)) : ?>
+                <div class="alert alert-<?php echo $status; ?> mt-3 mb-0">
+                    <?php echo $savemsg; ?>    
+                </div>
+            <?php endif; ?>
+        </form>
+    </div>
 
-                        inputValues[index] = value;
-                    }
-                });
-                
-                //Add options (select, radio)
-                if($(this).find(".options").length) {
-                    var options = [];
-                    
-                    $(this).find(".option").each(function() {
-                        if($(this).find(":radio").length) {
-                            //Radio, also add default
-                            if($(this).find(":radio:checked").length) {
-                                var isDefault = true;
-                            }
-                            else {
-                                var isDefault = false;
-                            }
+    <div class="col py-3">
+        <?php $formbuilder = new formbuilder($form['id']); echo $formbuilder->display(); ?>
+    </div>
+<?php else : ?>
+    <?php 
+        $title = 'Manage Forms';
+        require_once(dirname(__FILE__) . '/includes/header.php'); 
+    ?>
 
-                            options.push({
-                                "value": $(this).find("input[name='optionvalue']").first().val(),
-                                "default": isDefault
-                            });
-                        }
-                        else {
-                            //Select, only needs value
-                            options.push({
-                                "value": $(this).find("input[name='optionvalue']").first().val()
-                            });
-                        }
-                    });
-                    
-                    inputValues['options'] = options;
-                }
-                
-                inputs[ii] = inputValues;
-                
-                ii++;
-            });
-            
-            groups[gi] = {
-                "groupid": $(this).find("input[name='groupid']").first().val(),
-                "name": $(this).find("input[name='groupname']").first().val(),
-                "inputs": inputs
-            }
-            
-            gi++;
-        });
+    <div class="col-lg-3 bg-light py-3">	
+        <form id="createForm" method="post">
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="Create Form">
+            </div>
+        </form>
+    </div>
+
+    <div class="col py-3">
+        <h3>Current Forms</h3>
+		
+		<?php 
+			$search = (!empty($_GET['search']) ? '%' . $_GET['search'] . '%' : '%');
+		
+            $contentCount = $mysqli->prepare(
+				"SELECT posts.* FROM `posts` AS posts
+					LEFT OUTER JOIN `post_types` AS post_types ON post_types.id = posts.post_type_id
+				WHERE post_types.name = ? AND (posts.name LIKE ? OR posts.id LIKE ? OR posts.author LIKE ? OR posts.excerpt LIKE ? OR posts.content LIKE ?) 
+				ORDER BY date_created DESC"
+			);
+			$contentCount->bind_param('ssssss', $pt['name'], $search, $search, $search, $search, $search);
+			$contentCount->execute();
+			$contentCountResult = $contentCount->get_result();
         
-        structure['groups'] = groups;
+            $pagination = new pagination($contentCountResult->num_rows);
+			$pagination->load();
         
-        if(debug == true) {
-            console.log(structure);
-        }
-        else {
-            output.val(JSON.stringify(structure));
-        }
-    }
-    
-    //Add group
-    function formbuilder_addgroup(button) {
-        var groupCount = $(".formbuilder").children(".groups").children(".group").length + 1;
-        var groupData = {
-            "groupid": formbuilder_generaterandom(),
-            "name": "Group " + groupCount,
-            "inputs": []
-        };
+			$content = $mysqli->prepare(
+				"SELECT posts.* FROM `posts` AS posts
+					LEFT OUTER JOIN `post_types` AS post_types ON post_types.id = posts.post_type_id
+				WHERE post_types.name = ? AND (posts.name LIKE ? OR posts.id LIKE ? OR posts.author LIKE ? OR posts.excerpt LIKE ? OR posts.content LIKE ?) 
+				ORDER BY date_created DESC LIMIT {$pagination->itemsPerPage} OFFSET {$pagination->offset}"
+			);
+			$content->bind_param('ssssss', $pt['name'], $search, $search, $search, $search, $search);
+			$content->execute();
+			$contentResult = $content->get_result();			
+		?>
+		
+		<?php if($contentResult->num_rows > 0) : ?>
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead class="table-dark">
+						<tr>
+							<th class="shorten">ID</th>
+							<th>Details</th>
+							<th class="shorten">Date Created</th>
+							<th class="shorten">Actions</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<?php while($row = $contentResult->fetch_assoc()) : ?>
+							<tr>
+								<th class="shorten" scope="row"><?php echo $row['id']; ?></th>
+								
+								<td>
+									<span><strong><?php echo $row['name']; ?></strong></span><br>
+									<small>URL: /<?php echo $row['url']; ?></small>
+								</td>
+								
+								<td class="shorten">
+									<?php echo date('d/m/Y', strtotime($row['date_created'])); ?><br>
+									<?php echo date('H:i', strtotime($row['date_created'])); ?>
+								</td>
+								
+								<td class="shorten">
+									<div class="form-group mb-n1">
+										<a href="<?php echo explode('?', $_SERVER['REQUEST_URI'])[0] . '?id=' . $row['id']; ?>" class="btn btn-primary mb-1">Edit</a>
+										<input type="button" class="btn btn-danger mb-1" name="deleteContent" data-id="<?php echo $row['id']; ?>" value="Delete">
+									</div>
+								</td>
+							</tr>
+						<?php endwhile; ?>
+					</tbody>
+				</table>
+			</div>
         
-        $.ajax({
-            url: root_dir + "includes/classes/formbuilder.class.php",
-            method: "post",
-            dataType: "json",
-            data: ({data: JSON.stringify(groupData), method: "addGroup"}),
-            success: function(data) {
-                $(data).insertBefore(button.parents(".list-group-item").first());
-                formbuilder_disablesubmit();
-            }
-        });
-    }
-    
-    $(".formbuilder").on("click", "input[name='addGroup']", function() {
-        formbuilder_addgroup($(this));
-    });
-    
-    //Add input
-    function formbuilder_addinput(button, input = "", inputData = {}) {
-        if(input == "") {
-            inputData["type"] = button.siblings("select[name='inputType']").val();
-        }
-        else {
-            inputData["type"] = input;
-        }
-        
-        inputData["inputid"] = formbuilder_generaterandom();
-        
-        $.ajax({
-            url: root_dir + "includes/classes/formbuilder.class.php",
-            method: "post",
-            dataType: "json",
-            data: ({data: JSON.stringify(inputData), method: "addInput"}),
-            success: function(data) {
-                $(data).insertBefore(button.parents(".list-group-item").first());
-                formbuilder_disablesubmit();
-            }
-        });
-    }
-    
-    $(".formbuilder").on("click", "input[name='addInput']", function() {
-        formbuilder_addinput($(this));
-    });
-    
-    //Add option to select
-    function formbuilder_addoption_select(button) {
-        $.ajax({
-            url: root_dir + "includes/classes/formbuilder.class.php",
-            method: "post",
-            dataType: "json",
-            data: ({method: "addOptionSelect"}),
-            success: function(data) {
-                $(data).insertBefore(button.parents(".list-group-item").first());
-            }
-        });
-    }
-    
-    $(".formbuilder").on("click", "input[name='addOptionSelect']", function() {
-        formbuilder_addoption_select($(this));
-    });
-    
-    //Add option to radio
-    function formbuilder_addoption_radio(button) {
-        var count = button.parents(".list-group").first().children(".list-group-item:not(.actions)").length;
-        var inputId = button.parents(".input").first().find("input[name='inputid']").first().val();
-        
-        if(count > 0) {
-            var isDefault = false;
-        }
-        else {
-            var isDefault = true;
-        }
-        
-        $.ajax({
-            url: root_dir + "includes/classes/formbuilder.class.php",
-            method: "post",
-            dataType: "json",
-            data: ({inputId, isDefault, method: "addOptionRadio"}),
-            success: function(data) {
-                $(data).insertBefore(button.parents(".list-group-item").first());
-            }
-        });
-    }
-    
-    $(".formbuilder").on("click", "input[name='addOptionRadio']", function() {
-        formbuilder_addoption_radio($(this));
-    });
-    
-    //Delete item
-    function formbuilder_deleteitem(button) {
-        var type = button.val().split("× ")[1].toLowerCase();
-        var parent = button.parents(".list-group").first();
-        var isChecked = button.parent(".input-group").find("input[type='radio']:checked").length;
-        
-        if(confirm("Are you sure you want to delete this " + type + "?")) {
-            button.parents(".list-group-item").first().remove();
-            
-            if(type == "option" && isChecked > 0) {
-                parent.find("input[type='radio']").first().prop("checked", true);
-            }
-            
-            formbuilder_disablesubmit();
-        }
-    }
-    
-    $(".formbuilder").on("click", "input[name='deleteGroup'], input[name='deleteInput'], input[name='deleteOption']", function() {
-        formbuilder_deleteitem($(this));
-    });
-    
-    //Prevent submit inputs from being added if one already exists
-    function formbuilder_disablesubmit() {
-        if($(".formbuilder").find("input[name='type'][value='submit']").length) {
-            $(".formbuilder select[name='inputType']").children("option[value='input_submit']").prop("disabled", true);
-            $(".formbuilder select[name='inputType']").children("option").prop("selected", false);
-        }
-        else {
-            $(".formbuilder select[name='inputType']").children("option[value='input_submit']").prop("disabled", false);
-        }
-    }
-    
-    $(document).ready(function() {
-        formbuilder_disablesubmit();
-    });
-</script>
+            <?php echo $pagination->display(); ?>
+		<?php else : ?>
+			<div class="alert alert-info">No content could be found</div>
+		<?php endif; ?>
+	</div>
+<?php endif; ?>
 
 <?php require_once(dirname(__FILE__) . '/includes/footer.php'); ?>
