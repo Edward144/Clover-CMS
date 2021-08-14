@@ -136,6 +136,15 @@
                 )"
             );
             
+            //Forms
+            $mysqli->query(
+                "CREATE TABLE IF NOT EXISTS `forms` (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(255),
+                    structure LONGTEXT
+                )"
+            );
+            
             $mysqli->query(
                 "INSERT INTO `social_links` ('name') VALUES
                 ('facebook'),
