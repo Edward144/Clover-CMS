@@ -57,6 +57,12 @@ body#tinymce {
 	overflow-y: auto;
 }
 
+@include media-breakpoint-down(lg) {
+    .content > .contentInner {
+        display: block !important;
+    }
+}
+
 .btn-primary, .btn-secondary{
 	color: var(--bs-white) !important;
 }
