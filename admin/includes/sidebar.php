@@ -5,6 +5,11 @@
 			'link' => 'admin/',
 			'icon' => 'fa-chart-line'
 		],
+        [
+			'name' => 'Forms',
+			'link' => 'admin/manage-forms',
+			'icon' => 'fa-pen-alt'
+		],
 		[
 			'name' => 'Navigation',
 			'link' => 'admin/manage-navigation',
