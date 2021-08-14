@@ -1,6 +1,61 @@
 <?php 
     require_once(dirname(__DIR__) . '/includes/database.php');
     require_once(dirname(__DIR__) . '/includes/functions.php');
+
+    //Create Form
+    if(isset($_POST['createForm'])) {
+        $create = $mysqli->query("INSERT INTO `forms` (name) VALUES('New Form')");
+        $lastId = $mysqli->insert_id;
+
+        $rename = $mysqli->query("UPDATE `forms` SET name = CONCAT(name, ' {$lastId}') WHERE id = {$lastId}");
+
+        if($mysqli->error) {
+            $status = 'danger';
+            $createmsg = 'Failed to create form';
+        }
+        else {
+            $status = 'success';
+            $createmsg = 'Form created successfully';
+
+            header('Location: ./manage-forms?id=' . $lastId);
+            exit();
+        }
+    }
+
+    //Save Form
+    if(isset($_POST['saveForm'])) {
+        $save = $mysqli->prepare("UPDATE `forms` SET name = ?, structure = ? WHERE id = ?");
+        $save->bind_param('ssi', $_POST['name'], $_POST['structure'], $_POST['id']);
+        $save->execute();
+
+        if($save->error) {
+            $status = 'danger';
+            $savemsg = 'Failed to save form';
+        }
+        else {
+            $status = 'success';
+            $savemsg = 'Saved form successfully';
+        }
+    }
+
+    //Delete Form
+    if(isset($_POST['deleteForm'])) {
+        $delete = $mysqli->prepare("DELETE FROM `forms` WHERE id = ?");
+        $delete->bind_param('i', $_POST['id']);
+        $delete->execute();
+        
+        if($delete->error) {
+            $status = 'danger';
+            $deletemsg = 'Failed to delete form';
+        }
+        else {
+            $status = 'success';
+            $deletemsg = 'Successfully delete form';
+        }
+        
+        echo json_encode(['status' => $status, 'deletemsg' => $deletemsg]);
+        exit(); 
+    }
 ?>
 
 <?php if(isset($_GET['id'])) : ?>
@@ -18,22 +73,6 @@
         $form = $formResult->fetch_assoc();
         $title = 'Manage Forms: ' . $form['name'];
         require_once(dirname(__FILE__) . '/includes/header.php');
-
-        //Save Form
-        if(isset($_POST['saveForm'])) {
-            $save = $mysqli->prepare("UPDATE `forms` SET name = ?, structure = ? WHERE id = ?");
-            $save->bind_param('ssi', $_POST['name'], $_POST['structure'], $_POST['id']);
-            $save->execute();
-            
-            if($save->error) {
-                $status = 'danger';
-                $savemsg = 'Failed to save form';
-            }
-            else {
-                $status = 'success';
-                $savemsg = 'Saved form successfully';
-            }
-        }
     ?>
 
     <div class="col-lg-3 bg-light py-3">	
@@ -50,8 +89,9 @@
                 <input type="text" class="form-control" name="name" value="<?php echo $form['name']; ?>" required>
             </div>
             
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" name="saveForm" value="Save Form">
+            <div class="form-group mb-n1">
+                <input type="submit" class="btn btn-primary mb-1" name="saveForm" value="Save Form">
+                <input type="button" class="btn btn-primary mb-1" data-id="<?php echo $form['id']; ?>" name="deleteForm" value="Delete">
             </div>
             
             <?php if(!empty($savemsg)) : ?>
@@ -73,10 +113,38 @@
 
     <div class="col-lg-3 bg-light py-3">	
         <form id="createForm" method="post">
-            <div class="form-group">
-                <input type="submit" class="btn btn-primary" value="Create Form">
+            <div class="form-group mb-3">
+                <input type="submit" class="btn btn-primary" name="createForm" value="Create Form">
             </div>
+            
+            <?php if(!empty($createmsg)) : ?>
+                <div class="alert alert-<?php echo $status; ?>">
+                    <?php echo $createmsg; ?>
+                </div>
+            <?php endif; ?>
         </form>
+        
+        <h3>Search Forms</h3>
+		
+		<form id="searchForms">
+			<div class="form-group">
+				<div class="input-group">
+					<input type="text" class="form-control" name="search" value="<?php echo $_GET['search']; ?>" required>
+					
+					<input type="submit" class="btn btn-primary" value="Search">
+					
+					<?php if(isset($_GET['search'])) : ?>
+						<input type="button" class="btn btn-dark" name="clearSearch" value="Clear">
+					<?php endif; ?>
+				</div>
+			</div>
+		</form>
+        
+        <?php if(!empty($deletemsg)) : ?>
+            <div class="alert alert-<?php echo $status; ?>">
+                <?php echo $deletemsg; ?>
+            </div>
+        <?php endif; ?>
     </div>
 
     <div class="col py-3">
@@ -85,61 +153,45 @@
 		<?php 
 			$search = (!empty($_GET['search']) ? '%' . $_GET['search'] . '%' : '%');
 		
-            $contentCount = $mysqli->prepare(
-				"SELECT posts.* FROM `posts` AS posts
-					LEFT OUTER JOIN `post_types` AS post_types ON post_types.id = posts.post_type_id
-				WHERE post_types.name = ? AND (posts.name LIKE ? OR posts.id LIKE ? OR posts.author LIKE ? OR posts.excerpt LIKE ? OR posts.content LIKE ?) 
-				ORDER BY date_created DESC"
-			);
-			$contentCount->bind_param('ssssss', $pt['name'], $search, $search, $search, $search, $search);
-			$contentCount->execute();
-			$contentCountResult = $contentCount->get_result();
+            $formCount = $mysqli->prepare("SELECT * FROM `forms` WHERE name LIKE ? ORDER BY name ASC");
+			$formCount->bind_param('s', $search);
+			$formCount->execute();
+			$formCountResult = $formCount->get_result();
         
-            $pagination = new pagination($contentCountResult->num_rows);
+            $pagination = new pagination($formCountResult->num_rows);
 			$pagination->load();
         
-			$content = $mysqli->prepare(
-				"SELECT posts.* FROM `posts` AS posts
-					LEFT OUTER JOIN `post_types` AS post_types ON post_types.id = posts.post_type_id
-				WHERE post_types.name = ? AND (posts.name LIKE ? OR posts.id LIKE ? OR posts.author LIKE ? OR posts.excerpt LIKE ? OR posts.content LIKE ?) 
-				ORDER BY date_created DESC LIMIT {$pagination->itemsPerPage} OFFSET {$pagination->offset}"
-			);
-			$content->bind_param('ssssss', $pt['name'], $search, $search, $search, $search, $search);
-			$content->execute();
-			$contentResult = $content->get_result();			
+			$forms = $mysqli->prepare("SELECT * FROM `forms` WHERE name LIKE ? ORDER BY name ASC LIMIT {$pagination->itemsPerPage} OFFSET {$pagination->offset}");
+			$forms->bind_param('s', $search);
+			$forms->execute();
+			$formsResult = $forms->get_result();			
 		?>
 		
-		<?php if($contentResult->num_rows > 0) : ?>
+		<?php if($formsResult->num_rows > 0) : ?>
 			<div class="table-responsive">
 				<table class="table table-striped">
 					<thead class="table-dark">
 						<tr>
 							<th class="shorten">ID</th>
 							<th>Details</th>
-							<th class="shorten">Date Created</th>
 							<th class="shorten">Actions</th>
 						</tr>
 					</thead>
 					
 					<tbody>
-						<?php while($row = $contentResult->fetch_assoc()) : ?>
+						<?php while($row = $formsResult->fetch_assoc()) : ?>
 							<tr>
 								<th class="shorten" scope="row"><?php echo $row['id']; ?></th>
 								
 								<td>
 									<span><strong><?php echo $row['name']; ?></strong></span><br>
-									<small>URL: /<?php echo $row['url']; ?></small>
-								</td>
-								
-								<td class="shorten">
-									<?php echo date('d/m/Y', strtotime($row['date_created'])); ?><br>
-									<?php echo date('H:i', strtotime($row['date_created'])); ?>
+									<small>Insert: [form id="<?php echo $row['id']; ?>"]</small>
 								</td>
 								
 								<td class="shorten">
 									<div class="form-group mb-n1">
 										<a href="<?php echo explode('?', $_SERVER['REQUEST_URI'])[0] . '?id=' . $row['id']; ?>" class="btn btn-primary mb-1">Edit</a>
-										<input type="button" class="btn btn-danger mb-1" name="deleteContent" data-id="<?php echo $row['id']; ?>" value="Delete">
+										<input type="button" class="btn btn-danger mb-1" name="deleteForm" data-id="<?php echo $row['id']; ?>" value="Delete">
 									</div>
 								</td>
 							</tr>

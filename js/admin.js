@@ -508,3 +508,26 @@ function formbuilder_disablesubmit() {
 $(document).ready(function() {
     formbuilder_disablesubmit();
 });
+
+//Delete form
+$("input[name='deleteForm']").click(function() {
+    var id = $(this).attr("data-id");
+    $(".contentInner").find(".alert").remove();
+    
+    if(confirm("Are you sure you want to delete this form?")) {
+        $.ajax({
+            url: window.location.href,
+            method: "post",
+            dataType: "json",
+            data: ({id, deleteForm: true}),
+            success: function(data) {
+                if(data['status'] == 'success') {
+                    window.location.reload();
+                }
+                else {
+                    $("<div class='alert alert-" + data['status'] + " mt-3'>" + data['deletemsg'] + "</div>").appendTo($(".contentInner > div:first-child"));
+                }
+            }
+        });
+    }
+});
