@@ -380,7 +380,7 @@
             }
             
             //Check the form exists
-            /*$checkForm = $mysqli->prepare("SELECT * FROM `forms` WHERE id = ?");
+            $checkForm = $mysqli->prepare("SELECT * FROM `forms` WHERE id = ?");
             $checkForm->bind_param('i', $formId);
             $checkForm->execute();
             $checkResult = $checkForm->get_result();
@@ -389,10 +389,10 @@
                 $form = $checkResult->fetch_assoc();
                 
                 $this->structure = json_decode($form['structure'], true);
-            }*/
+            }
             
             //Test Structure - Remove Later
-            $this->structure = json_decode(
+            /*$this->structure = json_decode(
                 '{
                     "formid": "test",
                     "action": "/path/to/script.php",
@@ -536,7 +536,7 @@
                             "inputs": []
                         }
                     ]
-                }', true);
+                }', true);*/
             
             $this->output .= 
                 '<ul class="list-group groups">' . 
