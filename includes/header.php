@@ -45,7 +45,7 @@
 			<header id="pageHeader" class="bg-secondary text-light">
 				<div class="headerInner container-xl">
 					<div class="row py-3">
-						<div class="col-sm-3">
+						<div class="col-sm-auto">
                             <a href="<?php echo ROOT_DIR; ?>" class="siteTitle">
                                 <?php if(!empty($settingsArray['logo'])) : ?>
                                     <img src="<?php echo $settingsArray['logo']; ?>" class="siteLogo img-fluid" alt="<?php echo(!empty($settingsArray['website_name']) ? $settingsArray['website_name'] : 'Website '); ?>Logo">    
@@ -55,9 +55,9 @@
                             </a>
 						</div>
                         
-                        <div class="col d-flex flex-column justify-content-between">
+                        <div class="col d-flex flex-column justify-content-end">
                             <?php if(!empty($settingsArray['phone']) || !empty($settingsArray['email'])) : ?>
-                                <div class="contact d-flex align-items-center justify-content-end">
+                                <div class="contact d-flex align-items-center justify-content-end mt-0 mb-auto">
                                     <?php if(!empty($settingsArray['phone'])) : ?>
                                         <p class="phone">
                                             <span class="fa fa-phone me-1"></span>
