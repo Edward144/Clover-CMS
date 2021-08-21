@@ -1,8 +1,10 @@
 <?php
 
     if(isset($_POST['method'])) {
+        require_once(dirname(__DIR__) . '/database.php');
+        
         if($_POST['method'] == 'addGroup') {
-            $group = new formbuilder();
+            $group = new formbuilder($_POST['id']);
             $g = $group->pullgroups([
                 "groups" => [json_decode($_POST['data'], true)]
             ]);
@@ -15,7 +17,7 @@
             if(!empty($data) && method_exists('formbuilder', $data['type'])) {
                 $data['type'] = explode('input_', $data['type'])[1];
                 
-                $input = new formbuilder();
+                $input = new formbuilder($_POST['id']);
                 $i = $input->pullinputs([$data]);
                 
                 echo json_encode($i);
@@ -26,13 +28,13 @@
         }
         elseif($_POST['method'] == 'addOptionRadio') {
             $checked = ($_POST['isDefault'] === 'true' ? true : false);
-            $option = new formbuilder();
+            $option = new formbuilder($_POST['id']);
             $o = $option->radio_option($_POST['inputId'], '', $checked);
             
             echo json_encode($o);
         }
         elseif($_POST['method'] == 'addOptionSelect') {
-            $option = new formbuilder();
+            $option = new formbuilder($_POST['id']);
             $o = $option->select_option('');
             
             echo json_encode($o);
@@ -65,7 +67,7 @@
                     <span class="input-group-text me-2">Required?</span>';
             }
             
-            if($repeatable !== 0) {
+            if($repeatable !== 0 && 1 == 2) { //Don't want to show repeatable option until it is implemented
                 $repeatableOption =
                     '<div class="input-group-text">
                         <input type="checkbox" class="form-check-input mt-0" name="repeatable" ' . ($repeatable == true ? 'checked' : '') . '>
@@ -391,160 +393,13 @@
                 $this->structure = json_decode($form['structure'], true);
             }
             
-            //Test Structure - Remove Later
-            /*$this->structure = json_decode(
-                '{
-                    "formid": "test",
-                    "action": "/path/to/script.php",
-                    "method": "POST",
-                    "groups": [
-                        {
-                            "groupid": "g1",
-                            "name": "Test Group 1",
-                            "inputs": [
-                                {
-                                    "inputid": "i0",
-                                    "type": "general",
-                                    "value": "test general"
-                                },{
-                                    "inputid": "i1",
-                                    "type": "text",
-                                    "required": true,
-                                    "label": "test input",
-                                    "placeholder": "",
-                                    "value": ""
-                                },
-                                {
-                                    "inputid": "i2",
-                                    "type": "textarea",
-                                    "required": true,
-                                    "label": "test input",
-                                    "placeholder": "700",
-                                    "value": "100"
-                                },
-                                {
-                                    "inputid": "i3",
-                                    "type": "number",
-                                    "required": true,
-                                    "label": "test input",
-                                    "placeholder": "700",
-                                    "value": "100",
-                                    "min": "100",
-                                    "max": "150",
-                                    "step": "0.01"
-                                },
-                                {
-                                    "inputid": "i4",
-                                    "type": "email",
-                                    "required": true,
-                                    "label": "test input",
-                                    "placeholder": "700",
-                                    "value": "100"
-                                },
-                                {
-                                    "inputid": "i5",
-                                    "type": "password",
-                                    "required": true,
-                                    "label": "test input",
-                                    "value": "100"
-                                },
-                                {
-                                    "inputid": "i6",
-                                    "type": "date",
-                                    "required": true,
-                                    "label": "test input",
-                                    "placeholder": "700",
-                                    "value": "100"
-                                },
-                                {
-                                    "inputid": "i7",
-                                    "type": "time",
-                                    "required": true,
-                                    "label": "test input",
-                                    "placeholder": "700",
-                                    "value": "100"
-                                },
-                                {
-                                    "inputid": "i8",
-                                    "type": "datetime-local",
-                                    "required": true,
-                                    "label": "test input",
-                                    "placeholder": "700",
-                                    "value": "2021-07-20\t10:07"
-                                },
-                                {
-                                    "inputid": "i9",
-                                    "type": "hidden",
-                                    "required": true,
-                                    "label": "test input",
-                                    "placeholder": "700",
-                                    "value": "100"
-                                },
-                                {
-                                    "inputid": "i10",
-                                    "type": "file",
-                                    "required": true,
-                                    "label": "test file",
-                                    "multiple": false
-                                },
-                                {
-                                    "inputid": "i11",
-                                    "type": "select",
-                                    "required": true,
-                                    "label": "test select",
-                                    "multiple": false,
-                                    "options": [
-                                        { "value": "x" },
-                                        { "value": "y" },
-                                        { "value": "z" }
-                                    ]
-                                },
-                                {
-                                    "inputid": "i12",
-                                    "type": "radio",
-                                    "required": true,
-                                    "label": "test radio",
-                                    "options": [
-                                        { "value": "x", "default": true },
-                                        { "value": "y", "default": false },
-                                        { "value": "z", "default": false }
-                                    ]
-                                },
-                                {
-                                    "inputid": "i13",
-                                    "type": "checkbox",
-                                    "required": true,
-                                    "label": "test check",
-                                    "checked": true
-                                },
-                                {
-                                    "inputid": "i14",
-                                    "type": "button",
-                                    "label": "test button",
-                                    "theme": "btn-info"
-                                },
-                                {
-                                    "inputid": "i15",
-                                    "type": "submit",
-                                    "label": "test submit",
-                                    "theme": "btn-danger"
-                                }
-                            ]
-                        },
-                        {
-                            "groupid": "g2",
-                            "inputs": []
-                        }
-                    ]
-                }', true);*/
-            
             $this->output .= 
                 '<ul class="list-group groups">' . 
                     $this->pullgroups($this->structure) .
                     '<li class="list-group-item actions bg-light d-flex align-items-center justify-content-end">
                         <div class="input-group me-2">
                             <span class="input-group-text">Form ID</span>
-                            <input type="text" class="form-control bg-white" name="formid" value="' . $this->structure['formid'] . '" readonly>
+                            <input type="text" class="form-control bg-white" name="formid" value="' . (!empty($this->structure['formid']) ? $this->structure['formid'] : $formId) . '" readonly>
                             <span class="input-group-text">Action</span>
                             <input type="text" class="form-control" name="action" value="' . $this->structure['action'] . '" placeholder="path/to/script.php">
                             <span class="input-group-text">Method</span>
