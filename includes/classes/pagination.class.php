@@ -21,7 +21,7 @@
         public function __construct($numItems) {
             if($numItems != null) {
                 $this->items = $numItems;
-                $this->pageUrl = explode($_SERVER['SERVER_NAME'] . ROOT_DIR)[1] . explode('?', $_SERVER['REQUEST_URI'])[0];
+                $this->pageUrl = explode($_SERVER['SERVER_NAME'] . ROOT_DIR, explode('?', $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'])[0])[1];
             }
             
             //Remove existing page query
