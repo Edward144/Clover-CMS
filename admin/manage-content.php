@@ -17,9 +17,12 @@
 	//Create Content
     if(isset($_POST['createContent'])) {
         $unique = rtrim(base64_encode(date('Y-m-d H:i:s')), '=');
-                        
-        $create = $mysqli->prepare("INSERT INTO `posts` (post_type_id, name, url, last_edited_by) VALUES(?, ?, ?, ?)");
-        $create->bind_param('issi', $pt['id'], $pt['name'], $unique, $_SESSION['adminid']);
+        $defaultContent = 
+            '<h1>Enter your title</h1>
+            <p>Enter your content...</p>';
+        
+        $create = $mysqli->prepare("INSERT INTO `posts` (post_type_id, name, url, content, last_edited_by) VALUES(?, ?, ?, ?, ?)");
+        $create->bind_param('isssi', $pt['id'], $pt['name'], $unique, $defaultContent, $_SESSION['adminid']);
         $ex = $create->execute();
         
         if($ex === false) {
