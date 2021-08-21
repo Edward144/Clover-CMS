@@ -91,7 +91,7 @@
             
             <div class="form-group mb-n1">
                 <input type="submit" class="btn btn-primary mb-1" name="saveForm" value="Save Form">
-                <input type="button" class="btn btn-primary mb-1" data-id="<?php echo $form['id']; ?>" name="deleteForm" value="Delete">
+                <input type="button" class="btn btn-danger mb-1" data-id="<?php echo $form['id']; ?>" name="deleteForm" value="Delete">
             </div>
             
             <?php if(!empty($savemsg)) : ?>

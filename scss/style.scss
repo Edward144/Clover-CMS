@@ -69,6 +69,15 @@ body#tinymce {
 
 /* HEADER */
 
+.sticky {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 9999;
+}
+
 .siteTitle {
     color: $light !important;
     text-decoration: none;
@@ -78,8 +87,21 @@ body#tinymce {
     margin-bottom: 0;
 }
 
+#pageHeader .siteLogo {
+    max-width: 300px;
+    transition: max-width 0.35s ease;
+}
+
 #pageHeader .contact a {
     text-decoration: none;
+}
+
+#pageHeader.sticky .siteLogo {
+    max-width: 150px;
+}
+
+#pageHeader.sticky .contact {
+    display: none !important;
 }
 
 /* NAVIGATION */
@@ -330,4 +352,25 @@ li.nav-item > .dropdown-toggle:after {
     align-items: flex-end;
     justify-content: flex-end;
     padding: ($spacer * .25) 0;
+}
+
+.userForm .groupHeader {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 1px dashed $gray-500;
+    margin-bottom: map-get($spacers, 2);
+}
+
+.userForm .groupToggle > span {
+    transition: transform 0.35s ease;
+}
+
+.userForm .groupToggle[aria-expanded="true"] > span {
+    transform: rotate(-90deg);
+}
+
+.userForm label.required:after {    
+    content: " *";
+    color: $danger;
 }
