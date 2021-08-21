@@ -1,5 +1,5 @@
-@import "../bootstrap-5.0.1/scss/_functions.scss";
-@import "../bootstrap-5.0.1/scss/_variables.scss";
+@import "../node_modules/bootstrap/scss/_functions.scss";
+@import "../node_modules/bootstrap/scss/_variables.scss";
 
 $enable-negative-margins: true;
 
@@ -21,7 +21,7 @@ $pagination-color: $primary;
 $pagination-active-bg: $primary;
 $pagination-active-border-color: $pagination-active-bg;
 
-@import "../bootstrap-5.0.1/scss/bootstrap.scss";
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 /* GENERAL */
 

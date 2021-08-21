@@ -1,0 +1,22 @@
+{
+  "name": "clover-cms",
+  "version": "1.0.0",
+  "description": "A simple CMS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Edward144/Clover-CMS.git"
+  },
+  "author": "Ed Hall",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Edward144/Clover-CMS/issues"
+  },
+  "homepage": "https://github.com/Edward144/Clover-CMS#readme",
+  "dependencies": {
+    "bootstrap": "^5.0.2"
+  }
+}
