@@ -1,7 +1,8 @@
 <?php
 	
-	include_once(dirname(__DIR__) . '/includes/settings.php');
-	
+	include_once(dirname(__FILE__) . '/settings.php');
+	include_once(dirname(__FILE__) . '/shortcodes.php');
+
 	//Check if admin user is logged in
 	function isloggedin() {
 		global $mysqli;
@@ -178,13 +179,14 @@
 				$parameters = [];
 
 				//Get the supplied parameters
-				preg_match_all('$ [a-zA-Z0-9\-\_]+\=\"[^\"]+$', $match, $params);
+				//preg_match_all('$ [a-zA-Z0-9\-\_]+\=\"[^\"]+$', $match, $params);
+				preg_match_all('$ [a-zA-Z0-9\-\_]+\="[^"\\\\]*(?:\\\\.[^"\\\\]*)*"$s', $match, $params);
 
 				foreach($params[0] as $param) {
 					preg_match('$[^\=\"]+$', $param, $pName);
 					$pName = ltrim($pName[0], ' ');
 
-					preg_match('$^ [a-zA-Z0-9\-\_]+\=\"(.*)$', $param, $pValue);
+					preg_match('$^ [a-zA-Z0-9\-\_]+\=\"(.*)\"$', $param, $pValue);
 					$pValue = $pValue[1];
 
 					$parameters[$pName] = $pValue; 
