@@ -167,6 +167,9 @@ body#tinymce {
 	z-index: 999;
 	transition: width .7s ease;
 	overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 .sidebar > * {
@@ -223,6 +226,17 @@ body#tinymce {
 		position: absolute;
 		top: 0;
 	}
+}
+
+.sidebar #pageFooter {
+    margin-top: auto;
+    margin-bottom: 0;
+    padding-left: map-get($spacers, 2);
+    padding-right: map-get($spacers, 2);
+}
+
+.sidebar #pageFooter a {
+    color: $white;
 }
 
 /* ADMIN */
