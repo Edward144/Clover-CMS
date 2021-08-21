@@ -390,7 +390,7 @@ function formbuilder_addgroup(button) {
         url: root_dir + "includes/classes/formbuilder.class.php",
         method: "post",
         dataType: "json",
-        data: ({data: JSON.stringify(groupData), method: "addGroup"}),
+        data: ({id: $(this).parent(".structure").first().find("input[name='formid']").val(), data: JSON.stringify(groupData), method: "addGroup"}),
         success: function(data) {
             $(data).insertBefore(button.parents(".list-group-item").first());
             formbuilder_disablesubmit();
@@ -417,7 +417,7 @@ function formbuilder_addinput(button, input = "", inputData = {}) {
         url: root_dir + "includes/classes/formbuilder.class.php",
         method: "post",
         dataType: "json",
-        data: ({data: JSON.stringify(inputData), method: "addInput"}),
+        data: ({id: $(this).parent(".structure").first().find("input[name='formid']").val(), data: JSON.stringify(inputData), method: "addInput"}),
         success: function(data) {
             $(data).insertBefore(button.parents(".list-group-item").first());
             formbuilder_disablesubmit();
@@ -435,7 +435,7 @@ function formbuilder_addoption_select(button) {
         url: root_dir + "includes/classes/formbuilder.class.php",
         method: "post",
         dataType: "json",
-        data: ({method: "addOptionSelect"}),
+        data: ({id: $(this).parent(".structure").first().find("input[name='formid']").val(), method: "addOptionSelect"}),
         success: function(data) {
             $(data).insertBefore(button.parents(".list-group-item").first());
         }
@@ -462,7 +462,7 @@ function formbuilder_addoption_radio(button) {
         url: root_dir + "includes/classes/formbuilder.class.php",
         method: "post",
         dataType: "json",
-        data: ({inputId, isDefault, method: "addOptionRadio"}),
+        data: ({id: $(this).parent(".structure").first().find("input[name='formid']").val(), inputId, isDefault, method: "addOptionRadio"}),
         success: function(data) {
             $(data).insertBefore(button.parents(".list-group-item").first());
         }
@@ -512,7 +512,7 @@ $(document).ready(function() {
 //Delete form
 $("input[name='deleteForm']").click(function() {
     var id = $(this).attr("data-id");
-    $(".contentInner").find(".alert").remove();
+    $(".contentInner").find(".alert" ).remove();
     
     if(confirm("Are you sure you want to delete this form?")) {
         $.ajax({
