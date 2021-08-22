@@ -34,7 +34,7 @@ Going to Pages or News you will be presented with a list view of the content typ
 Creating or editing a content item will take you to the single view for that item. Within this page are various fields to fill out. 
 * Name - used for reference in the CMS and will be used as the Meta title if one isn't provided
 * URL - the url for the page, this must be unique even amongst other post types
-* Template - the template file used to display this item's content [See templates](## Templates)
+* Template - the template file used to display this item's content [See templates](# Templates)
 * Author - mostly used for news or similar custom post types, the author will display on the page. Also used as meta author if one isn't provided
 * Date Created - again mostly for news, this date will appear on news posts as the published date
 * Visibility - hidden will not appear, draft can be accessed as long as you are logged in to the cms, visible is visible to everyone
