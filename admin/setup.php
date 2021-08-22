@@ -3,7 +3,7 @@
     require_once(dirname(__FILE__, 2) . '/includes/database.php');
     require_once(dirname(__FILE__, 2) . '/includes/functions.php');
 
-    if(file_exists(dirname(__FILE__, 2) . '/includes/settings.php')) {
+    if(file_exists(dirname(__FILE__, 2) . '/includes/settings.php') && defined('ROOT_DIR')) {
         header('Location: ' . ROOT_DIR);
         exit();
     }
@@ -163,7 +163,7 @@
             }
             else {
                 $rootdir = '/' . explode('/', dirname(__FILE__, 2))[count(explode('/', dirname(__FILE__, 2))) - 1] . '/';
-                define(ROOT_DIR, $rootdir);
+                define('ROOT_DIR', $rootdir);
                 
                 fwrite($settings, 
                     "<?php
