@@ -1,9 +1,11 @@
 <?php 
+    ob_start();
 	$title = 'Navigation';
 	require_once(dirname(__FILE__) . '/includes/header.php'); 
 
     //Redirect to menu 0 if the id is empty or doesn't exist
     if(!isset($_GET['id'])) {
+        ob_get_clean();
         http_response_code(404);
         header('Location: ./manage-navigation/0');
         exit();
@@ -15,6 +17,7 @@
     $checkResult = $checkMenu->get_result();
 
     if($checkResult->num_rows <= 0 && $_GET['id'] != 0) {
+        ob_get_clean();
         http_response_code(404);
         header('Location: ./0');
         exit();
