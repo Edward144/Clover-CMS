@@ -2,7 +2,7 @@ Options All -Indexes
 
 <Ifmodule mod_rewrite.c>
 	RewriteEngine On
-	RewriteBase /clover-cms/
+	RewriteBase /
 	
 	#Remove Trailing Slash
 	RewriteCond %{REQUEST_FILENAME} !-d
