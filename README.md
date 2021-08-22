@@ -14,7 +14,7 @@ Next you will want to create a new MySQL database and go to **https://yoursite.c
 
 You can click the link on the confirmation message or in the email to get to the admin login, or go to **https://yoursite.com/admin-login/**. The initial account always has the username **admin**.
 
-###Bootstrap
+### Bootstrap
 You may also wish to install bootstrap via npm, Clover CMS is using bootstrap 5.0.2, 5.1.0 has caused some issues so I would avoid it for now. The only reason you should need to install bootstrap separately is to use with scss. The two existing scss files both import from **../node_modules/bootstrap/scss/**. If you want to make changes to these files then you should also install bootstrap. 
 
 > npm install bootstrap@5.0.2
