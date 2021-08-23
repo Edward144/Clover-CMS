@@ -153,6 +153,7 @@ li.nav-item > .dropdown-toggle:after {
     right: 0;
     width: 320px;
     background: shade-color($secondary, 5);
+    z-index: 9999;
 }
 
 .subMenu .nav-link {
