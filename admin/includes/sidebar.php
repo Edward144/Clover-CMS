@@ -3,8 +3,7 @@
 		[
 			'name' => 'Dashboard',
 			'link' => 'admin/',
-			'icon' => 'fa-chart-line',
-            'filename' => 'index.php'
+			'icon' => 'fa-chart-line'
 		],
         [
 			'name' => 'Forms',
