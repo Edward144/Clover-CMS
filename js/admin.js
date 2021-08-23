@@ -4,11 +4,9 @@ $(".sidebar").on("click", "#toggleSidebar", function() {
 	
 	if(sidebar.hasClass("collapse-left")) {
 		sidebar.removeClass("collapse-left");
-		//sidebar.find(".floatingToggle").remove();
 	}
 	else {
 		sidebar.addClass("collapse-left");
-		//$(this).clone().addClass("floatingToggle").prependTo(sidebar);
 	}
 });
 
@@ -18,10 +16,15 @@ function sidebarcollapse() {
 		var sidebar = $(".wrapper > .main > .sidebar");
 		
 		sidebar.hide().addClass("collapse-left");
-			
-		sidebar.on("transitionend", function() {
-			sidebar.show();
-		});
+	
+        setTimeout(function() {
+            sidebar.show();
+        }, 50);
+        
+        //This doesn't work as we are hiding the element first, so the transition end isn't detected
+		/*sidebar.on("transitionend webkitTransitionEnd oTransitionEnd", function() {
+			sidebar.css("visibility", "");
+		});*/
 	}
 }
 

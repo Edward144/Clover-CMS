@@ -172,10 +172,6 @@ body#tinymce {
     align-items: stretch;
 }
 
-.sidebar > * {
-	overflow: hidden;
-}
-
 .sidebar .nav-link {
 	color: var(--bs-white);
 	display: flex;
@@ -226,6 +222,14 @@ body#tinymce {
 		position: absolute;
 		top: 0;
 	}
+    
+    .sidebar.collapse-left {
+        overflow: visible;
+    }
+    
+    .sidebar.collapse-left > *:not(#toggleSidebar) {
+        display: none;
+    }
 }
 
 .sidebar #pageFooter {
