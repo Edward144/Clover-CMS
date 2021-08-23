@@ -29,6 +29,11 @@
 			'icon' => 'fa-cogs',
             'filename' => 'settings.php'
 		],
+        [
+            'name' => 'Profile',
+            'link' => 'admin/my-profile',
+            'icon' => 'fa-user-cog'
+        ]
 	];
 
 	$postTypes = $mysqli->query("SELECT * FROM `post_types`");
