@@ -26,6 +26,54 @@
 		}
 	}
 
+    //Check if user has access to page
+    function checkaccess($pagename, $menu = false) {
+        global $mysqli;
+        $allowed = false;
+        
+        $getRole = $mysqli->prepare(
+            "SELECT users.role, roles.access FROM `users` AS users
+                LEFT OUTER JOIN `roles` AS roles ON roles.id = users.role
+            WHERE users.id = ?"
+        );
+        $getRole->bind_param('i', $_SESSION['adminid']);
+        $getRole->execute();
+        $roleResult = $getRole->get_result();
+        
+        if($roleResult->num_rows > 0) {
+            $user = $roleResult->fetch_assoc();
+            $access = json_decode($user['access'], true);
+            $access = ($access == null ? [] : $access);
+            
+            if($user['role'] == 0 || in_array($pagename, $access)) {
+                $allowed = true;
+            }
+        }
+        
+        if($allowed == false && $menu == false) {
+            http_response_code(403);
+            require_once(dirname(__DIR__) . '/admin/includes/header.php');
+
+            echo 
+                '<div>
+                    <div class="alert alert-danger mt-3">
+                        <h3>Forbidden</h3>
+                        <h5>You do not have access to view this page. Please contact your administrator if you feel this is incorrect.<h5>
+                    </div>
+                </div>';
+            
+            require_once(dirname(__DIR__) . '/admin/includes/footer.php');
+            exit();
+        }
+        //Return true or false for menu items so that they can be hidden
+        elseif($allowed == false && $menu == true) {
+            return false;
+        }
+        elseif($allowed == true && $menu == true) {
+            return true;
+        }
+    }
+
 	//Create metadata
 	function adminmeta($title = '', $description = '', $keywords = '', $author = '') {
 		$metadata = '';

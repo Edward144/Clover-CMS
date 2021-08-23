@@ -2,6 +2,8 @@
 
 I have created this CMS for my own personal use however want to share it in case anyone else finds it helpful for their projects. As such anyone else using it may not find things very intuitive or easy to develop further. I am maintaing this repository myself and working on it in my spare time. Feel free to get in touch if you need assistance and I will do my best to help.
 
+It is recommended that you run at least PHP7.1 and ideally PHP7.4, there may be some incompatibilities with PHP8.0 but I have fixed everything that I have found so far.
+
 ## Setup
 
 Installation is as simple as downloading a copy of the repository and saving the files to the required directory.
@@ -68,6 +70,16 @@ You can edit each item within the structure to change the name, url and visiblit
 ### Users
 
 In this section you can create new users who can log into the cms, or update existing ones. Each user's email address must be unique.
+
+You are also able to create and assign roles to users. The first user is always an Admin role, which has access to everything within the CMS, this cannot be changed. By default there is also a Standard role which will have access to everything other than this users page.
+
+The standard user's access can be amended by clicking the edit button next to the role on the left side. You will be presented with a popup to select which sections you want the role to have access to. This is a multi select box, so you can use CTRL/CMD + A to select all, click and drag to select multiple, CTRL/CMD + click to select or deselect multiple individual items. 
+
+Managing content is broken down to individual post types, like pages and news. If you choose to create more custom post types by adding to the table in the database then make sure to allow access to these types for the standard role, if you want it to have access. 
+
+Ideally the standard user would automatically be given access to any newly created sections within the CMS. But as the new types can only be added directly through the database this is not currently possible. The ability to create new post types through the cms may come later, this has been ommitted for now to avoid inexperienced users from accidentally creating unnecessary content.
+
+You are also able to create as many custom roles as you like to limit page access any way you like. Custom roles behave exactly the same as the Standard role, with the addition of being able to delete them. If you delete a role, any user set to that role will be converted to the Standard role.
 
 ### Settings
 

@@ -2,6 +2,8 @@
 	$title = 'Settings';
 	require_once(dirname(__FILE__) . '/includes/header.php');
 
+    checkaccess(basename(__FILE__));
+
     //Save Website Details
     if(isset($_POST['saveWebDetails'])) {
         $details = $mysqli->prepare(

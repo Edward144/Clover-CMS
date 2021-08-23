@@ -3,27 +3,32 @@
 		[
 			'name' => 'Dashboard',
 			'link' => 'admin/',
-			'icon' => 'fa-chart-line'
+			'icon' => 'fa-chart-line',
+            'filename' => 'index.php'
 		],
         [
 			'name' => 'Forms',
 			'link' => 'admin/manage-forms',
-			'icon' => 'fa-pen-alt'
+			'icon' => 'fa-pen-alt',
+            'filename' => 'manage-forms.php'
 		],
 		[
 			'name' => 'Navigation',
 			'link' => 'admin/manage-navigation',
-			'icon' => 'fa-sitemap'
+			'icon' => 'fa-sitemap',
+            'filename' => 'manage-navigation.php'
 		],
 		[
 			'name' => 'Users',
 			'link' => 'admin/manage-users',
-			'icon' => 'fa-users'
+			'icon' => 'fa-users',
+            'filename' => 'manage-users.php'
 		],
 		[
 			'name' => 'Settings',
 			'link' => 'admin/settings',
-			'icon' => 'fa-cogs'
+			'icon' => 'fa-cogs',
+            'filename' => 'settings.php'
 		],
 	];
 
@@ -33,13 +38,15 @@
 
 	if($postTypes->num_rows > 0) {
 		while($postType = $postTypes->fetch_assoc()) {
-			$postItems[$pi] = [
-				'name' => ucwords(str_replace('-', ' ', $postType['name'])),
-				'link' => 'admin/manage-content/' . $postType['name'],
-				'icon' => (!empty($postType['icon']) ? $postType['icon'] : 'fa-file-alt')
-			];
-			
-			$pi++;
+            if(checkaccess('posttype_' . $postType['name'], true) !== false) {
+                $postItems[$pi] = [
+                    'name' => ucwords(str_replace('-', ' ', $postType['name'])),
+                    'link' => 'admin/manage-content/' . $postType['name'],
+                    'icon' => (!empty($postType['icon']) ? $postType['icon'] : 'fa-file-alt')
+                ];
+
+                $pi++;
+            }
 		}
 		
 		array_splice($menuItems, 1, 0, $postItems);
@@ -56,29 +63,31 @@
 	</li>
 	
 	<?php foreach($menuItems as $item) : ?>
-		<?php
-			if($item['target'] == 'popup') {
-				$width = (isset($item['popup_width']) && is_numeric($item['popup_width']) ? $item['popup_width'] : 1000);
-				$height = (isset($item['popup_height']) && is_numeric($item['popup_height']) ? $item['popup_height'] : 625);
-				
-				$hw = ',\'width=' . $width . ',height=' . $height . '\'';
-				
-				$target = 'target="popup" onclick="window.open(\'' . $item['link'] . '\', \'' . $item['name'] . '\'' . $hw . '); return false;"';
-			}
-			elseif(!empty($item['target'])) {
-				$target = 'target="' . $item['target'] . '"';
-			}
-			else {
-				$target = '';
-			}
-		?>
-	
-		<li class="nav-item shadow-sm">
-			<a class="nav-link btn-dark" href="<?php echo $item['link']; ?>" <?php echo $target; ?>>
-				<span><?php echo $item['name']; ?></span>
-				<?php echo (!empty($item['icon']) ? '<span class="fa ' . $item['icon'] . '"></span>' : ''); ?>
-			</a>
-		</li>
+        <?php if((!empty($item['filename']) && file_exists(dirname(__DIR__) . '/' . $item['filename']) && checkaccess($item['filename'], true) !== false) || empty($item['filename']) || (!empty($item['filename']) && !file_exists(dirname(__DIR__) . '/' . $item['filename']))) : ?>
+            <?php    
+                if($item['target'] == 'popup') {
+                    $width = (isset($item['popup_width']) && is_numeric($item['popup_width']) ? $item['popup_width'] : 1000);
+                    $height = (isset($item['popup_height']) && is_numeric($item['popup_height']) ? $item['popup_height'] : 625);
+
+                    $hw = ',\'width=' . $width . ',height=' . $height . '\'';
+
+                    $target = 'target="popup" onclick="window.open(\'' . $item['link'] . '\', \'' . $item['name'] . '\'' . $hw . '); return false;"';
+                }
+                elseif(!empty($item['target'])) {
+                    $target = 'target="' . $item['target'] . '"';
+                }
+                else {
+                    $target = '';
+                }
+            ?>
+
+            <li class="nav-item shadow-sm">
+                <a class="nav-link btn-dark" href="<?php echo $item['link']; ?>" <?php echo $target; ?>>
+                    <span><?php echo $item['name']; ?></span>
+                    <?php echo (!empty($item['icon']) ? '<span class="fa ' . $item['icon'] . '"></span>' : ''); ?>
+                </a>
+            </li>
+        <?php endif; ?>
 	<?php endforeach; ?>
 	
 	<li class="nav-item">

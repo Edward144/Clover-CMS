@@ -519,7 +519,7 @@ $("input[name='deleteForm']").click(function() {
             url: window.location.href,
             method: "post",
             dataType: "json",
-            data: ({id, deleteForm: true}),
+            data: ({id: id, deleteForm: true}),
             success: function(data) {
                 if(data['status'] == 'success') {
                     window.location.reload();
@@ -531,3 +531,11 @@ $("input[name='deleteForm']").click(function() {
         });
     }
 });
+
+//Confirm role deletion
+$(".deleteRole").submit(function() {
+    if(!confirm("Are you sure you want to delete this role? All users set to this role will be changed to Standard users.")) {
+        event.preventDefault();
+        return;
+    }
+})

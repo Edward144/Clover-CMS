@@ -3,6 +3,8 @@
 	$title = 'Navigation';
 	require_once(dirname(__FILE__) . '/includes/header.php'); 
 
+    checkaccess(basename(__FILE__));
+
     //Redirect to menu 0 if the id is empty or doesn't exist
     if(!isset($_GET['id'])) {
         ob_get_clean();

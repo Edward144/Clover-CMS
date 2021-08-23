@@ -1,5 +1,6 @@
 <?php
 	require_once(dirname(__FILE__, 2) . '/includes/database.php');
+	require_once(dirname(__FILE__, 2) . '/includes/functions.php');
 
 	$checkType = $mysqli->prepare("SELECT id, name FROM `post_types` WHERE name = ?");
 	$checkType->bind_param('s', $_GET['post-type']);
@@ -13,6 +14,8 @@
 	}
 
 	$pt = $checkResult->fetch_assoc();
+
+    checkaccess('posttype_' . $pt['name']);
 
 	//Create Content
     if(isset($_POST['createContent'])) {

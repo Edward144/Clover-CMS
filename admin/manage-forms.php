@@ -2,6 +2,8 @@
     require_once(dirname(__DIR__) . '/includes/database.php');
     require_once(dirname(__DIR__) . '/includes/functions.php');
 
+    checkaccess(basename(__FILE__));
+
     //Create Form
     if(isset($_POST['createForm'])) {
         $create = $mysqli->query("INSERT INTO `forms` (name) VALUES('New Form')");

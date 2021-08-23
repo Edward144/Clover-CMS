@@ -54,9 +54,21 @@
                     last_name VARCHAR(255),
                     email VARCHAR(191) UNIQUE,
                     username VARCHAR(191) UNIQUE,
-                    password VARCHAR(60)
+                    password VARCHAR(60),
+                    role INT NOT NULL DEFAULT 1
                 )"
             );
+            
+            ////Roles
+            $mysqli->query(
+                "CREATE TABLE IF NOT EXISTS `roles` (
+                    id INT AUTO_INCREMENT PRIMARY KEY,
+                    name VARCHAR(191) UNIQUE,
+                    access LONGTEXT
+                )"
+            );
+            
+            $mysqli->query("INSERT IGNORE INTO `roles` (id, name, access) VALUES(0, 'Admin', 'ALL'), (1, 'Standard', NULL)");
             
             ////Password Reset
             $mysqli->query(
@@ -176,6 +188,10 @@
                         define('ROOT_DIR', '" . $rootdir . "');
                         define('BASE_DIR', (!empty(\$_SERVER['HTTPS']) ? 'https' : 'http') . '://' . \$_SERVER['SERVER_NAME'] . ROOT_DIR);
                         define('CMS_VERSION', 'v1.0.0');
+                        
+                        //Pages that must always be accessible by cms user roles
+                        //Manage content is included here as we will differentiate content by post type
+                        define('ALLOWED_PAGES', ['404.php', 'index.php', 'setup.php', 'template.php', 'manage-content.php']);
                     ?>"
                 );
 
@@ -184,7 +200,7 @@
                 //Create the admin user
                 $password = password_hash($_POST['aPassword'], PASSWORD_BCRYPT);
                 
-                $createAdmin = $mysqli->prepare("INSERT IGNORE INTO `users` (first_name, last_name, username, email, password) VALUES('Admin', 'User', 'admin', ?, ?)");
+                $createAdmin = $mysqli->prepare("INSERT IGNORE INTO `users` (first_name, last_name, username, email, password, role) VALUES('Admin', 'User', 'admin', ?, ?, 0)");
                 $createAdmin->bind_param('ss', $_POST['aEmail'], $password);
                 $createAdmin->execute();
                 
