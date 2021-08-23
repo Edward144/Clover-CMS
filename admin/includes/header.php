@@ -34,14 +34,18 @@
 		<div class="wrapper">
 			<header id="pageHeader">
 				<div class="container-fluid">
-					<div class="row">						
-						<div class="col bg-secondary text-light d-flex align-items-center justify-content-start px-0">
-							<div class="logo bg-primary me-2 p-2">
+					<div class="row bg-secondary text-light">						
+						<div class="col-md-auto px-0">
+							<div class="logo bg-primary py-2 px-3">
 								<img src="images/clover-cms-logo.png" alt="Clover CMS Logo" class="img-fluid">
 							</div>
-							
-							<h2 class="h1 mb-0">Clover CMS<?php echo (!empty($title) ? '<small> &bull; ' . $title . '</small>': ''); ?></h2>
-							
+                        </div>
+                        
+                        <div class="col-sm-auto d-flex align-items-center">
+							<h2 class="h1 mb-0 py-2 py-sm-0">Clover CMS<?php echo (!empty($title) ? '<small> &bull; ' . $title . '</small>': ''); ?></h2>
+                        </div>
+                
+                        <div class="col-sm-auto d-flex align-items-stretch px-0 ms-auto me-0">
 							<a href="admin/includes/logout" class="logout text-white btn-dark p-3 ms-auto h-100"><span class="fa fa-sign-out-alt me-3"></span>Logout</a>
 						</div>
 					</div>
