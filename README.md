@@ -12,6 +12,10 @@ First make sure that the .htaccess file has the correct RewriteBase location, if
 
 Then you will want to ensure that the file permissions are correct, this will most likely vary depending on your server configuration but 775/755 for directories and 664/644 for files should work best. In order for the setup process to be successful the includes directory must be writable by the server, so that a new settings.php file can be created. 
 
+> 775 and 664 permissions are best for none PHP-FPM installations, combined with the web user owning the directory (www-data, httpd, apache)
+
+> 755 and 644 permissions are best for FPM installations where the cms will be installed to a users home directory, owned by that user
+
 Next you will want to create a new MySQL database and go to **https://yoursite.com**. You should be redirected automatically to the setup page. On this page fill out your MySQL database details, and then an email and password for your initial admin account. After submitting you should see a message explaining that installation is complete and you can now login to your admin account. You should also receive an email confirming this.
 
 You can click the link on the confirmation message or in the email to get to the admin login, or go to **https://yoursite.com/admin-login/**. The initial account always has the username **admin**.
