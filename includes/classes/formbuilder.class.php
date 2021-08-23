@@ -401,7 +401,7 @@
                             <span class="input-group-text">Form ID</span>
                             <input type="text" class="form-control bg-white" name="formid" value="' . (!empty($this->structure['formid']) ? $this->structure['formid'] : $formId) . '" readonly>
                             <span class="input-group-text">Action</span>
-                            <input type="text" class="form-control" name="action" value="' . $this->structure['action'] . '" placeholder="path/to/script.php">
+                            <input type="text" class="form-control" name="action" value="' . $this->structure['action'] . '" placeholder="includes/actions/script.php">
                             <span class="input-group-text">Method</span>
                             <select class="form-control" name="method">
                                 <option value="post">POST</option>
