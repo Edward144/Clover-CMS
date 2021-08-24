@@ -27,7 +27,7 @@ You may also wish to install bootstrap via npm, Clover CMS is using bootstrap 5.
 
 ## General Usage
 
-After logging in to the cms you will be presented with a dashboard page (Currently in development). In the left hand sidebar are several pages.
+After logging in to the cms you will be presented with a dashboard page which will welcome the logged in user, and display the latest five edits for each post type.
 
 ### Pages / News
 
