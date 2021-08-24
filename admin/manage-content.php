@@ -1,21 +1,24 @@
 <?php
 	require_once(dirname(__FILE__, 2) . '/includes/database.php');
-	require_once(dirname(__FILE__, 2) . '/includes/functions.php');
+    
+    if(!isset($_POST['method']) || (isset($_POST['method']) && $_POST['method'] != 'deleteContent')) {
+        require_once(dirname(__FILE__, 2) . '/includes/functions.php');
 
-	$checkType = $mysqli->prepare("SELECT id, name FROM `post_types` WHERE name = ?");
-	$checkType->bind_param('s', $_GET['post-type']);
-	$checkType->execute();
-	$checkResult = $checkType->get_result();
+        $checkType = $mysqli->prepare("SELECT id, name FROM `post_types` WHERE name = ?");
+        $checkType->bind_param('s', $_GET['post-type']);
+        $checkType->execute();
+        $checkResult = $checkType->get_result();
 
-	if($checkResult->num_rows <= 0 || !isset($_GET['post-type'])) {
-		http_response_code(404);
-		header('Location: ' . ROOT_DIR . 'admin');
-		exit();
-	}
+        if($checkResult->num_rows <= 0 || !isset($_GET['post-type'])) {
+            http_response_code(404);
+            header('Location: ' . ROOT_DIR . 'admin');
+            exit();
+        }
 
-	$pt = $checkResult->fetch_assoc();
+        $pt = $checkResult->fetch_assoc();
 
-    checkaccess('posttype_' . $pt['name']);
+        checkaccess('posttype_' . $pt['name']);
+    }
 
 	//Create Content
     if(isset($_POST['createContent'])) {
@@ -51,14 +54,14 @@
 		$delete = $mysqli->prepare("DELETE FROM `posts` WHERE id = ?");
 		$delete->bind_param('i', $_POST['id']);
 		$delete->execute();
-		
+        
 		if($delete->affected_rows > 0) {
 			echo json_encode(['status' => 'success', 'message' => 'Successfully deleted content']);
 		}
 		else {
 			echo json_encode(['status' => 'danger', 'message' => 'Failed to delete content']);
 		}
-		
+        
 		exit();
 	}
 
