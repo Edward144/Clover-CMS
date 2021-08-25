@@ -6,7 +6,7 @@
 			<footer id="pageFooter" class="bg-dark text-white">
 				<div class="footerInner container-xl">
                     <div class="row py-3">
-                        <div class="address col-sm-6 col-lg-3">
+                        <div class="address col-sm-6 col-lg-3 mb-3">
                             <?php 
                                 $addressFields = ['address_1', 'address_2', 'city', 'county', 'postcode'];
                                 $hasAddress = false;
@@ -34,7 +34,7 @@
                             <?php endif; ?>
                         </div>
                         
-                        <div class="contact col-sm-6 col-lg-3">
+                        <div class="contact col-sm-6 col-lg-3 mb-3">
                             <?php if(!empty($settingsArray['phone']) || !empty($settingsArray['email'])) : ?>
                                 <h3>Contact Us</h3>
                             
@@ -56,7 +56,7 @@
                             <?php endif; ?>
                         </div>
                         
-                        <div class="socials col-sm-6 col-lg-3">
+                        <div class="socials col-sm-6 col-lg-3 mb-3">
                             <?php $socials = $mysqli->query("SELECT * FROM `social_links` WHERE link <> '' AND link IS NOT NULL"); ?>
                             
                             <?php if($socials->num_rows > 0) : ?>
@@ -72,7 +72,7 @@
                             <?php endif; ?>
                         </div>
                         
-                        <div class="links col-sm-6 col-lg-3">
+                        <div class="links col-sm-6 col-lg-3 mb-3">
                             <h3>Useful Links</h3>
                             
                             <?php new verticalnav(1); ?>
