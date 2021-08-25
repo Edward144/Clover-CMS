@@ -103,6 +103,7 @@
                     url VARCHAR(191) UNIQUE,
                     author VARCHAR(255),
                     featured_image VARCHAR(500),
+                    carousel LONGTEXT,
                     template VARCHAR(255),
                     date_created DATETIME DEFAULT CURRENT_TIMESTAMP(),
                     last_edited DATETIME DEFAULT CURRENT_TIMESTAMP(),

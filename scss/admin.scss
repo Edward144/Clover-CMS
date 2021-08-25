@@ -279,3 +279,67 @@ body#tinymce {
 .structureItems:not(.structure) > .navigationLevel:first-child {
     margin-top: $spacer;
 }
+
+.carousel-inner {
+    position: relative;
+    overflow: hidden;
+    min-height: 50vh;
+}
+
+.carousel-inner:after {
+    content: "";
+    display: inline-block;
+    padding-top: 40%;
+}
+
+.carousel-inner > .carousel-item {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    padding: $spacer;
+    background-color: $dark;
+}
+
+.carousel-item-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    max-width: map-get($grid-breakpoints, 'xl');
+    margin: auto;
+}
+
+.carousel-item img.background {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+}
+
+.carousel-item .carouselTitle,
+.carousel-item .carouselTagline {
+    color: $white;
+    text-shadow: 1px 1px 10px $dark;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.carousel-item input.carouselTitle,
+.carousel-item input.carouselTagline {
+    background: transparent;
+    border: 0;
+    width: 100%;
+    color: $white;
+}
+
+.carousel-item input.carouselTitle::placeholder,
+.carousel-item input.carouselTagline::placeholder {
+    color: $white
+}

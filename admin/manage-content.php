@@ -209,6 +209,11 @@
             </div>
             
             <div class="form-group mb-3">
+                <label>Carousel</label>
+                <?php echo carousel($_GET['id'], true); ?>
+            </div>
+            
+            <div class="form-group mb-3">
                 <label>Content</label>
                 <textarea class="form-control tiny" name="content"><?php echo $content['content']; ?></textarea>
             </div>

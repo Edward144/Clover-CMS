@@ -17,7 +17,9 @@
     $author = (!empty($content['meta_author']) ? $content['meta_author'] : $content['author']);
     $keywords = (!empty($content['meta_keywords']) ? $content['meta_keywords'] : '');
 
-    require_once(dirname(__FILE__) . '/includes/header.php'); 
+    require_once(dirname(__FILE__) . '/includes/header.php');
+
+    echo carousel($content['id']);
 ?>
 
 <div class="uc content">

@@ -211,6 +211,110 @@
 		}
 	}
 
+    //Carousel
+    function carousel($postId, $builder = false, $interval = 5000, $wrap = true, $controls = true) {
+        if(is_numeric($postId) && $postId > 0) {
+            global $mysqli;
+            
+            $slides = '';
+            $si = 0;
+            
+            $getSlides = $mysqli->prepare("SELECT carousel FROM `posts` WHERE id = ?");
+            $getSlides->bind_param('i', $postId);
+            $getSlides->execute();
+            $slidesResult = $getSlides->get_result();
+            
+            if($slidesResult->num_rows > 0) {
+                $slideJson = json_decode($slidesResult->fetch_array()[0], true);
+                
+                if(!empty($slideJson)) {
+                    foreach($slideJson as $slide) {
+                        if($builder == true) {
+                            $title = '<input type="text" name="carouselTitle" class="carouselTitle display-3" value="' . $slide['title'] . '" placeholder="Slide title">';
+                            $tagline = '<input type="text" name="carouselTagline" class="carouselTitle display-6" value="' . $slide['tagline'] . '" placeholder="Slide tagline">';
+                        }
+                        else {
+                            $title = (!empty($slide['title']) ? '<h3 class="carouselTitle display-3">' . $slide['title'] . '</h3>' : '');
+                            $tagline = (!empty($slide['tagline']) ? '<h6 class="carouselTagline display-6">' . $slide['tagline'] . '</h6>' : '');
+                        }
+                        
+                        
+                        $slides .=
+                            '<div class="carousel-item' . ($si == 0 ? ' active' : '') . '">
+                                <div class="carousel-item-inner">' .
+                                    (!empty($slide['image']) ? '<img src="' . $slide['image'] . '" class="background">' : '') . 
+                                    $title . 
+                                    $tagline .
+                                '</div>
+                            </div>';
+
+                        $si++;
+                    }
+                }
+            }
+            
+            if($builder == true) {
+                $si++;
+            }
+            
+            $controlsOut = 
+                '<button class="carousel-control-prev" type="button" data-bs-target="#carousel' . $postId . '" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel' . $postId . '" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>';
+            
+            
+            if($si > 1) {
+                $controlsOut .=
+                    '<div class="carousel-indicators">';
+                
+                for($i = 0; $i < $si; $i++) {
+                    $controlsOut .=
+                        '<button type="button" data-bs-target="#carousel' . $postId . '" data-bs-slide-to="' . $i . '"' . ($i == 0 ? ' class="active" aria-current="true"' : '') . 'aria-label="slide-' . ($i+1) . '"></button>';
+                }
+                
+                $controlsOut .=
+                    '</div>';
+            }
+            
+            if(!empty($slides) || $builder == true) {
+                if($builder == true) {
+                    $controls = true;
+                    $interval = false;
+                }
+                elseif($si == 0) {
+                    $controls = false;
+                }
+                
+                $output =
+                    '<div id="carousel' . $postId . '" class="' . ($builder == true ? 'builder ': 'fullWidth mt-n3 mb-3 ') . 'carousel slide" data-bs-ride="carousel" data-bs-interval="' . ($interval === false ? 'false' : $interval) . '" data-bs-wrap="' . ($wrap == true ? 'true' : 'false') . '">
+                        <div class="carousel-inner">' .
+                            $slides . 
+                            ($builder == true ? 
+                                '<div class="carousel-item' . (empty($slides) ? ' active' : '') . ' additionalSlide bg-dark">
+                                    <div class="carousel-item-inner">
+                                        <button type="button" name="addCarousel" class="btn btn-secondary">+ Slide</button>
+                                    </div>
+                                </div>'
+                            : '') .
+                        '</div>' .
+                        ($controls == true ? $controlsOut : '').
+                    '</div>';
+                
+                if($builder == true) {
+                    $output .=
+                        '<input type="hidden" name="carousel"' . (!empty($slideJson) ? ' value="' . json_encode($slideJson) . '"' : '') . '>';
+                }
+            }
+            
+            return $output;
+        }
+    }
+
 	//Find and execute shortcode functions within page content
 	function parsecontent($content) {
 		$shortcodes = [];
