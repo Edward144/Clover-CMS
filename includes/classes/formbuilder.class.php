@@ -1,9 +1,9 @@
 <?php
 
-    if(isset($_POST['method'])) {
+    if(isset($_POST['formbuilder_method'])) {
         require_once(dirname(__DIR__) . '/database.php');
         
-        if($_POST['method'] == 'addGroup') {
+        if($_POST['formbuilder_method'] == 'addGroup') {
             $group = new formbuilder($_POST['id']);
             $g = $group->pullgroups([
                 "groups" => [json_decode($_POST['data'], true)]
@@ -11,7 +11,7 @@
             
             echo json_encode($g);
         }
-        elseif($_POST['method'] == 'addInput') {
+        elseif($_POST['formbuilder_method'] == 'addInput') {
             $data = json_decode($_POST['data'], true);
             
             if(!empty($data) && method_exists('formbuilder', $data['type'])) {
@@ -26,14 +26,14 @@
                 echo json_encode($method . ' does not exist');
             }
         }
-        elseif($_POST['method'] == 'addOptionRadio') {
+        elseif($_POST['formbuilder_method'] == 'addOptionRadio') {
             $checked = ($_POST['isDefault'] === 'true' ? true : false);
             $option = new formbuilder($_POST['id']);
             $o = $option->radio_option($_POST['inputId'], '', $checked);
             
             echo json_encode($o);
         }
-        elseif($_POST['method'] == 'addOptionSelect') {
+        elseif($_POST['formbuilder_method'] == 'addOptionSelect') {
             $option = new formbuilder($_POST['id']);
             $o = $option->select_option('');
             
