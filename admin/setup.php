@@ -9,175 +9,176 @@
     }
     
     if(isset($_POST['doSetup'])) {
-        //Connect to the database
-        $mysqli = new mysqli($_POST['hostname'], $_POST['username'], $_POST['password'], $_POST['database']);
-
-        if($mysqli->connect_error) {
+        //Check write permissions for settings
+        $settings = fopen(dirname(__FILE__, 2) . '/includes/settings.php', 'w');
+        
+        if(!$settings) {
             $status = 'danger';
-            $setupmessage = 'Failed to connect to the database, please check your details';
+            $setupmessage = 'Failed to create settings file, ensure permissions are correct for /includes directory';
         }
         else {
-            //Create the required tables
-            ////Settings
-            $mysqli->query(
-                "CREATE TABLE IF NOT EXISTS `settings` (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    name VARCHAR(191) UNIQUE,
-                    value VARCHAR(255)
-                )"
-            );
-            
-            $mysqli->query(
-                "INSERT INTO `settings` (name, value) VALUES
-                ('setup_complete', 0),
-                ('website_name', ''),
-                ('address_1', ''),
-                ('address_2', ''),
-                ('city', ''),
-                ('county', ''),
-                ('postcode', ''),
-                ('phone', ''),
-                ('email', ''),
-                ('google_analytics', ''),
-                ('recaptcha_sitekey', ''),
-                ('recaptcha_secretkey', ''),
-                ('logo', ''),
-                ('homepage', NULL),
-                ('newspage', NULL)"
-            );
-            
-            ////Users
-            $mysqli->query(
-                "CREATE TABLE IF NOT EXISTS `users` (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    first_name VARCHAR(255),
-                    last_name VARCHAR(255),
-                    email VARCHAR(191) UNIQUE,
-                    username VARCHAR(191) UNIQUE,
-                    password VARCHAR(60),
-                    role INT NOT NULL DEFAULT 1
-                )"
-            );
-            
-            ////Roles
-            $mysqli->query(
-                "CREATE TABLE IF NOT EXISTS `roles` (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    name VARCHAR(191) UNIQUE,
-                    access LONGTEXT
-                )"
-            );
-            
-            $mysqli->query("INSERT IGNORE INTO `roles` (id, name, access) VALUES(0, 'Admin', 'ALL'), (1, 'Standard', NULL)");
-            
-            ////Password Reset
-            $mysqli->query(
-                "CREATE TABLE IF NOT EXISTS `password_reset` (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    email VARCHAR(191) UNIQUE,
-                    token VARCHAR(191) UNIQUE,
-                    date_generated DATETIME DEFAULT CURRENT_TIMESTAMP(),
-                    expired INT DEFAULT 0
-                )"
-            );
-            
-            ////Post Types
-            $mysqli->query(
-                "CREATE TABLE IF NOT EXISTS `post_types` (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    name VARCHAR(191) UNIQUE,
-                    icon VARCHAR(50)
-                )"
-            );
-            
-            $mysqli->query("INSERT IGNORE INTO `post_types` (name, icon) VALUES ('pages', 'fa-file-alt'), ('news', 'fa-newspaper')");
-            
-            ////Posts
-            $mysqli->query(
-                "CREATE TABLE IF NOT EXISTS `posts` (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    post_type_id INT,
-                    name VARCHAR(255),
-                    excerpt VARCHAR(500),
-                    content TEXT,
-                    url VARCHAR(191) UNIQUE,
-                    author VARCHAR(255),
-                    featured_image VARCHAR(500),
-                    carousel LONGTEXT,
-                    template VARCHAR(255),
-                    date_created DATETIME DEFAULT CURRENT_TIMESTAMP(),
-                    last_edited DATETIME DEFAULT CURRENT_TIMESTAMP(),
-                    last_edited_by INT,
-                    state  INT DEFAULT 0,
-                    meta_title VARCHAR(255),
-                    meta_description VARCHAR(500),
-                    meta_author VARCHAR(255),
-                    meta_keywords VARCHAR(255)
-                )"
-            );
-            
-            $mysqli->query("INSERT IGNORE INTO `posts` VALUES(id, post_type_id, name, content, author, state) (1, 1, 'Welcome', '<h1>Welcome to Clover CMS</h1><p>Set up is complete, you can now start creating content.</p>', 'Admin User', 2)");
-            
-            ////Navigation Menus
-            $mysqli->query(
-                "CREATE TABLE IF NOT EXISTS `navigation_menus` (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    name VARCHAR(255)
-                )"
-            );
-            
-            ////Navigation Structure
-            $mysqli->query(
-                "CREATE TABLE IF NOT EXISTS `navigation_structure` (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    menu_id INT DEFAULT 0,
-                    name VARCHAR(255),
-                    url VARCHAR(500),
-                    visible INT DEFAULT 0,
-                    target VARCHAR(50) DEFAULT NULL,
-                    parent_id INT DEFAULT 0,
-                    poosition INT DEFAULT 0
-                )"
-            );
-            
-            ////Social Links
-            $mysqli->query(
-                "CREATE TABLE IF NOT EXISTS `social_links` (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    name VARCHAR(191) UNIQUE,
-                    link VARCHAR(255)
-                )"
-            );
-            
-            //Forms
-            $mysqli->query(
-                "CREATE TABLE IF NOT EXISTS `forms` (
-                    id INT AUTO_INCREMENT PRIMARY KEY,
-                    name VARCHAR(255),
-                    structure LONGTEXT
-                )"
-            );
-            
-            $mysqli->query(
-                "INSERT INTO `social_links` ('name') VALUES
-                ('facebook'),
-                ('twitter'),
-                ('instagram'),
-                ('youtube'),
-                ('linkedin')"
-            );
-            
-            //Create the settings file
-            $settings = fopen(dirname(__FILE__, 2) . '/includes/settings.php', 'w');
-            
-            if(!$settings) {
+            //Connect to the database
+            $mysqli = new mysqli($_POST['hostname'], $_POST['username'], $_POST['password'], $_POST['database']);
+
+            if($mysqli->connect_error) {
                 $status = 'danger';
-                $setupmessage = 'Failed to create settings file, ensure permissions are correct for /includes directory';
+                $setupmessage = 'Failed to connect to the database, please check your details';
             }
             else {
+                //Create the required tables
+                ////Settings
+                $mysqli->query(
+                    "CREATE TABLE IF NOT EXISTS `settings` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(191) UNIQUE,
+                        value VARCHAR(255)
+                    )"
+                );
+
+                $mysqli->query(
+                    "INSERT INTO `settings` (name, value) VALUES
+                    ('setup_complete', 0),
+                    ('website_name', ''),
+                    ('address_1', ''),
+                    ('address_2', ''),
+                    ('city', ''),
+                    ('county', ''),
+                    ('postcode', ''),
+                    ('phone', ''),
+                    ('email', ''),
+                    ('google_analytics', ''),
+                    ('recaptcha_sitekey', ''),
+                    ('recaptcha_secretkey', ''),
+                    ('logo', ''),
+                    ('homepage', NULL),
+                    ('newspage', NULL)"
+                );
+
+                ////Users
+                $mysqli->query(
+                    "CREATE TABLE IF NOT EXISTS `users` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        first_name VARCHAR(255),
+                        last_name VARCHAR(255),
+                        email VARCHAR(191) UNIQUE,
+                        username VARCHAR(191) UNIQUE,
+                        password VARCHAR(60),
+                        role INT NOT NULL DEFAULT 1
+                    )"
+                );
+
+                ////Roles
+                $mysqli->query(
+                    "CREATE TABLE IF NOT EXISTS `roles` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(191) UNIQUE,
+                        access LONGTEXT
+                    )"
+                );
+
+                $mysqli->query("INSERT IGNORE INTO `roles` (id, name, access) VALUES(0, 'Admin', 'ALL'), (1, 'Standard', NULL)");
+
+                ////Password Reset
+                $mysqli->query(
+                    "CREATE TABLE IF NOT EXISTS `password_reset` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        email VARCHAR(191) UNIQUE,
+                        token VARCHAR(191) UNIQUE,
+                        date_generated DATETIME DEFAULT CURRENT_TIMESTAMP(),
+                        expired INT DEFAULT 0
+                    )"
+                );
+
+                ////Post Types
+                $mysqli->query(
+                    "CREATE TABLE IF NOT EXISTS `post_types` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(191) UNIQUE,
+                        icon VARCHAR(50)
+                    )"
+                );
+
+                $mysqli->query("INSERT IGNORE INTO `post_types` (name, icon) VALUES ('pages', 'fa-file-alt'), ('news', 'fa-newspaper')");
+
+                ////Posts
+                $mysqli->query(
+                    "CREATE TABLE IF NOT EXISTS `posts` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        post_type_id INT,
+                        name VARCHAR(255),
+                        excerpt VARCHAR(500),
+                        content TEXT,
+                        url VARCHAR(191) UNIQUE,
+                        author VARCHAR(255),
+                        featured_image VARCHAR(500),
+                        carousel LONGTEXT,
+                        template VARCHAR(255),
+                        date_created DATETIME DEFAULT CURRENT_TIMESTAMP(),
+                        last_edited DATETIME DEFAULT CURRENT_TIMESTAMP(),
+                        last_edited_by INT,
+                        state  INT DEFAULT 0,
+                        meta_title VARCHAR(255),
+                        meta_description VARCHAR(500),
+                        meta_author VARCHAR(255),
+                        meta_keywords VARCHAR(255)
+                    )"
+                );
+
+                $mysqli->query("INSERT IGNORE INTO `posts` VALUES(id, post_type_id, name, content, author, state) (1, 1, 'Welcome', '<h1>Welcome to Clover CMS</h1><p>Set up is complete, you can now start creating content.</p>', 'Admin User', 2)");
+
+                ////Navigation Menus
+                $mysqli->query(
+                    "CREATE TABLE IF NOT EXISTS `navigation_menus` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(255)
+                    )"
+                );
+
+                ////Navigation Structure
+                $mysqli->query(
+                    "CREATE TABLE IF NOT EXISTS `navigation_structure` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        menu_id INT DEFAULT 0,
+                        name VARCHAR(255),
+                        url VARCHAR(500),
+                        visible INT DEFAULT 0,
+                        target VARCHAR(50) DEFAULT NULL,
+                        parent_id INT DEFAULT 0,
+                        poosition INT DEFAULT 0
+                    )"
+                );
+
+                ////Social Links
+                $mysqli->query(
+                    "CREATE TABLE IF NOT EXISTS `social_links` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(191) UNIQUE,
+                        link VARCHAR(255)
+                    )"
+                );
+
+                //Forms
+                $mysqli->query(
+                    "CREATE TABLE IF NOT EXISTS `forms` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(255),
+                        structure LONGTEXT
+                    )"
+                );
+
+                $mysqli->query(
+                    "INSERT INTO `social_links` ('name') VALUES
+                    ('facebook'),
+                    ('twitter'),
+                    ('instagram'),
+                    ('youtube'),
+                    ('linkedin')"
+                );
+
+                //Create the settings file     
                 $rootdir = '/' . explode('/', dirname(__FILE__, 2))[count(explode('/', dirname(__FILE__, 2))) - 1] . '/';
                 define('ROOT_DIR', $rootdir);
-                
+
                 fwrite($settings, 
                     "<?php
                         //Database Details
@@ -189,7 +190,7 @@
                         define('ROOT_DIR', '" . $rootdir . "');
                         define('BASE_DIR', (!empty(\$_SERVER['HTTPS']) ? 'https' : 'http') . '://' . \$_SERVER['SERVER_NAME'] . ROOT_DIR);
                         define('CMS_VERSION', 'v1.0.0');
-                        
+
                         //Pages that must always be accessible by cms user roles
                         //Manage content is included here as we will differentiate content by post type
                         define('ALLOWED_PAGES', ['404.php', 'index.php', 'setup.php', 'template.php', 'manage-content.php']);
@@ -197,14 +198,14 @@
                 );
 
                 fclose($settings);
-                
+
                 //Create the admin user
                 $password = password_hash($_POST['aPassword'], PASSWORD_BCRYPT);
-                
+
                 $createAdmin = $mysqli->prepare("INSERT IGNORE INTO `users` (first_name, last_name, username, email, password, role) VALUES('Admin', 'User', 'admin', ?, ?, 0)");
                 $createAdmin->bind_param('ss', $_POST['aEmail'], $password);
                 $createAdmin->execute();
-                
+
                 if($createAdmin->error) {
                     $status = 'danger';
                     $setupmessage = 'Failed to create admin user';
@@ -216,19 +217,18 @@
                     $content = 
                         '<p>Welcome ' . $_POST['aEmail'] . ',</p>
                         <p>Clover CMS has finished it\'s setup and you can now login using the link below. You can login with username <strong>admin</strong> and your chosen password.</p>
-                        
+
                         <div style="margin: 1rem auto;">
                             <a href="' . (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $rootdir . 'admin-login" target="_blank" style="border-radius: 10px; box-sizing: border-box; background: #009688; color: #fff; padding: 0.5rem; border: 0; text-decoration: none;">Click here to login</a>
                         </div>';
-                    
+
                     systememail($to, $subject, $content);
-                    
+
                     //Mark as setup completed    
                     $mysqli->query("UPDATE `settings` SET value = 1 WHERE name = 'setup_complete'");
                     $status = 'success';
                     $setupmessage = 'Setup is complete you can now login with username <strong>admin</strong> and your chosen password, by clicking <a href="../admin-login">here</a>';
                 }
-                
             }
         }
     }
