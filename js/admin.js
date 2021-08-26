@@ -19,7 +19,7 @@ function sidebarcollapse() {
 	
         setTimeout(function() {
             sidebar.show();
-        }, 50);
+        }, 70);
         
         //This doesn't work as we are hiding the element first, so the transition end isn't detected
 		/*sidebar.on("transitionend webkitTransitionEnd oTransitionEnd", function() {
@@ -393,7 +393,7 @@ function formbuilder_addgroup(button) {
         url: root_dir + "includes/classes/formbuilder.class.php",
         method: "post",
         dataType: "json",
-        data: ({id: $(this).parent(".structure").first().find("input[name='formid']").val(), data: JSON.stringify(groupData), method: "addGroup"}),
+        data: ({id: $(this).parent(".structure").first().find("input[name='formid']").val(), data: JSON.stringify(groupData), formbuilder_method: "addGroup"}),
         success: function(data) {
             $(data).insertBefore(button.parents(".list-group-item").first());
             formbuilder_disablesubmit();
@@ -420,7 +420,7 @@ function formbuilder_addinput(button, input = "", inputData = {}) {
         url: root_dir + "includes/classes/formbuilder.class.php",
         method: "post",
         dataType: "json",
-        data: ({id: $(this).parent(".structure").first().find("input[name='formid']").val(), data: JSON.stringify(inputData), method: "addInput"}),
+        data: ({id: $(this).parent(".structure").first().find("input[name='formid']").val(), data: JSON.stringify(inputData), formbuilder_method: "addInput"}),
         success: function(data) {
             $(data).insertBefore(button.parents(".list-group-item").first());
             formbuilder_disablesubmit();
@@ -438,7 +438,7 @@ function formbuilder_addoption_select(button) {
         url: root_dir + "includes/classes/formbuilder.class.php",
         method: "post",
         dataType: "json",
-        data: ({id: $(this).parent(".structure").first().find("input[name='formid']").val(), method: "addOptionSelect"}),
+        data: ({id: $(this).parent(".structure").first().find("input[name='formid']").val(), formbuilder_method: "addOptionSelect"}),
         success: function(data) {
             $(data).insertBefore(button.parents(".list-group-item").first());
         }
@@ -465,7 +465,7 @@ function formbuilder_addoption_radio(button) {
         url: root_dir + "includes/classes/formbuilder.class.php",
         method: "post",
         dataType: "json",
-        data: ({id: $(this).parent(".structure").first().find("input[name='formid']").val(), inputId, isDefault, method: "addOptionRadio"}),
+        data: ({id: $(this).parent(".structure").first().find("input[name='formid']").val(), inputId, isDefault, formbuilder_method: "addOptionRadio"}),
         success: function(data) {
             $(data).insertBefore(button.parents(".list-group-item").first());
         }
@@ -541,4 +541,166 @@ $(".deleteRole").submit(function() {
         event.preventDefault();
         return;
     }
-})
+});
+
+////Carousel
+
+//Show Controls
+function carousel_loadcontrols(carousel) {
+    carousel.find(".carousel-item:not(.additionalSlide)").each(function() {
+        if(!$(this).find(".carouselControls").length) {
+            $(
+                "<div class='carouselControls'>" +
+                    "<button type='button' class='btn btn-dark' name='carouselImage' data-toggle='tooltip' data-placement='bottom' title='Choose Image'><span class='fas fa-image'></span></button>" +
+                    "<button type='button' class='btn btn-dark' name='carouselDelete' data-toggle='tooltip' data-placement='bottom' title='Delete Slide'><span class='fas fa-trash'></span></button>" +
+                "</div>"
+            ).prependTo($(this));
+            
+            $("[data-toggle='tooltip']").tooltip();
+        }
+    });
+}
+
+$(document).ready(function() {
+    if($(".carousel.builder").length) {
+        carousel_loadcontrols($(".carousel.builder"));
+    }
+});
+
+//Save Carousel
+function carousel_save(carousel) {
+    var savelocation = $("input[name='carousel']");
+    
+    if(carousel.length && savelocation.length) {
+        var json = [];
+        var i = 0;
+        
+        carousel.find(".carousel-item:not(.additionalSlide)").each(function() {
+            var image = $(this).find("img.background").attr("src");
+            var title = $(this).find("input[name='carouselTitle']").val();
+            var tagline = $(this).find("input[name='carouselTagline']").val();
+            
+            json[i] = {
+                "image": image,
+                "title": title,
+                "tagline": tagline,
+            };
+            
+            i++;
+        });
+        
+        savelocation.val(JSON.stringify(json));
+    }
+    else {
+        console.log("Err: Carousel cannot be saved");
+    }
+}
+
+$("#manageContent").submit(function() {
+    if($(this).find(".carousel.builder").length) {
+        carousel_save($(this).find(".carousel.builder"));
+    }
+});
+
+//Regenerate Carousel
+function carousel_regen(carousel) {
+    var savelocation = $("input[name='carousel']");
+    var carouseljson = savelocation.val();
+    
+    $.ajax({
+        url: window.location.pathname,
+        method: "post",
+        dataType: "json",
+        data: ({carouselid: carousel.attr("id").split("carousel")[1], carouseldata: carouseljson, method: "carouselRegen"}),
+        success: function(data) {
+            carousel.html($(data).html());
+            carousel_loadcontrols(carousel);
+            
+            if($("input[name='carousel']").length > 1) {
+                $("input[name='carousel']").last().remove();
+            }
+        }
+    });
+}
+
+//Add Slide
+function carousel_addslide(carousel) {
+    var savelocation = $("input[name='carousel']");
+    
+    if(carousel.length) {
+        carousel_save(carousel, savelocation);
+        
+        var carouseljson = JSON.parse(savelocation.val());
+        var carouselcount = carouseljson.length
+        
+        carouseljson[carouselcount] = {
+            "image": ""
+        }
+        
+        savelocation.val(JSON.stringify(carouseljson));
+        carousel_regen(carousel);
+        
+        $(document).ajaxComplete(function() {         
+            carousel.find(".carousel-item.active").removeClass("active");
+            
+            if(!carousel.find(".carousel-item:not(.additionalSlide)").length) {
+                carousel.find(".carousel-item").last().addClass("active");
+            }
+            else {
+                carousel.find(".carousel-item:not(.additionalSlide)").last().addClass("active");
+            }
+        });
+    }
+}
+
+$("body").on("click", "button[name='addCarousel']", function() {
+    var carousel = $(this).parents(".carousel").first();
+    carousel_addslide(carousel);
+});
+
+//Delete Slide
+function carousel_deleteslide(item) {
+    var savelocation = $("input[name='carousel']");
+    var carousel = item.parents(".carousel").first();
+    
+    if(confirm("Are you sure you want to delete this slide?")) {
+        item.remove();
+        $(".tooltip").remove();
+        carousel_save(carousel, savelocation);
+        carousel_regen(carousel);
+    }
+}
+
+$("body").on("click", "button[name='carouselDelete']", function() {
+    carousel_deleteslide($(this).parents(".carousel-item").first());
+});
+
+//Change Image
+function carousel_rf_callback(field_id) {
+    var url = $("#" + field_id).val().split(root_dir)[1];
+    $("#img" + field_id).attr("src", url);
+    $("#" + field_id).remove();
+}
+
+function carousel_selectimage(item) {
+    var random = btoa(new Date()).split("=")[0];
+    
+    item.find("img.background").remove();
+    item.prepend("<input type='hidden' id='" + random + "' name='" + random + "'>");
+    item.prepend("<img src='" + $("#slideimage").val() + "' class='background' id='img" + random + "'>");
+    
+    $.fancybox.open({
+        src: "js/responsive_filemanager/filemanager/dialog.php?type=1&field_id=" + random + "&callback=carousel_rf_callback",
+        type: "iframe"
+    });
+}
+
+$("body").on("click", "button[name='carouselImage']", function() {
+    carousel_selectimage($(this).parent(".carouselControls").siblings(".carousel-item-inner").first());
+});
+
+//Position Text
+
+//Text Colour
+
+//Position Image

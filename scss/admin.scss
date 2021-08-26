@@ -343,3 +343,22 @@ body#tinymce {
 .carousel-item input.carouselTagline::placeholder {
     color: $white
 }
+
+.carousel .carouselControls {
+    position: absolute;
+    top: $spacer;
+    right: $spacer;
+    z-index: 2;
+    margin-bottom: map-get($spacers, -1);
+}
+
+.carousel .carouselControls .btn {
+    opacity: 0.25;
+    margin-left: map-get($spacers, 1);
+    margin-bottom: map-get($spacers, 1);
+}
+
+.carousel .carouselControls .btn:active,
+.carousel .carouselControls .btn:hover {
+    opacity: 1;
+}

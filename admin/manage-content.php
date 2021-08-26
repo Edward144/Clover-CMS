@@ -1,24 +1,21 @@
 <?php
 	require_once(dirname(__FILE__, 2) . '/includes/database.php');
-    
-    if(!isset($_POST['method']) || (isset($_POST['method']) && $_POST['method'] != 'deleteContent')) {
-        require_once(dirname(__FILE__, 2) . '/includes/functions.php');
+    require_once(dirname(__FILE__, 2) . '/includes/functions.php');
 
-        $checkType = $mysqli->prepare("SELECT id, name FROM `post_types` WHERE name = ?");
-        $checkType->bind_param('s', $_GET['post-type']);
-        $checkType->execute();
-        $checkResult = $checkType->get_result();
+    $checkType = $mysqli->prepare("SELECT id, name FROM `post_types` WHERE name = ?");
+    $checkType->bind_param('s', $_GET['post-type']);
+    $checkType->execute();
+    $checkResult = $checkType->get_result();
 
-        if($checkResult->num_rows <= 0 || !isset($_GET['post-type'])) {
-            http_response_code(404);
-            header('Location: ' . ROOT_DIR . 'admin');
-            exit();
-        }
-
-        $pt = $checkResult->fetch_assoc();
-
-        checkaccess('posttype_' . $pt['name']);
+    if($checkResult->num_rows <= 0 || !isset($_GET['post-type'])) {
+        http_response_code(404);
+        header('Location: ' . ROOT_DIR . 'admin');
+        exit();
     }
+
+    $pt = $checkResult->fetch_assoc();
+
+    checkaccess('posttype_' . $pt['name']);
 
 	//Create Content
     if(isset($_POST['createContent'])) {
@@ -67,8 +64,8 @@
 
     //Save Content
     if(isset($_POST['saveContent'])) {
-        $save = $mysqli->prepare("UPDATE `posts` SET name = ?, url = ?, template = ?, author = ?, date_created = ?, state = ?, featured_image = ?, excerpt = ?, content = ?, meta_title = ?, meta_description = ?, meta_keywords = ?, meta_author = ?, last_edited = NOW(), last_edited_by = ? WHERE id = ?");
-        $save->bind_param('sssssisssssssii', $_POST['name'], $_POST['url'], $_POST['template'], $_POST['author'], $_POST['dateCreated'], $_POST['state'], $_POST['featuredImage'], $_POST['excerpt'], $_POST['content'], $_POST['metaTitle'], $_POST['metaDescription'], $_POST['metaKeywords'], $_POST['metaAuthor'], $_SESSION['adminid'], $_POST['id']);
+        $save = $mysqli->prepare("UPDATE `posts` SET name = ?, url = ?, template = ?, author = ?, date_created = ?, state = ?, featured_image = ?, carousel = ?, excerpt = ?, content = ?, meta_title = ?, meta_description = ?, meta_keywords = ?, meta_author = ?, last_edited = NOW(), last_edited_by = ? WHERE id = ?");
+        $save->bind_param('sssssissssssssii', $_POST['name'], $_POST['url'], $_POST['template'], $_POST['author'], $_POST['dateCreated'], $_POST['state'], $_POST['featuredImage'], $_POST['carousel'], $_POST['excerpt'], $_POST['content'], $_POST['metaTitle'], $_POST['metaDescription'], $_POST['metaKeywords'], $_POST['metaAuthor'], $_SESSION['adminid'], $_POST['id']);
         $save->execute();
         
         if($save->error) {
@@ -79,6 +76,13 @@
             $status = 'success';
             $message = 'Saved changes successfully';
         }
+    }
+
+    //Add Carousel Slide
+    if(isset($_POST['method']) && $_POST['method'] == 'carouselRegen') {
+        $carousel = carousel($_POST['carouselid'], true, $_POST['carouseldata']);
+        echo json_encode($carousel);
+        exit();
     }
 
 	$title = 'Manage ' . ucwords(str_replace('-', ' ', $pt['name']));
