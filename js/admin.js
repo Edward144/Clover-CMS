@@ -30,7 +30,7 @@ function sidebarcollapse() {
 
 //Split full url from media manager
 function responsive_filemanager_callback(field_id) {
-	var url = $("#" + field_id).val().split(root_dir)[1];
+	var url = $("#" + field_id).val();
 	$("input[name='" + field_id + "']").val(url).trigger("change");
 }
 
@@ -677,7 +677,7 @@ $("body").on("click", "button[name='carouselDelete']", function() {
 
 //Change Image
 function carousel_rf_callback(field_id) {
-    var url = $("#" + field_id).val().split(root_dir)[1];
+    var url = $("#" + field_id).val();
     $("#img" + field_id).attr("src", url);
     $("#" + field_id).remove();
 }
@@ -687,7 +687,7 @@ function carousel_selectimage(item) {
     
     item.find("img.background").remove();
     item.prepend("<input type='hidden' id='" + random + "' name='" + random + "'>");
-    item.prepend("<img src='" + $("#slideimage").val() + "' class='background' id='img" + random + "'>");
+    item.prepend("<img src='' class='background' id='img" + random + "'>");
     
     $.fancybox.open({
         src: "js/responsive_filemanager/filemanager/dialog.php?type=1&field_id=" + random + "&callback=carousel_rf_callback",
