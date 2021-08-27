@@ -176,7 +176,8 @@
                 );
 
                 //Create the settings file     
-                $rootdir = '/' . explode('/', dirname(__FILE__, 2))[count(explode('/', dirname(__FILE__, 2))) - 1] . '/';
+                $rootdir = '/' . explode($_SERVER['DOCUMENT_ROOT'] . '/', dirname(__FILE__, 2))[1] . '/';
+                $rootdir = ($rootdir == '//' ? '/' : $rootdir);
                 define('ROOT_DIR', $rootdir);
 
                 fwrite($settings, 
