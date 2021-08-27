@@ -144,7 +144,7 @@
                         visible INT DEFAULT 0,
                         target VARCHAR(50) DEFAULT NULL,
                         parent_id INT DEFAULT 0,
-                        poosition INT DEFAULT 0
+                        position INT DEFAULT 0
                     )"
                 );
 
