@@ -2,15 +2,15 @@
 	
 	session_start();
 
-	include_once(dirname(__FILE__) . '/settings.php');
-    $setupLoc = (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . '/' . explode('/', dirname(__DIR__))[count(explode('/', dirname(__DIR__))) - 1] . '/admin/setup';
-    
+    $setupLoc = (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . '/' . explode($_SERVER['DOCUMENT_ROOT'] . '/', dirname(__DIR__))[1] . 'admin/setup';
+
     if($_SERVER['REQUEST_URI'] != explode($_SERVER['SERVER_NAME'], $setupLoc)[1]) {
         if(!file_exists(dirname(__FILE__) . '/settings.php')) {
             header('Location: ' . $setupLoc);
             exit();
         }
-
+        
+        include_once(dirname(__FILE__) . '/settings.php');
         $mysqli = new mysqli($hostname, $username, $password, $database);
 
         if($mysqli->connect_error) {
