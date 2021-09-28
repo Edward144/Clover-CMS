@@ -3,7 +3,8 @@
 			</div>
 		</div>
 
-		<script src="js/admin.min.js"></script>
+        <script src="js/css_colors.js"></script>
+		<script src="js/admin.js"></script>
 		<script src="js/tinyConfig.min.js"></script>
 
         <?php if(!empty($_POST)) : ?>
