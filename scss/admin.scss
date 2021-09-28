@@ -306,8 +306,9 @@ body#tinymce {
     align-items: center;
     justify-content: center;
     height: 100%;
-    max-width: map-get($grid-breakpoints, 'xl');
     margin: auto;
+    padding-left: map-get($spacers, 2);
+    padding-right: map-get($spacers, 2);
 }
 
 .carousel-item img.background {
@@ -363,18 +364,8 @@ body#tinymce {
     margin-bottom: map-get($spacers, 1);
 }
 
-.carousel .carouselControls:hover > * {
-    opacity: 0.75;
-}
-
-.carousel .carouselControls .btn:active,
-.carousel .carouselControls .btn:hover,
-.carousel .carouselControls .carouselInput:active, 
-.carousel .carouselControls .carouselInput:hover {
-    opacity: 1;
-}
-
-.carousel .carouselControls .carouselInput {
+.carousel .carouselControls .carouselInput,
+.carousel .carouselControls .carouselPicker {
     background: $dark;
     display: inline-block;
     height: 42px;
@@ -406,4 +397,35 @@ body#tinymce {
 .carousel .carouselControls .btnBottom > span {
     margin-top: auto;
     margin-bottom: 0;
+}
+
+.carousel .carouselControls .btnVertical > span {
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 5px;
+}
+
+.carousel .carouselControls .btnVertical > span:first-child {
+    margin-top: -5px;
+}
+
+.carousel .carouselControls .btnVertical > span:last-child {
+    margin-bottom: -5px;
+}
+
+.carousel .carouselControls .carouselPicker {
+    width: 50px;
+}
+
+.carousel .carouselControls:hover > * {
+    opacity: 0.75;
+}
+
+.carousel .carouselControls .btn:active,
+.carousel .carouselControls .btn:hover,
+.carousel .carouselControls .carouselInput:active, 
+.carousel .carouselControls .carouselInput:hover,
+.carousel .carouselControls .carouselPicker:active,
+.carousel .carouselControls .carouselPicker:hover {
+    opacity: 1;
 }

@@ -557,6 +557,8 @@ function carousel_loadcontrols(carousel) {
                     "<button type='button' class='btn btn-dark' name='carouselTextL' data-toggle='tooltip' data-placement='bottom' title='Text Align Left'><span class='fas fa-align-left'></span></button>" +
                     "<button type='button' class='btn btn-dark' name='carouselTextC' data-toggle='tooltip' data-placement='bottom' title='Text Align Center'><span class='fas fa-align-center'></span></button>" +
                     "<button type='button' class='btn btn-dark' name='carouselTextR' data-toggle='tooltip' data-placement='bottom' title='Text Align Right'><span class='fas fa-align-right'></span></button>" +
+                    "<button type='button' class='btn btn-dark btnVertical' name='carouselTitleColor' data-toggle='tooltip' data-placement='bottom' title='Title Colour'><span class='fas fa-heading'></span><span class='fas fa-palette'></span></button>" +
+                    "<button type='button' class='btn btn-dark btnVertical' name='carouselTaglineColor' data-toggle='tooltip' data-placement='bottom' title='Tagline Colour'><span class='fas fa-paragraph'></span><span class='fas fa-palette'></span></button>" +
                     "<button type='button' class='btn btn-dark' name='carouselImage' data-toggle='tooltip' data-placement='bottom' title='Choose Image'><span class='fas fa-image'></span></button>" +
                     "<button type='button' class='btn btn-danger' name='carouselDelete' data-toggle='tooltip' data-placement='bottom' title='Delete Slide'><span class='fas fa-trash'></span></button>" +
                 "</div>"
@@ -590,23 +592,24 @@ function carousel_save(carousel) {
             var titlecolor = $(this).find("input[name='carouselTitle']").css("color");
             var taglinecolor = $(this).find("input[name='carouselTagline']").css("color");
             var position = $(this).find("img.background").css("object-position");
-            //textalign
-            //veritcalalign
+            var textalign = $(this).find("input[name='carouselTitle']").css("text-align");
+            var verticalalign = $(this).find(".carousel-item-inner").css("justify-content");
             
             json[i] = {
                 "image": image,
+                "imageposition": position,
                 "title": title,
                 "titlecolor": titlecolor,
                 "tagline": tagline,
                 "taglinecolor": taglinecolor,
-                "imageposition": position
+                "textalign": textalign,
+                "verticalalign": verticalalign
             };
             
             i++;
         });
         
         savelocation.val(JSON.stringify(json));
-        console.log(json);
     }
     else {
         console.log("Err: Carousel cannot be saved");
@@ -815,7 +818,6 @@ $(".carousel.builder").on("click", "button[name='carouselTextL'],button[name='ca
 });
 
 //Text Colour
-const TEST = "hellow";
 function carousel_textcolor(item, color) {
     var validrgb = "([0-9]|[0-9][0-9]|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])";
     var alpha = "([0-1]|0\.[0-9]{1,2})";
@@ -855,6 +857,74 @@ function carousel_textcolor(item, color) {
 
 var carousel_textcolour = carousel_textcolor;
 
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+$(".carousel.builder").on("click", "button[name='carouselTitleColor'],button[name='carouselTaglineColor']", function() {
+    var btn = $(this);
+    var type = "";
+    var currColor = "";
+    
+    if($(this).attr("name").split("carousel")[1] == "TitleColor") {
+        type = "Title";
+        currColor = $(this).parents(".carousel-item").first().find("input[name='carouselTitle']").css("color");
+    }
+    else if($(this).attr("name").split("carousel")[1] == "TaglineColor") {
+        type = "Tagline";
+        currColor = $(this).parents(".carousel-item").first().find("input[name='carouselTagline']").css("color");
+    }
+    
+    //Convert RGB / RGBA to Hex
+    if(currColor.indexOf("rgb") >= 0 || currColor.indexOf("rgba") >= 0) {
+        var colors = currColor.replace(new RegExp(/\s/, "g"), "").match(/[0-9]{0,3}/g);
+        var i = 1;
+        var r;
+        var g;
+        var b;
+        
+        $.each(colors, function(key, color) {
+            if(color.length && i <= 3) {
+                switch(i) {
+                    case 1:
+                        r = color;
+                        break;
+                    case 2:
+                        g = color;
+                        break;
+                    case 3:
+                        b = color;
+                        break;
+                }
+                
+                i++;
+            }
+        });
+        
+        if(r.length && g.length && b.length) {
+            currColor = rgbToHex(parseInt(r), parseInt(g), parseInt(b));
+        }
+    }
+    
+    if(!$(this).next(".carouselPicker").length) {
+        $(this).addClass("hasInput");
+        $("<div class='carouselPicker'><input type='color' class='form-control form-control-color p-0' colorformat='rgb' name='carouselPicker" + type + "' data-color='" + currColor + "' value='" + currColor + "'></div>").insertAfter($(this));
+    }
+    else {
+        $(this).removeClass("hasInput");
+        $(this).next(".carouselPicker").remove();
+    }
+});
+
+$(".carousel.builder").on("change", "input[type='color']", function() {
+    carousel_textcolor($(this).parents(".carousel-item").first().find("input[name='carousel" + $(this).attr("name").split("carouselPicker")[1] + "']"), $(this).val());
+})
+
 //Position Image
 function carousel_checkimage(item) {
     var image = item.find("img.background");
@@ -877,11 +947,11 @@ function carousel_imageposition(item, horizontal, vertical) {
         item.css("object-position", "");
     }
     else {
-        if(!/^[\d]+(px|pt|em|rem|\%){1}$/.test(horizontal)) {
+        if(!/^(\-?)[\d]+(px|pt|em|rem|\%){1}$/.test(horizontal)) {
             horizontal = currentHorz;
         }
 
-        if(!/^[\d]+(px|pt|em|rem|\%){1}$/.test(vertical)) {
+        if(!/^(\-?)[\d]+(px|pt|em|rem|\%){1}$/.test(vertical)) {
             vertical = currentVert;
         }
         
@@ -939,7 +1009,7 @@ $(document).keydown(function(e) {
     if($(".carousel.builder input[name='carouselImageHorizontal'],.carousel.builder input[name='carouselImageVertical']").is(":focus")) {
         var input = $(":focus");
         
-        if(/^[\d]+(px|pt|em|rem|\%){1}$/.test(input.val())) {
+        if(/^(\-?)[\d]+(px|pt|em|rem|\%){1}$/.test(input.val())) {
             var inputnumber = parseInt(input.val());
             var inputsuffix = input.val().split(inputnumber)[1];
             

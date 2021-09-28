@@ -234,21 +234,59 @@
             $slideJson = json_decode($slideData, true);
 
             if(!empty($slideJson)) {
-                foreach($slideJson as $slide) {
+                foreach($slideJson as $slide) {                    
+                    $titleStyle = '';
+                    $taglineStyle = '';
+                    $imageStyle = '';
+                    $innerStyle = '';
+                    
+                    if(!empty($slide['titlecolor'])) {
+                        $titleStyle .= 'color: ' . $slide['titlecolor'] . ';';
+                    }
+                    
+                    if(!empty($slide['taglinecolor'])) {
+                        $taglineStyle .= 'color: ' . $slide['taglinecolor'] . ';';
+                    }
+                    
+                    if(!empty($slide['textalign'])) {
+                        $titleStyle .= 'text-align: ' . $slide['textalign'] . ';';
+                        $taglineStyle .= 'text-align: ' . $slide['textalign'] . ';';
+                        
+                        switch($slide['textalign']) {
+                            case 'left':
+                                $innerStyle .= 'align-items: flex-start;';
+                                break;
+                            case 'center':
+                                $innerStyle .= 'align-items: center;';
+                                break;
+                            case 'right':
+                                $innerStyle .= 'align-items: flex-end;';
+                                break;
+                        }
+                    }
+                    
+                    if(!empty($slide['position'])) {
+                        $imageStyle .= 'object-position: ' . $slide['position'] . ';';
+                    }
+                    
+                    if(!empty($slide['verticalalign'])) {
+                        $innerStyle .= 'justify-content: ' . $slide['verticalalign'] . ';';
+                    }
+                    
                     if($builder == true) {
-                        $title = '<input type="text" name="carouselTitle" class="carouselTitle display-3" value="' . $slide['title'] . '" placeholder="Slide title"' . (!empty($slide['titlecolor']) ? 'style="color: ' . $slide['titlecolor'] . ';"' : '') . '>';
-                        $tagline = '<input type="text" name="carouselTagline" class="carouselTitle display-6" value="' . $slide['tagline'] . '" placeholder="Slide tagline"' . (!empty($slide['taglinecolor']) ? 'style="color: ' . $slide['taglinecolor'] . ';"' : '') . '>';
+                        $title = '<input type="text" name="carouselTitle" class="carouselTitle display-3" value="' . $slide['title'] . '" placeholder="Slide title" style="' . $titleStyle . '">';
+                        $tagline = '<input type="text" name="carouselTagline" class="carouselTitle display-6" value="' . $slide['tagline'] . '" placeholder="Slide tagline" style="' . $taglineStyle . '">';
                     }
                     else {
-                        $title = (!empty($slide['title']) ? '<h3 class="carouselTitle display-3"' . (!empty($slide['titlecolor']) ? 'style="color: ' . $slide['titlecolor'] . ';"' : '') . '>' . $slide['title'] . '</h3>' : '');
-                        $tagline = (!empty($slide['tagline']) ? '<h6 class="carouselTagline display-6"' . (!empty($slide['taglinecolor']) ? 'style="color: ' . $slide['taglinecolor'] . ';"' : '') . '>' . $slide['tagline'] . '</h6>' : '');
+                        $title = (!empty($slide['title']) ? '<h3 class="carouselTitle display-3" style="' . $titleStyle . '">' . $slide['title'] . '</h3>' : '');
+                        $tagline = (!empty($slide['tagline']) ? '<h6 class="carouselTagline display-6" style="' . $taglineStyle . '">' . $slide['tagline'] . '</h6>' : '');
                     }
 
 
                     $slides .=
                         '<div class="carousel-item' . ($si == 0 ? ' active' : '') . '">
-                            <div class="carousel-item-inner">' .
-                                (!empty($slide['image']) ? '<img src="' . $slide['image'] . '" class="background" style="' . (!empty($slide['imageposition']) ? 'object-position: ' . $slide['imageposition'] : '') . '">' : '') . 
+                            <div class="carousel-item-inner container-xl" style="' . $innerStyle . '">' .
+                                (!empty($slide['image']) ? '<img src="' . $slide['image'] . '" class="background" style="' . $imageStyle . '">' : '') . 
                                 $title . 
                                 $tagline .
                             '</div>

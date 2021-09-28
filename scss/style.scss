@@ -300,8 +300,9 @@ li.nav-item > .dropdown-toggle:after {
     align-items: center;
     justify-content: center;
     height: 100%;
-    max-width: map-get($grid-breakpoints, 'xl');
     margin: auto;
+    padding-left: map-get($spacers, 2);
+    padding-right: map-get($spacers, 2);
 }
 
 .carousel-item img.background {
