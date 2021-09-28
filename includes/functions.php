@@ -236,19 +236,19 @@
             if(!empty($slideJson)) {
                 foreach($slideJson as $slide) {
                     if($builder == true) {
-                        $title = '<input type="text" name="carouselTitle" class="carouselTitle display-3" value="' . $slide['title'] . '" placeholder="Slide title">';
-                        $tagline = '<input type="text" name="carouselTagline" class="carouselTitle display-6" value="' . $slide['tagline'] . '" placeholder="Slide tagline">';
+                        $title = '<input type="text" name="carouselTitle" class="carouselTitle display-3" value="' . $slide['title'] . '" placeholder="Slide title"' . (!empty($slide['titlecolor']) ? 'style="color: ' . $slide['titlecolor'] . ';"' : '') . '>';
+                        $tagline = '<input type="text" name="carouselTagline" class="carouselTitle display-6" value="' . $slide['tagline'] . '" placeholder="Slide tagline"' . (!empty($slide['taglinecolor']) ? 'style="color: ' . $slide['taglinecolor'] . ';"' : '') . '>';
                     }
                     else {
-                        $title = (!empty($slide['title']) ? '<h3 class="carouselTitle display-3">' . $slide['title'] . '</h3>' : '');
-                        $tagline = (!empty($slide['tagline']) ? '<h6 class="carouselTagline display-6">' . $slide['tagline'] . '</h6>' : '');
+                        $title = (!empty($slide['title']) ? '<h3 class="carouselTitle display-3"' . (!empty($slide['titlecolor']) ? 'style="color: ' . $slide['titlecolor'] . ';"' : '') . '>' . $slide['title'] . '</h3>' : '');
+                        $tagline = (!empty($slide['tagline']) ? '<h6 class="carouselTagline display-6"' . (!empty($slide['taglinecolor']) ? 'style="color: ' . $slide['taglinecolor'] . ';"' : '') . '>' . $slide['tagline'] . '</h6>' : '');
                     }
 
 
                     $slides .=
                         '<div class="carousel-item' . ($si == 0 ? ' active' : '') . '">
                             <div class="carousel-item-inner">' .
-                                (!empty($slide['image']) ? '<img src="' . $slide['image'] . '" class="background">' : '') . 
+                                (!empty($slide['image']) ? '<img src="' . $slide['image'] . '" class="background" style="' . (!empty($slide['imageposition']) ? 'object-position: ' . $slide['imageposition'] : '') . '">' : '') . 
                                 $title . 
                                 $tagline .
                             '</div>

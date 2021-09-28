@@ -551,13 +551,21 @@ function carousel_loadcontrols(carousel) {
         if(!$(this).find(".carouselControls").length) {
             $(
                 "<div class='carouselControls'>" +
+                    "<button type='button' class='btn btn-dark btnTop' name='carouselTextT' data-toggle='tooltip' data-placement='bottom' title='Text Align Top'><span class='fas fa-grip-lines'></span></button>" +
+                    "<button type='button' class='btn btn-dark' name='carouselTextM' data-toggle='tooltip' data-placement='bottom' title='Text Align Middle'><span class='fas fa-grip-lines'></span></button>" +
+                    "<button type='button' class='btn btn-dark btnBottom' name='carouselTextB' data-toggle='tooltip' data-placement='bottom' title='Text Align Bottom'><span class='fas fa-grip-lines'></span></button>" +
+                    "<button type='button' class='btn btn-dark' name='carouselTextL' data-toggle='tooltip' data-placement='bottom' title='Text Align Left'><span class='fas fa-align-left'></span></button>" +
+                    "<button type='button' class='btn btn-dark' name='carouselTextC' data-toggle='tooltip' data-placement='bottom' title='Text Align Center'><span class='fas fa-align-center'></span></button>" +
+                    "<button type='button' class='btn btn-dark' name='carouselTextR' data-toggle='tooltip' data-placement='bottom' title='Text Align Right'><span class='fas fa-align-right'></span></button>" +
                     "<button type='button' class='btn btn-dark' name='carouselImage' data-toggle='tooltip' data-placement='bottom' title='Choose Image'><span class='fas fa-image'></span></button>" +
-                    "<button type='button' class='btn btn-dark' name='carouselDelete' data-toggle='tooltip' data-placement='bottom' title='Delete Slide'><span class='fas fa-trash'></span></button>" +
+                    "<button type='button' class='btn btn-danger' name='carouselDelete' data-toggle='tooltip' data-placement='bottom' title='Delete Slide'><span class='fas fa-trash'></span></button>" +
                 "</div>"
             ).prependTo($(this));
             
             $("[data-toggle='tooltip']").tooltip();
         }
+        
+        carousel_checkimage($(this));
     });
 }
 
@@ -579,17 +587,26 @@ function carousel_save(carousel) {
             var image = $(this).find("img.background").attr("src");
             var title = $(this).find("input[name='carouselTitle']").val();
             var tagline = $(this).find("input[name='carouselTagline']").val();
+            var titlecolor = $(this).find("input[name='carouselTitle']").css("color");
+            var taglinecolor = $(this).find("input[name='carouselTagline']").css("color");
+            var position = $(this).find("img.background").css("object-position");
+            //textalign
+            //veritcalalign
             
             json[i] = {
                 "image": image,
                 "title": title,
+                "titlecolor": titlecolor,
                 "tagline": tagline,
+                "taglinecolor": taglinecolor,
+                "imageposition": position
             };
             
             i++;
         });
         
         savelocation.val(JSON.stringify(json));
+        console.log(json);
     }
     else {
         console.log("Err: Carousel cannot be saved");
@@ -680,6 +697,8 @@ function carousel_rf_callback(field_id) {
     var url = $("#" + field_id).val();
     $("#img" + field_id).attr("src", url);
     $("#" + field_id).remove();
+    
+    carousel_checkimage($("#img" + field_id).parents(".carousel-item").first());
 }
 
 function carousel_selectimage(item) {
@@ -700,7 +719,240 @@ $("body").on("click", "button[name='carouselImage']", function() {
 });
 
 //Position Text
+function carousel_textvertical(item, alignment) {
+    if(item.hasClass("carousel-item-inner")) {
+        switch(alignment) {
+            case "flex-start":
+            case "center":
+            case "flex-end":
+                item.css("justify-content", alignment);
+                break;
+            case "centre":
+            case "middle":
+                item.css("justify-content", "center");
+                break;
+            case "top":
+            case "start":
+                item.css("justify-content", "flex-start");
+                break;
+            case "bottom":
+            case "end":
+                item.css("justify-content", "flex-end");
+                break;
+            default:
+                item.css("justify-content", "");
+                break;
+        }
+    }
+}
+
+$(".carousel.builder").on("click", "button[name='carouselTextT'],button[name='carouselTextM'],button[name='carouselTextB']", function() {
+    var position = $(this).attr("name").split("carouselText")[1];
+    var inner = $(this).parents(".carousel-item").find(".carousel-item-inner").first();
+    
+    switch(position) {
+        case "T":
+            carousel_textvertical(inner, "flex-start");
+            break;
+        case "M":
+            carousel_textvertical(inner, "center");
+            break;
+        case "B":
+            carousel_textvertical(inner, "flex-end");
+            break;
+            break;
+        default: 
+            break;
+    }
+});
+
+function carousel_textalign(item, alignment) {    
+    switch(alignment) {
+        case "left":
+        case "center":
+        case "right":
+            item.css("text-align", alignment);
+            break;
+        case "centre":
+        case "middle":
+            item.css("text-align", "center");
+            break;
+        case "start":
+            item.css("text-align", "left");
+            break;
+        case "end":
+            item.css("text-align", "right");
+            break;
+        default:
+            item.css("text-align", "");
+            break;
+    }
+}
+
+$(".carousel.builder").on("click", "button[name='carouselTextL'],button[name='carouselTextC'],button[name='carouselTextR']", function() {
+    var position = $(this).attr("name").split("carouselText")[1];
+    var title = $(this).parents(".carousel-item").find("input[name='carouselTitle']").first();
+    var tagline = $(this).parents(".carousel-item").find("input[name='carouselTagline']").first();
+    
+    switch(position) {
+        case "L":
+            carousel_textalign(title, "left");
+            carousel_textalign(tagline, "left");
+            break;
+        case "C":
+            carousel_textalign(title, "center");
+            carousel_textalign(tagline, "center");
+            break;
+        case "R":
+            carousel_textalign(title, "right");
+            carousel_textalign(tagline, "right");
+            break;
+        default: 
+            carousel_textalign(title, "");
+            carousel_textalign(tagline, "");
+            break;
+    }
+});
 
 //Text Colour
+const TEST = "hellow";
+function carousel_textcolor(item, color) {
+    var validrgb = "([0-9]|[0-9][0-9]|[0-1][0-9][0-9]|2[0-4][0-9]|25[0-5])";
+    var alpha = "([0-1]|0\.[0-9]{1,2})";
+    var commas = "(,|,\\s)";
+    var pattern = "^rgb\\(";
+    
+    //Build RGB pattern
+    for(var i = 0; i <= 2; i++) {
+        pattern += validrgb
+        
+        if(i < 2) {
+            pattern += commas;
+        }
+    }
+    
+    pattern += "\\)$";
+    
+    var rgbReg = new RegExp(pattern, "gi");
+    var rgbaReg = new RegExp(pattern.replace(new RegExp("rgb", "gi"), "rgba").replace("\\)$", commas + alpha + "\\)$"), "gi");
+    
+    if(/^\#([\da-fA-F]{3}){1,2}$/.test(color)) {
+        item.css("color", color);
+    } //Hex
+    else if(rgbReg.test(color)) {
+        item.css("color", color);
+    } //RGB
+    else if(rgbaReg.test(color)) {
+        item.css("color", color);
+    } //RGBA
+    else if(CSS_COLORS.includes(color.toLowerCase())) {
+        item.css("color", color.toLowerCase());
+    } //Name
+    else {
+        item.css("color", "");
+    } //Invalid
+}
+
+var carousel_textcolour = carousel_textcolor;
 
 //Position Image
+function carousel_checkimage(item) {
+    var image = item.find("img.background");
+    
+    if(image.length && image.attr("src").length && !item.find(".carouselControls button[name='carouselImageH']").length && !item.find(".carouselControls button[name='carouselImageV']").length) {
+        $(
+            "<button type='button' class='btn btn-dark' name='carouselImageH' data-toggle='tooltip' data-placement='bottom' title='Image Horizontal'><span class='fas fa-arrows-alt-h'></span></button>" +
+            "<button type='button' class='btn btn-dark' name='carouselImageV' data-toggle='tooltip' data-placement='bottom' title='Image Vertical'><span class='fas fa-arrows-alt-v'></span></button>"
+        ).insertBefore(item.find(".carouselControls button[name='carouselDelete']"));
+    }
+}
+
+function carousel_imageposition(item, horizontal, vertical) {
+    var objectPosition = item.css("object-position");
+    var currentHorz = objectPosition.split(" ")[0].trim();
+    var currentVert = objectPosition.split(" ")[1].trim();
+    var newPosition = "";
+    
+    if(horizontal == "" && vertical == "") {
+        item.css("object-position", "");
+    }
+    else {
+        if(!/^[\d]+(px|pt|em|rem|\%){1}$/.test(horizontal)) {
+            horizontal = currentHorz;
+        }
+
+        if(!/^[\d]+(px|pt|em|rem|\%){1}$/.test(vertical)) {
+            vertical = currentVert;
+        }
+        
+        newPosition = horizontal + " " + vertical;
+        item.css("object-position", newPosition);
+    }
+}
+
+$(".carousel.builder").on("click", "button[name='carouselImageH'],button[name='carouselImageV']", function() {
+    var objectPosition = $(this).parents(".carousel-item").first().find("img.background").css("object-position");
+    var imageValue = "";
+    var type = $(this).attr("name").split("carouselImage")[1];
+    
+    
+    if(type == "H") {
+        imageValue = objectPosition.split(" ")[0];
+        type = "Horizontal";
+    }
+    else if(type == "V") {
+        imageValue = objectPosition.split(" ")[1];
+        type = "Vertical";
+    }
+    
+    if(!$(this).next(".carouselInput").length) {
+        $(this).addClass("hasInput");
+        $("<div class='carouselInput'><input type='text' class='form-control py-0 px-1' name='carouselImage" + type + "' placeholder='px, pt, em, rem, %' value='" + imageValue + "'></div>").insertAfter($(this));
+    }
+    else {
+        $(this).removeClass("hasInput");
+        $(this).next(".carouselInput").remove();
+    }
+});
+
+$(".carousel.builder").on("keyup", "input[name='carouselImageHorizontal'],input[name='carouselImageVertical']", function() {
+    var horz = "";
+    var vert = "";
+    var controls = $(this).parents(".carouselControls").first();
+    
+    if($(this).attr("name").split("carouselImage")[1] == "Horizontal") {
+        horz = $(this).val();
+        vert = (controls.find("input[name='carouselImageVertical']").length ? controls.find("input[name='carouselImageVertical']").val() : "");
+    }
+    else if($(this).attr("name").split("carouselImage")[1] == "Vertical") {
+        horz = (controls.find("input[name='carouselImageHorizontal']").length ? controls.find("input[name='carouselImageHorizontal']").val() : "");
+        vert = $(this).val();
+    }
+    
+    horz = (horz.length ? horz : "50%");
+    vert = (vert.length ? vert : "50%");
+    
+    carousel_imageposition($(this).parents(".carousel-item").first().find("img.background"), horz, vert);
+});
+
+$(document).keydown(function(e) {
+    if($(".carousel.builder input[name='carouselImageHorizontal'],.carousel.builder input[name='carouselImageVertical']").is(":focus")) {
+        var input = $(":focus");
+        
+        if(/^[\d]+(px|pt|em|rem|\%){1}$/.test(input.val())) {
+            var inputnumber = parseInt(input.val());
+            var inputsuffix = input.val().split(inputnumber)[1];
+            
+            switch(e.which) {
+                case 38:
+                    inputnumber += 1;
+                    input.val(inputnumber + inputsuffix);
+                    break;
+                case 40:
+                    inputnumber -= 1;
+                    input.val(inputnumber + inputsuffix);
+                    break;
+            }
+        }
+    }
+});

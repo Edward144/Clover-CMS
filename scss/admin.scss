@@ -350,15 +350,60 @@ body#tinymce {
     right: $spacer;
     z-index: 2;
     margin-bottom: map-get($spacers, -1);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
 }
 
 .carousel .carouselControls .btn {
     opacity: 0.25;
+    width: 42px;
+    height: 42px;
     margin-left: map-get($spacers, 1);
     margin-bottom: map-get($spacers, 1);
 }
 
+.carousel .carouselControls:hover > * {
+    opacity: 0.75;
+}
+
 .carousel .carouselControls .btn:active,
-.carousel .carouselControls .btn:hover {
+.carousel .carouselControls .btn:hover,
+.carousel .carouselControls .carouselInput:active, 
+.carousel .carouselControls .carouselInput:hover {
     opacity: 1;
+}
+
+.carousel .carouselControls .carouselInput {
+    background: $dark;
+    display: inline-block;
+    height: 42px;
+    width: 150px;
+    border-radius: 0 .25rem .25rem 0;
+    margin-top: -5px;
+    opacity: 0.25;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: map-get($spacers, 1);
+}
+
+.carousel .carouselControls .btn.hasInput {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.carousel .carouselControls .btnTop,    
+.carousel .carouselControls .btnBottom {    
+    display: flex;
+}
+
+.carousel .carouselControls .btnTop > span {
+    margin-top: 0;
+    margin-bottom: auto;
+}
+
+.carousel .carouselControls .btnBottom > span {
+    margin-top: auto;
+    margin-bottom: 0;
 }
