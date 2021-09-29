@@ -6,6 +6,12 @@
 			'icon' => 'fa-chart-line'
 		],
         [
+            'name' => 'Comments',
+            'link' => 'admin/manage-comments',
+            'icon' => 'fa-comments',
+            'filename' => 'manage-comments.php'
+        ],
+        [
 			'name' => 'Forms',
 			'link' => 'admin/manage-forms',
 			'icon' => 'fa-pen-alt',
@@ -55,6 +61,13 @@
 		
 		array_splice($menuItems, 1, 0, $postItems);
 	}
+
+    //Insert blank target to any item that is missing it
+    foreach($menuItems as $index => $item) {
+        if(is_array($menuItems[$index]) && !array_key_exists('target', $menuItems[$index])) {
+            $menuItems[$index]['target'] = '';
+        }
+    }
 ?>
 
 <a id="toggleSidebar" class="floatingToggle btn-dark"><span class="fa fa-bars"></span></a>
