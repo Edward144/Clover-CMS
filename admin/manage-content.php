@@ -64,8 +64,10 @@
 
     //Save Content
     if(isset($_POST['saveContent'])) {
-        $save = $mysqli->prepare("UPDATE `posts` SET name = ?, url = ?, template = ?, author = ?, date_created = ?, state = ?, featured_image = ?, carousel = ?, excerpt = ?, content = ?, meta_title = ?, meta_description = ?, meta_keywords = ?, meta_author = ?, last_edited = NOW(), last_edited_by = ? WHERE id = ?");
-        $save->bind_param('sssssissssssssii', $_POST['name'], $_POST['url'], $_POST['template'], $_POST['author'], $_POST['dateCreated'], $_POST['state'], $_POST['featuredImage'], $_POST['carousel'], $_POST['excerpt'], $_POST['content'], $_POST['metaTitle'], $_POST['metaDescription'], $_POST['metaKeywords'], $_POST['metaAuthor'], $_SESSION['adminid'], $_POST['id']);
+        $allowComments = (isset($_POST['allowComments']) ? 1 : 0);
+        
+        $save = $mysqli->prepare("UPDATE `posts` SET name = ?, url = ?, template = ?, author = ?, date_created = ?, state = ?, featured_image = ?, carousel = ?, excerpt = ?, content = ?, meta_title = ?, meta_description = ?, meta_keywords = ?, meta_author = ?, last_edited = NOW(), last_edited_by = ?, allow_comments = ? WHERE id = ?");
+        $save->bind_param('sssssissssssssiii', $_POST['name'], $_POST['url'], $_POST['template'], $_POST['author'], $_POST['dateCreated'], $_POST['state'], $_POST['featuredImage'], $_POST['carousel'], $_POST['excerpt'], $_POST['content'], $_POST['metaTitle'], $_POST['metaDescription'], $_POST['metaKeywords'], $_POST['metaAuthor'], $_SESSION['adminid'], $allowComments, $_POST['id']);
         $save->execute();
         
         if($save->error) {
@@ -152,6 +154,11 @@
                     <option value="1" <?php echo ($content['state'] == 1 ? 'selected' : ''); ?>>Draft</option>
                     <option value="2" <?php echo ($content['state'] == 2 ? 'selected' : ''); ?>>Visible</option>
                 </select>
+            </div>
+            
+            <div class="form-group form-check mb-3">
+                <input type="checkbox" class="form-check-input" name="allowComments" <?php echo ($content['allow_comments'] == 1 ? 'checked' : ''); ?> id="allowcomments">
+                <label for="allowcomments" class="form-check-label">Allow Comments</label>
             </div>
             
             <hr>

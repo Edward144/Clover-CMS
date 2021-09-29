@@ -121,7 +121,8 @@
                         meta_title VARCHAR(255),
                         meta_description VARCHAR(500),
                         meta_author VARCHAR(255),
-                        meta_keywords VARCHAR(255)
+                        meta_keywords VARCHAR(255),
+                        allow_comments INT DEFAULT 0
                     )"
                 );
 
