@@ -5,6 +5,55 @@
     checkaccess(basename(__FILE__));
     $title = 'Manage Comments';
     
+    //Modify Comment
+    if(isset($_POST['method']) && $_POST['method'] == 'modifyComment') {
+        $currentComment = $mysqli->prepare("SELECT original_content, modified FROM `comments` WHERE id = ?");
+        $currentComment->bind_param('i', $_POST['id']);
+        $currentComment->execute();
+        $commentResult = $currentComment->get_result();
+        
+        if($commentResult->num_rows > 0) {
+            $currComment = $commentResult->fetch_assoc();
+            $_POST['comment'] = (empty($_POST['comment']) ? $currComment['original_content'] : $_POST['comment']);
+
+            if($currComment['modified'] == 1) {
+                $modify = $mysqli->prepare("UPDATE `comments` SET content = ?, modified = 1, approved = ? WHERE id = ?");
+                $modify->bind_param('sii', $_POST['comment'], $_POST['approved'], $_POST['id']);
+            }
+            else {
+                $modify = $mysqli->prepare("UPDATE `comments` SET content = ?, original_content = content, modified = 1, approved = ? WHERE id = ?");
+                $modify->bind_param('sii', $_POST['comment'], $_POST['approved'], $_POST['id']);    
+            }
+
+            $modify->execute();
+
+            if($modify->error) {
+                echo json_encode(['status' => 'danger', 'message' => 'Failed to modify comment']);
+            }
+            else {
+                echo json_encode(['status' => 'success', 'message' => 'Comment modified successfully']);
+            }
+        }
+        
+        exit();
+    }
+
+    //Delete Comment
+    if(isset($_POST['method']) && $_POST['method'] == 'deleteComment') {
+        $delete = $mysqli->prepare("DELETE FROM `comments` WHERE id = ?");
+        $delete->bind_param('i', $_POST['id']);
+        $delete->execute();
+        
+        if($delete->error) {
+            echo json_encode(['status' => 'danger', 'message' => 'Failed to delete comment']);
+        }
+        else {
+            echo json_encode(['status' => 'success', 'message' => 'Successfully deleted comment']);    
+        }
+        
+        exit();
+    }
+
     require_once(dirname(__FILE__) . '/includes/header.php')
 ?>
 

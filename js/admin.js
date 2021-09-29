@@ -543,6 +543,81 @@ $(".deleteRole").submit(function() {
     }
 });
 
+//Delete Comment
+$("input[name='deleteComment']").click(function() {
+    var btn = $(this);
+    
+	if(confirm("Are you sure you want to delete this comment? Any replies will also be hidden.")) {
+		if(btn.attr("data-id").length) {
+			$.ajax({
+				url: window.location.pathname,
+				method: "post",
+				dataType: "json",
+				data: ({id: $(this).attr("data-id"), method: "deleteComment"}),
+				success: function(data) {
+					if(data["status"] == "success") {
+						location.reload();
+					}
+					else {
+						var message = "<div class='alert alert-" + data["status"] + "'>" + data["message"] + "</div>";
+                        
+						if(btn.parents("table").first().length > 0) {
+							btn.parents("table").first().find(".alert").remove();
+							$(message).insertBefore(btn.parents("table").first());
+						}
+						else {
+							btn.parents("form").first().find(".alert").remove();
+							$(message).appendTo(btn.parents("form").first());
+						}
+					}
+				}
+			});
+		}
+	}
+});
+
+//Modify Comment
+$("input[name='modifyComment']").click(function() {
+    $(this).parents("table").first().find(".alert").remove();
+    
+    var btn = $(this);
+    var id = btn.attr("data-id");
+    var comment = btn.parents("tr").first().find("textarea[name='comment']").val();
+    
+    if(btn.siblings(".form-check").children("input[name='approved']").is(":checked")) {
+        var approved = 1;
+    }
+    else {
+        var approved = 0;
+    }
+    
+    if(btn.attr("data-id").length) {
+        $.ajax({
+            url: window.location.pathname,
+            method: "post",
+            dataType: "json",
+            data: ({id: id, approved: approved, comment: comment, method: "modifyComment"}),
+            success: function(data) {
+                if(data["status"] == "success") {
+                    location.reload();
+                }
+                else {
+                    var message = "<div class='alert alert-" + data["status"] + "'>" + data["message"] + "</div>";
+
+                    if(btn.parents("table").first().length > 0) {
+                        btn.parents("table").first().find(".alert").remove();
+                        $(message).insertBefore(btn.parents("table").first());
+                    }
+                    else {
+                        btn.parents("form").first().find(".alert").remove();
+                        $(message).appendTo(btn.parents("form").first());
+                    }
+                }
+            }
+        });
+    }
+});
+
 ////Carousel
 
 //Show Controls
