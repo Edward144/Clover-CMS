@@ -125,6 +125,23 @@
                 );
 
                 $mysqli->query("INSERT IGNORE INTO `posts` VALUES(id, post_type_id, name, content, author, state) (1, 1, 'Welcome', '<h1>Welcome to Clover CMS</h1><p>Set up is complete, you can now start creating content.</p>', 'Admin User', 2)");
+                
+                //Comments
+                $mysqli->query(
+                    "CREATE TABLE IF NOT EXISTS `comments` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        post_id INT,
+                        author VARCHAR(255) DEFAULT NULL,
+                        registered INT DEFAULT 0,
+                        content VARCHAR(1000) DEFAULT NULL,
+                        reply_to INT DEFAULT 0,
+                        approved INT DEFAULT 0,
+                        date_posted DATETIME DEFAULT CURRENT_TIMESTAMP(),
+                        ip_address VARCHAR(25) DEFAULT NULL,
+                        modified INT DEFAULT 0,
+                        original_content VARCHAR(1000) DEFAULT NULL
+                    )"
+                );
 
                 ////Navigation Menus
                 $mysqli->query(
