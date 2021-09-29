@@ -37,10 +37,11 @@
         $page = $mysqli->prepare(
             "INSERT INTO `settings` (name, value) VALUES
                 ('homepage', ?),
-                ('newspage', ?)
+                ('newspage', ?),
+                ('comment_approval', ?)
             ON DUPLICATE KEY UPDATE name = VALUES(name), value = VALUES(value)"
         );
-        $page->bind_param('ss', $_POST['homepage'], $_POST['newspage']);
+        $page->bind_param('sss', $_POST['homepage'], $_POST['newspage'], $_POST['commentapproval']);
         $page->execute();
         
         if($page->error) {
@@ -106,7 +107,7 @@
         $settingValues[$setting['name']] = $setting['value'];
     }
 
-    $socials = $mysqli->query("SELECT * FROM `social_links`");
+    $socials = $mysqli->query("SELECT * FROM `social_links`"); 
 ?>
 
 <div class="col-md-6 col-lg-3 bg-light py-3">
@@ -217,6 +218,14 @@
 			</select>
 		</div>
 		
+        <div class="form-group mb-3">
+            <label>Default Comment Approval</label>
+            <select class="form-control" name="commentapproval">
+                <option value="unapproved" <?php echo ($settingValues['comment_approval'] == 'unapproved' ? 'selected' : ''); ?>>Unapproved</option>
+                <option value="approved" <?php echo ($settingValues['comment_approval'] == 'approved' ? 'selected' : ''); ?>>Approved</option>
+            </select>
+        </div>
+        
 		<div class="form-group">
 			<input type="submit" class="btn btn-primary" name="savePageSettings" value="Save Pages">
 		</div>

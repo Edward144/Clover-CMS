@@ -51,7 +51,8 @@
                     ('recaptcha_secretkey', ''),
                     ('logo', ''),
                     ('homepage', NULL),
-                    ('newspage', NULL)"
+                    ('newspage', NULL),
+                    ('comment_approval', 'unapproved')"
                 );
 
                 ////Users
