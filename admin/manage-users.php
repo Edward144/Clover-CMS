@@ -214,7 +214,7 @@
                 
                 <?php if($roles->num_rows > 0) : ?>
                     <?php while($role = $roles->fetch_assoc()) : ?>
-                        <option value="<?php echo $role['value']; ?>" <?php echo ($c['role'] == $role['id'] ? 'selected' : ($role['id'] == 1 ? 'selected' : '')); ?>><?php echo $role['name']; ?></option>
+                        <option value="<?php echo $role['id']; ?>" <?php echo ($c['role'] == $role['id'] ? 'selected' : ($role['id'] == 1 ? 'selected' : '')); ?>><?php echo $role['name']; ?></option>
                     <?php endwhile; ?>
                 <?php endif; ?>
             </select>
@@ -446,7 +446,7 @@
 
                                                 <?php if($roles->num_rows > 0) : ?>
                                                     <?php while($role = $roles->fetch_assoc()) : ?>
-                                                        <option value="<?php echo $role['value']; ?>" <?php echo ($user['role'] == $role['id'] ? 'selected' : ''); ?>><?php echo $role['name']; ?></option>
+                                                        <option value="<?php echo $role['id']; ?>" <?php echo ($user['role'] == $role['id'] ? 'selected' : ''); ?>><?php echo $role['name']; ?></option>
                                                     <?php endwhile; ?>
                                                 <?php endif; ?>
                                             </select>
