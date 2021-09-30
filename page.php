@@ -30,6 +30,9 @@
     if($content['id'] == $settingsArray['newspage']) {
         echo listposts();
     }
+
+    $comments = new comments($content['id']); 
+    $comments->display();
 ?>
 
 <?php require_once(dirname(__FILE__) . '/includes/footer.php'); ?>
