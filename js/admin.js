@@ -397,6 +397,7 @@ function formbuilder_addgroup(button) {
         success: function(data) {
             $(data).insertBefore(button.parents(".list-group-item").first());
             formbuilder_disablesubmit();
+            formbuilder_sortable($(".groups"));
         }
     });
 }
@@ -424,6 +425,7 @@ function formbuilder_addinput(button, input = "", inputData = {}) {
         success: function(data) {
             $(data).insertBefore(button.parents(".list-group-item").first());
             formbuilder_disablesubmit();
+            formbuilder_sortable($(".inputs"));
         }
     });
 }
@@ -508,8 +510,28 @@ function formbuilder_disablesubmit() {
     }
 }
 
+//Re-order form builder elements
+function formbuilder_sortable(element) {
+    element.sortable({
+        cancel: ".actions",
+        item: element.attr("class").split(" ")[1].trim("s"),
+        containment: "parent"
+    });
+}
+
 $(document).ready(function() {
     formbuilder_disablesubmit();
+    formbuilder_sortable($(".groups"));
+    formbuilder_sortable($(".inputs"));
+});
+
+$(".formbuilder").on("click", "input[name='expander']", function() {
+    if($(this).val() == "Expand") {
+        $(this).val("Collapse");
+    }
+    else {
+        $(this).val("Expand");
+    }
 });
 
 //Delete form

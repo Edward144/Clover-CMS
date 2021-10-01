@@ -437,7 +437,7 @@
                             <input type="text" class="form-control bg-white" name="groupid" value="' . (isset($group['groupid']) ? $group['groupid'] : '') .'" readonly>
                             <span class="input-group-text">Group Name</span>
                             <input type="text" class="form-control bg-white" name="groupname" value="' . (isset($group['name']) ? $group['name'] : '') .'">
-                            <input type="button" class="btn btn-dark" data-bs-toggle="collapse" href="#' . $group['groupid'] . 'inputs" role="button" aria-expanded=false value="Expand">
+                            <input type="button" class="btn btn-dark" data-bs-toggle="collapse" href="#' . $group['groupid'] . 'inputs" role="button" aria-expanded=false name="expander" value="Expand">
                             <input type="button" class="btn btn-danger" name="deleteGroup" value="× Group">
                         </div>
                         
@@ -470,7 +470,7 @@
                             <input type="text" class="form-control bg-white" name="inputid" value="' . (isset($input['inputid']) ? $input['inputid'] : '') .'" readonly>
                             <span class="input-group-text">Input Type</span>
                             <input type="text" class="form-control bg-white" name="type" value="' . (isset($input['type']) ? str_replace('_', '-', $input['type']) : '') .'" readonly>
-                            <input type="button" class="btn btn-dark" data-bs-toggle="collapse" href="#input' . $input['inputid'] . '" role="button" aria-expanded=false value="Expand">
+                            <input type="button" class="btn btn-dark" data-bs-toggle="collapse" href="#input' . $input['inputid'] . '" role="button" aria-expanded=false name="expander" value="Expand">
                             <input type="button" class="btn btn-danger" name="deleteInput" value="× Input">
                         </div>
                         
