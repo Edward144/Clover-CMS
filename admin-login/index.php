@@ -22,7 +22,13 @@
 				$_SESSION['adminid'] = $user['id'];
 				$_SESSION['adminuser'] = $user['username'];
 				
-				header('Location: ../admin');
+                if(!empty($_SESSION['adminredirect'])) {
+                    header('Location: ' . $_SESSION['adminredirect']);
+                }
+                else {
+				    header('Location: ../admin');
+                }
+                
 				exit();
 			}
 			else {
@@ -70,7 +76,8 @@
 				<div class="content">
 					<form id="adminLogin" class="shadow rounded bg-white overflow-hidden mx-auto my-5" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
 						<input type="hidden" name="dologin">
-						
+						<input type="hidden" name="redirectto" value="<?php echo $_SESSION['adminredirect']; ?>">
+                        
 						<div class="formHeader text-center bg-primary text-white p-3">
 							<h1 class="mb-0"><span class="fa fa-unlock-alt me-3"></span>Admin Login</h1>
 						</div>
