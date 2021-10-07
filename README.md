@@ -49,6 +49,22 @@ Creating or editing a content item will take you to the single view for that ite
 * Excerpt - this is another field mostly used for news, the excerpt will appear on the list view of the news post type
 * Content - a TinyMCE 5 editor for creating the content for the item
 
+### Comments
+
+When a comment is posted on any post that allowa them it will appear here. You are able to search for comments by: id, content, author.
+
+You are able to modify the content of the comment by typing into it's textarea and clicking the modify button. This will then be reflected on the front end along with a note that an administrative user has modified the comment. This is mostly usefuly for censoring inappropriate comments. 
+
+The original comment will be stored and can be recovered by deleting the whole content of the comment and clicking modify. 
+
+Along with the comment will be the authors name, either a name typed out themselves if they are a guest user, or the name tied to their profile if they are registered. An IP address will be shown if one can be obtained, this can be useful for blocking malicious users or bots spamming the comment forms. If the comment is a reply, then the ID of the parent comment will be displayed, this can be clicked to view that parent comment. The date and time the comment was originally displayed is also shown.
+
+Next to the comment details are the controls to modify or delete a comment. You are able to change the approval of a comment by checking or unchecking the "Approved" box and clicking modify. Unapproved comments will be highlighted in red and will no longer appear on the front end, this will also hide any replies. 
+
+You can choose whether or not comments are allowed on a given post via a checkbox no the lefthand side. The comments form will not be displayed if comments are not allowed, and no comments currently exist for that post. Otherwise existing comments will be displayed, but the form to post new comments will not be loaded and a message explaining that comments are now disabled is displayed. 
+
+Within settings is an option to choose whether new comments are approved when posted or not. This is set to unapproved by default.
+
 ### Forms
 
 You can create forms that can be displayed within a page by copying the displayed shortcode into the TinyMCE editor. In the form editor you can set a name for the form which is used for your reference only, with the exception of a contact form script that has already been provided. 
