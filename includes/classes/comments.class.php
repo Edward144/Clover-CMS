@@ -1,10 +1,32 @@
 <?php
 
+    /*$.ajax({
+    url: "includes/classes/comments.class.php",
+    method: "post",
+    dataType: "html",
+    data: ({loadcomments: true, contentid: 55, parent: 0, limit: 10, offset: 10}),
+    success: function(data) {
+        $(data).insertAfter($(".comments > .comment").last());
+    },
+    error: function(a, b, c) {
+        console.log(c);
+    }
+});*/
+
+    if(isset($_POST['loadcomments'])) {
+        require_once(dirname(__DIR__) . '/database.php');
+        
+        $loadComments = new comments($_POST['contentid'], $_POST['parent'], $_POST['limit'], $_POST['offset']);
+        $loadComments->display();
+        
+        exit();
+    }
+
     class comments {
         private $commentsOpen = false;
         private $output = '';
         
-        public function __construct($postid) {
+        public function __construct($postid, $parent = 0, $limit = 10, $offset = 0) {
             global $mysqli;
             
             if(isset($postid) && is_numeric($postid)) {
@@ -20,7 +42,7 @@
                 }
                 
                 //Load existing comments
-                $this->output .= $this->loadcomments($postid);
+                $this->output .= $this->loadcomments($postid, $parent, $limit, $offset);
             }
         }
         
@@ -34,18 +56,21 @@
             }
         }
         
-        private function loadcomments($postid, $parent = 0) {
+        private function loadcomments($postid, $parent, $limit, $offset) {
             global $mysqli;
             
             $output = '';
             
-            $checkComments = $mysqli->prepare("SELECT * FROM `comments` WHERE post_id = ? AND reply_to = ? AND approved = 1 ORDER BY date_posted DESC LIMIT 10 OFFSET 0");
+            $limit = (!is_numeric($limit) || $limit < 0 ? 10 : $limit);
+            $limit = (!is_numeric($offset) || $offset < 0 ? 0 : $limit);
+            
+            $checkComments = $mysqli->prepare("SELECT * FROM `comments` WHERE post_id = ? AND reply_to = ? AND approved = 1 ORDER BY date_posted DESC LIMIT {$limit} OFFSET {$offset}");
             $checkComments->bind_param('ii', $postid, $parent);
             $checkComments->execute();
             $checkResult = $checkComments->get_result();
             
             if($checkResult->num_rows > 0) {
-                if($parent == 0) {
+                if($parent == 0 && $offset == 0) {
                     $output .=
                         '<div class="comments bg-light p-3" id="comments' . $postid . '">
                             <h4 class="mb-3">Comments</h4>';
@@ -90,11 +115,11 @@
                                 <span class="commentDate"><small>&nbsp;on ' . date('d/m/Y H:i', strtotime($comment['date_posted'])) . '</small></span>
                             </div>' .
                             $this->postcomment($postid, $comment['id']) .
-                            $this->loadcomments($postid, $comment['id']) .
+                            $this->loadcomments($postid, $comment['id'], 10, 0) .
                         '</div>';
                 }
                 
-                if($parent == 0) {
+                if($parent == 0 && $offset == 0) {
                     $output .= 
                             $this->postcomment($postid) .
                         '</div>';
@@ -150,9 +175,9 @@
                 
                 
                 return 
-                    ($commentid == 0 ? '<hr><h5>Post a comment</h5>' : '<h6 class="text-end mt-n4"><small><a href="#" data-bs-toggle="collapse" data-bs-target="#comment' . $commentid .'" aria-expanded="' . (!empty($_SESSION['message' . $commentid]) ? 'true' : 'false') . '">Reply</a></small></h6>') .
+                    ($commentid == 0 ? '<hr><h5>Post a comment</h5>' : '<h6 class="text-end mt-n4"><small><a href="#" data-bs-toggle="collapse" data-bs-target="#post' . $commentid .'" aria-expanded="' . (!empty($_SESSION['message' . $commentid]) ? 'true' : 'false') . '">Reply</a></small></h6>') .
                     
-                    '<div class="commentForm ' . ($commentid > 0 ? (!empty($_SESSION['message' . $commentid]) ? 'collapse show' : 'collapse') : '') . '" id="comment' . $commentid . '">
+                    '<div class="commentForm ' . ($commentid > 0 ? (!empty($_SESSION['message' . $commentid]) ? 'collapse show' : 'collapse') : '') . '" id="post' . $commentid . '">
                         <form class="postComment" action="includes/actions/postcomment.php" method="post">
                             <input type="hidden" name="returnurl" value="' . $_SERVER['REQUEST_URI'] . '">
                             <input type="hidden" name="postid" value="' . $postid . '">
