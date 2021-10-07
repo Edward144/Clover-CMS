@@ -4,6 +4,22 @@ I have created this CMS for my own personal use however want to share it in case
 
 It is recommended that you run at least PHP7.1 and ideally PHP7.4, there may be some incompatibilities with PHP8.0 but I have fixed everything that I have found so far.
 
+Jump to:
+* [Setup](#setup)
+* [Bootstrap](#bootstrap)
+* [General Usage](#general-usage)
+* [Pages / News](#pages--news)
+* [Comments](#comments)
+* [Forms](#forms)
+* [Navigation](#navigation)
+* [Users](#users)
+* [Settings](#settings)
+* [Profile](#profile)
+* [Media Manager](#media-manager)
+* [Templates](#templates)
+* [Shortcodes](#shortcode)
+* [Credits](#credits)
+
 ## Setup
 
 Installation is as simple as downloading a copy of the repository and saving the files to the required directory.
