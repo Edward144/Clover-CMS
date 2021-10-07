@@ -26,6 +26,12 @@
         
         public function display() {
             echo $this->output;
+            
+            foreach($_SESSION as $key => $session) {
+                if(strpos($key, 'status') !== false || strpos($key, 'message') !== false) {
+                    unset($_SESSION[$key]);
+                }
+            }
         }
         
         private function loadcomments($postid, $parent = 0) {
@@ -141,13 +147,16 @@
                         </div>';
                 }
                 
+                
+                
                 return 
-                    ($commentid == 0 ? '<hr><h5>Post a comment</h5>' : '<h6 class="text-end mt-n4"><small><a href="#" data-bs-toggle="collapse" data-bs-target="#post' . $commentid .'" aria-expanded="false">Reply</a></small></h6>') .
+                    ($commentid == 0 ? '<hr><h5>Post a comment</h5>' : '<h6 class="text-end mt-n4"><small><a href="#" data-bs-toggle="collapse" data-bs-target="#comment' . $commentid .'" aria-expanded="' . (!empty($_SESSION['message' . $commentid]) ? 'true' : 'false') . '">Reply</a></small></h6>') .
                     
-                    '<div class="commentForm ' . ($commentid > 0 ? 'collapse' : '') . '" id="post' . $commentid . '">
-                        <form class="postComment" method="post">
-                            <input type="hidden" name="postid" value="' . $postid . '"' .
-                            ($commentid > 0 ? '<input type="hidden" name="replyto" value="' . $commentid . '">' : '') .
+                    '<div class="commentForm ' . ($commentid > 0 ? (!empty($_SESSION['message' . $commentid]) ? 'collapse show' : 'collapse') : '') . '" id="comment' . $commentid . '">
+                        <form class="postComment" action="includes/actions/postcomment.php" method="post">
+                            <input type="hidden" name="returnurl" value="' . $_SERVER['REQUEST_URI'] . '">
+                            <input type="hidden" name="postid" value="' . $postid . '">
+                            <input type="hidden" name="replyto" value="' . $commentid . '">' .
                             $guestName .
 
                             '<div class="form-group mb-3">
@@ -157,8 +166,10 @@
                             
                             <div class="form-group d-flex align-items-center justify-content-end">
                                 <input type="submit" class="btn btn-primary text-white" value="' . ($commentid == 0 ? 'Post Comment' : 'Post Reply') . '">
-                            </div>
-                        </form>
+                            </div>' .
+                            
+                            (!empty($_SESSION['message' . $commentid]) ? '<div class="mt-3 mb-0 py-2 alert alert-' . $_SESSION['status' . $commentid] . '">' . $_SESSION['message' . $commentid] . '</div>' : '') .
+                        '</form>
                     </div>';
             }
             elseif($this->commentsOpen == false && $commentid == 0) {
