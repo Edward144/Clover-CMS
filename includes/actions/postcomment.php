@@ -6,6 +6,14 @@
     if(isset($_POST['postid']) && isset($_POST['replyto'])) {
         $author = 'Unknown';
         $registered = 0;
+        $approved = 0;
+        
+        $checkApproved = $mysqli->query("SELECT value FROM `settings` WHERE name = 'comment_approval'");
+        
+        if($checkApproved->num_rows > 0) {
+            $approval = $checkApproved->fetch_array()[0];
+            $approved = ($approval == 'approved' ? 1 : 0);
+        }
         
         if(isset($_SESSION['adminid'])) {
             $checkUser = $mysqli->prepare("SELECT CONCAT(first_name, ' ', last_name) AS author FROM `users` WHERE id = ?");
