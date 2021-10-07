@@ -17,7 +17,7 @@ It is recommended that you run at least PHP7.1 and ideally PHP7.4, there may be 
 * [Profile](#profile)
 * [Media Manager](#media-manager)
 * [Templates](#templates)
-* [Shortcodes](#shortcode)
+* [Shortcodes](#shortcodes)
 * [Credits](#credits)
 
 ## Setup
