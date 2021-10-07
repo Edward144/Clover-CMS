@@ -4,7 +4,7 @@ I have created this CMS for my own personal use however want to share it in case
 
 It is recommended that you run at least PHP7.1 and ideally PHP7.4, there may be some incompatibilities with PHP8.0 but I have fixed everything that I have found so far.
 
-Jump to:
+*Jump to:*
 * [Setup](#setup)
 * [Bootstrap](#bootstrap)
 * [General Usage](#general-usage)
