@@ -181,7 +181,7 @@
                                     <?php echo (!empty($row['ip_address']) ? '<span>IP Address: <a href="https://api.iplocation.net/?ip=' . $row['ip_address'] . '" target="_blank"><strong>' . $row['ip_address'] . '</strong></a></span><br>' : '');?>
                                     
                                     <?php if($row['reply_to'] > 0) : ?>
-                                        <span>Reply to ID: <a href="admin/manage-comments?search=<?php echo $row['reply_to']; ?>&reply"><strong><?php echo $row['reply_to']; ?></strong></a></span><br>
+                                        <span>Reply to ID: <a href="admin/manage-comments?search=<?php echo $row['reply_to']; ?>&id=<?php echo $row['reply_to']; ?>&reply"><strong><?php echo $row['reply_to']; ?></strong></a></span><br>
                                     <?php endif; ?>
                                     
                                     <span>Modified: <strong><span class="fa fa-<?php echo ($row['modified'] == 0 ? 'times-circle text-danger' : 'check-circle text-success'); ?>" title="Has this comment been modified by an administrative user?"></span></strong></span>

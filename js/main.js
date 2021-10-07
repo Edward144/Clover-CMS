@@ -34,3 +34,28 @@ $(window).scroll(function() {
 $(document).ready(function() {
     sticky($("#pageHeader"));
 });
+
+//Load new comments
+function comments_load(contentid, parentid) {
+    if(parentid == 0) {
+        var appendTo = $(".comments > .comment").last(); 
+        var offset = $(".comments > .comment").length;
+    }
+    else {
+        var appendTo = $("#comment" + parentid + " > .comment").last();
+        var offset = $("#comment" + parentid + " > .comment").length;
+    }
+    
+    $.ajax({
+        url: "includes/classes/comments.class.php",
+        method: "post",
+        dataType: "html",
+        data: ({loadcomments: true, contentid: contentid, parent: parentid, offset: offset}),
+        success: function(data) {
+            $(data).insertAfter(appendTo);
+        },
+        error: function(a, b, c) {
+            console.log(c);
+        }
+    });
+}
