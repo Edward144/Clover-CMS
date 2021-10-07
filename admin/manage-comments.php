@@ -21,8 +21,19 @@
                 $modify->bind_param('sii', $_POST['comment'], $_POST['approved'], $_POST['id']);
             }
             else {
-                $modify = $mysqli->prepare("UPDATE `comments` SET content = ?, original_content = content, modified = 1, approved = ? WHERE id = ?");
-                $modify->bind_param('sii', $_POST['comment'], $_POST['approved'], $_POST['id']);    
+                $originalComment = $mysqli->prepare("SELECT original_content FROM `comments` WHERE id = ?");
+                $originalComment->bind_param('i', $_POST['id']);
+                $originalComment->execute();
+                $originalCommentResult = $originalComment->get_result();
+                
+                if($originalCommentResult->num_rows > 0) {
+                    $oComment = $originalCommentResult->fetch_array()[0];
+                }
+                
+                $modified = (isset($oComment) && $_POST['comment'] == $oComment ? 0 : 1);
+                    
+                $modify = $mysqli->prepare("UPDATE `comments` SET content = ?, original_content = content, modified = ?, approved = ? WHERE id = ?");
+                $modify->bind_param('siii', $_POST['comment'], $modified, $_POST['approved'], $_POST['id']);    
             }
 
             $modify->execute();
