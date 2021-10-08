@@ -1,10 +1,19 @@
 <?php
 
     if(isset($_POST['recaptchaverify'])) {        
+        require_once(dirname(__DIR__) . '/database.php');
+        
         $valid = true;
         $message = '';
         $status = 'success';
         $responses = json_decode($_POST['responses'], true);
+        $secret = '';
+        
+        $checkSecret = $mysqli->query("SELECT value FROM `settings` WHERE name = 'recaptcha_secretkey_v2'");
+        
+        if($checkSecret->num_rows > 0) {
+            $secret = $checkSecret->fetch_array()[0];
+        }
         
         foreach($responses as $response) {
             $ch = curl_init();
@@ -12,7 +21,7 @@
             curl_setopt($ch, CURLOPT_URL, 'https://www.google.com/recaptcha/api/siteverify');
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, [
-                'secret' => '6LfwNLkcAAAAALzqGeeDjfV-8BPgsfmjOJ0CLI_G',
+                'secret' => $secret,
                 'response' => $response
             ]);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true); 
