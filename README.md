@@ -79,7 +79,7 @@ Next to the comment details are the controls to modify or delete a comment. You 
 
 You can choose whether or not comments are allowed on a given post via a checkbox no the lefthand side. The comments form will not be displayed if comments are not allowed, and no comments currently exist for that post. Otherwise existing comments will be displayed, but the form to post new comments will not be loaded and a message explaining that comments are now disabled is displayed. 
 
-Within settings is an option to choose whether new comments are approved when posted or not. This is set to unapproved by default.
+Within settings is an option to choose whether new comments are approved when posted or not. This is set to unapproved by default. You are also able to add Google Recaptcha v2 credentials to verify comments before they are posted, to prevent against bots.
 
 ### Forms
 
