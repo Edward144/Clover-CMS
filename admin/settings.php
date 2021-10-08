@@ -84,8 +84,8 @@
             "INSERT INTO `settings` (name, value) VALUES
                 ('google_analytics', ?),
                 ('recaptcha_sitekey_v3', ?),
-                ('recaptcha_secretkey_v3', ?)
-                ('recaptcha_sitekey_v2', ?)
+                ('recaptcha_secretkey_v3', ?),
+                ('recaptcha_sitekey_v2', ?),
                 ('recaptcha_secretkey_v2', ?)
             ON DUPLICATE KEY UPDATE name = VALUES(name), value = VALUES(value)"
         );
