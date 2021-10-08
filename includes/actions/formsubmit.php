@@ -17,7 +17,7 @@
     }
 
     //Get our captcha keys
-    $captcha = $mysqli->query("SELECT name, value FROM `settings` WHERE name = 'recaptcha_sitekey' OR name = 'recaptcha_secretkey' OR name = 'email'");
+    $captcha = $mysqli->query("SELECT name, value FROM `settings` WHERE name = 'recaptcha_sitekey_v3' OR name = 'recaptcha_secretkey_v3recaptcha_secretkey_v2' OR name = 'email'");
                         
     if($captcha->num_rows > 0) {
         $cptch = [];
@@ -26,8 +26,8 @@
             $cptch[$row['name']] = $row['value'];
         }
 
-        $sitekey = $cptch['recaptcha_sitekey'];
-        $secretkey = $cptch['recaptcha_secretkey'];
+        $sitekey = $cptch['recaptcha_sitekey_v3'];
+        $secretkey = $cptch['recaptcha_secretkey_v3'];
 
         //Validate the captcha response
         $allowsend = false;

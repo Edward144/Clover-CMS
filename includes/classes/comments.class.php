@@ -21,15 +21,15 @@
             
             if(isset($postid) && is_numeric($postid)) {
                 //Check for Recaptcha details
-                $settings = $mysqli->query("SELECT * FROM `settings` WHERE name = 'comment_sitekey' OR name = 'comment_secretkey'");
+                $settings = $mysqli->query("SELECT * FROM `settings` WHERE name = 'recaptcha_sitekey_v2' OR name = 'recaptcha_secretkey_v2'");
                 
                 if($settings->num_rows == 2) {
                     while($setting = $settings->fetch_assoc()) {
                         switch($setting['name']) {
-                            case 'comment_sitekey': 
+                            case 'recaptcha_sitekey_v2': 
                                 $this->sitekey = $setting['value'];
                                 break;
-                            case 'comment_secretkey':
+                            case 'recaptcha_secretkey_v2':
                                 $this->secretkey = $setting['value'];
                                 break;
                         }

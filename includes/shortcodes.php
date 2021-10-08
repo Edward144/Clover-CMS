@@ -156,7 +156,7 @@
                     
                     //Add Recaptcha validation if contact form
                     if(strpos($structure['action'], 'actions/formsubmit.php') !== false) {
-                        $captcha = $mysqli->query("SELECT name, value FROM `settings` WHERE name = 'recaptcha_sitekey' OR name = 'recaptcha_secretkey'");
+                        $captcha = $mysqli->query("SELECT name, value FROM `settings` WHERE name = 'recaptcha_sitekey_v3' OR name = 'recaptcha_secretkey_v3'");
                         
                         if($captcha->num_rows > 0) {
                             $cptch = [];
@@ -165,8 +165,8 @@
                                 $cptch[$row['name']] = $row['value'];
                             }
                             
-                            $sitekey = $cptch['recaptcha_sitekey'];
-                            $secretkey = $cptch['recaptcha_secretkey'];
+                            $sitekey = $cptch['recaptcha_sitekey_v3'];
+                            $secretkey = $cptch['recaptcha_secretkey_v3'];
                             
                             if(!empty($sitekey) && !empty($secretkey)) {
                                 $output .=

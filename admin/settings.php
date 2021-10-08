@@ -83,11 +83,13 @@
         $other = $mysqli->prepare(
             "INSERT INTO `settings` (name, value) VALUES
                 ('google_analytics', ?),
-                ('recaptcha_sitekey', ?),
-                ('recaptcha_secretkey', ?)
+                ('recaptcha_sitekey_v3', ?),
+                ('recaptcha_secretkey_v3', ?)
+                ('recaptcha_sitekey_v2', ?)
+                ('recaptcha_secretkey_v2', ?)
             ON DUPLICATE KEY UPDATE name = VALUES(name), value = VALUES(value)"
         );
-        $other->bind_param('sss', $_POST['googleAnalytics'], $_POST['sitekey'], $_POST['secretkey']);
+        $other->bind_param('sssss', $_POST['googleAnalytics'], $_POST['sitekeyv3'], $_POST['secretkeyv3'], $_POST['sitekeyv2'], $_POST['secretkeyv2']);
         $other->execute();
         
         if($other->error) {
@@ -274,14 +276,32 @@
 		
 		<div class="form-group mb-3">
 			<label><span class="fab fa-google"></span> ReCaptcha<sub>v3</sub> Site Key</label>
-			<input type="text" class="form-control" name="sitekey" value="<?php echo $settingValues['recaptcha_sitekey']; ?>">
+			<input type="text" class="form-control" name="sitekeyv3" value="<?php echo $settingValues['recaptcha_sitekey_v3']; ?>">
 		</div>
 		
 		<div class="form-group mb-3">
 			<label><span class="fab fa-google"></span> ReCaptcha<sub>v3</sub> Secret Key</label>
-			<input type="text" class="form-control" name="secretkey" value="<?php echo $settingValues['recaptcha_secretkey']; ?>">
+			<input type="text" class="form-control" name="secretkeyv3" value="<?php echo $settingValues['recaptcha_secretkey_v3']; ?>">
+		</div>
+        
+        <div class="form-group mb-3">
+            <small class="text-muted">Recaptcha v3 is used for verifying form submissions and can be integrated into custom actions</small>
+        </div>
+        
+        <div class="form-group mb-3">
+			<label><span class="fab fa-google"></span> ReCaptcha<sub>v2</sub> Site Key</label>
+			<input type="text" class="form-control" name="sitekeyv2" value="<?php echo $settingValues['recaptcha_sitekey_v2']; ?>">
 		</div>
 		
+		<div class="form-group mb-3">
+			<label><span class="fab fa-google"></span> ReCaptcha<sub>v2</sub> Secret Key</label>
+			<input type="text" class="form-control" name="secretkeyv2" value="<?php echo $settingValues['recaptcha_secretkey_v2']; ?>">
+		</div>
+		
+        <div class="form-group mb-3">
+            <small class="text-muted">Recaptcha v2 is used for verifying comments and can be integrated into custom actions</small>
+        </div>
+        
 		<div class="form-group">
 			<input type="submit" class="btn btn-primary" name="saveOtherSettings" value="Save Settings">
 		</div>
