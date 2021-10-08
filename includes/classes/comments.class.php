@@ -11,12 +11,35 @@
 
     class comments {
         private $commentsOpen = false;
+        private $loadcaptcha = false;
+        private $sitekey;
+        private $secretkey;
         private $output = '';
         
         public function __construct($postid, $parent = 0, $offset = 0) {
             global $mysqli;
             
             if(isset($postid) && is_numeric($postid)) {
+                //Check for Recaptcha details
+                $settings = $mysqli->query("SELECT * FROM `settings` WHERE name = 'comment_sitekey' OR name = 'comment_secretkey'");
+                
+                if($settings->num_rows == 2) {
+                    while($setting = $settings->fetch_assoc()) {
+                        switch($setting['name']) {
+                            case 'comment_sitekey': 
+                                $this->sitekey = $setting['value'];
+                                break;
+                            case 'comment_secretkey':
+                                $this->secretkey = $setting['value'];
+                                break;
+                        }
+                    }
+                    
+                    if(!empty($this->sitekey) && !empty($this->secretkey)) {
+                        $this->loadcaptcha = true;
+                    }
+                }
+                
                 //Check that this post allows comments
                 $checkAllowed = $mysqli->prepare("SELECT allow_comments FROM `posts` WHERE id = ?");
                 $checkAllowed->bind_param('i', $postid);
@@ -115,6 +138,14 @@
                             ($commentsCount > 10 ? '<a href="#" onclick="comments_load(' . $postid . ', ' . $parent . '); return false;">Load More Comments</a>' : '') .
                             $this->postcomment($postid) .
                         '</div>';
+                    
+                    if($this->loadcaptcha == true) {
+                        $output .=
+                            '<script>
+                                var recaptchaSitekey = "' . $this->sitekey . '";
+                            </script>
+                            <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaOnload&render=explicit" async defer></script>';       
+                    }
                 }
                 
                 return $output;
@@ -165,7 +196,7 @@
                 }
                 
                 return 
-                    ($commentid == 0 ? '<hr><h5>Post a comment</h5>' : '<h6 class="text-end mt-n4"><small><a href="#" data-bs-toggle="collapse" data-bs-target="#post' . $commentid .'" aria-expanded="' . (!empty($_SESSION['message' . $commentid]) ? 'true' : 'false') . '">Reply</a></small></h6>') .
+                    ($commentid == 0 ? '<hr><h5>Post a comment</h5>' : '<h6 class="text-end mt-n4"><small><a href="#" class="commentReply" data-bs-toggle="collapse" data-bs-target="#post' . $commentid .'" aria-expanded="' . (!empty($_SESSION['message' . $commentid]) ? 'true' : 'false') . '">Reply</a></small></h6>') .
                     
                     '<div class="commentForm ' . ($commentid > 0 ? (!empty($_SESSION['message' . $commentid]) ? 'collapse show' : 'collapse') : '') . '" id="post' . $commentid . '">
                         <form class="postComment" action="includes/actions/postcomment.php" method="post">
@@ -177,9 +208,14 @@
                             '<div class="form-group mb-3">
                                 <label class="required">Your comment</label>
                                 <textarea class="form-control" name="content" maxlength="1000" required></textarea>
-                            </div>
+                            </div>' .
                             
-                            <div class="form-group d-flex align-items-center justify-content-end">
+                            ($this->loadcaptcha == true ? 
+                            '<div class="form-group mb-3">
+                                <div id="recaptcha' . $commentid . '" class="recaptcha"></div>
+                            </div>' : '') .
+                    
+                            '<div class="form-group d-flex align-items-center justify-content-end">
                                 <input type="submit" class="btn btn-primary text-white" value="' . ($commentid == 0 ? 'Post Comment' : 'Post Reply') . '">
                             </div>' .
                             

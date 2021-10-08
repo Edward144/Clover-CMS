@@ -45,7 +45,7 @@
     }
 
     $noId = explode('#', $_POST['returnurl'])[0];
-    $queryString = '?' . explode('?', $noId)[1];
+    $queryString = (!empty(explode('?', $noId)[1]) ? '?' . explode('?', $noId)[1] : '');
     $redirectUri = explode('?', $_POST['returnurl'])[0] . $queryString . (isset($_POST['replyto']) ? '#post' . $_POST['replyto'] : '');
 
     header('Location: ' . $redirectUri);
