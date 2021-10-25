@@ -240,7 +240,7 @@
                         <p>Setsquare CMS has finished it\'s setup and you can now login using the link below. You can login with username <strong>admin</strong> and your chosen password.</p>
 
                         <div style="margin: 1rem auto;">
-                            <a href="' . (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $rootdir . 'admin-login" target="_blank" style="border-radius: 10px; box-sizing: border-box; background: #009688; color: #fff; padding: 0.5rem; border: 0; text-decoration: none;">Click here to login</a>
+                            <a href="' . (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $rootdir . 'admin-login" target="_blank" style="border-radius: 10px; box-sizing: border-box; background: #2196f3; color: #fff; padding: 0.5rem; border: 0; text-decoration: none;">Click here to login</a>
                         </div>';
 
                     systememail($to, $subject, $content);
