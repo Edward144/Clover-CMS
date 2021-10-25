@@ -110,7 +110,7 @@
 			</div>
 			
 			<footer id="pageFooter" class="container-fluid bg-white border-top border-light shadow text-end">
-				<a href="https://github.com/Edward144/Clover-CMS" target="_blank" class="d-inline-block text-primary"><small>Powered by Clover CMS</small></a>
+				<a href="https://github.com/Edward144/Clover-CMS" target="_blank" class="d-inline-block text-primary"><small>Powered by Setsquare CMS</small></a>
 			</footer>
 		</div>
 	</body>
