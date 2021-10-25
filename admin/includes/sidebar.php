@@ -117,5 +117,5 @@
 </ul>
 
 <footer id="pageFooter">
-    <span class="small"><a href="https://github.com/Edward144/Clover-CMS" target="_blank"><span class="fab fa-github"></span> Edward144/Clover-CMS</a> <?php echo CMS_VERSION; ?></span>
+    <span class="small"><a href="https://github.com/Setsquare-Solutions/Setsquare-CMS" target="_blank"><span class="fab fa-github"></span> Setsquare-Solutions/Setsquare-CMS</a> <?php echo CMS_VERSION; ?></span>
 </footer>
