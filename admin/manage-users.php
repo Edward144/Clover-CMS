@@ -254,7 +254,7 @@
         <?php endif; ?>
     </form>
     
-    <?php $roles = $mysqli->query("SELECT * FROM `roles` ORDER BY id ASC"); ?>
+    <?php $roles = $mysqli->query("SELECT * FROM `roles` WHERE id > 1 ORDER BY id ASC"); ?>
     
     <?php if($roles->num_rows > 0) : ?>
         <hr>
@@ -270,11 +270,11 @@
                     <form class="deleteRole d-block d-xl-flex align-items-start justify-content-end mb-n1" method="post">
                         <span class="ms-0 me-auto"><?php echo $role['name']; ?></span>
                         
-                        <?php if($role['id'] > 0) : ?>
+                        <?php if($role['id'] > 1) : ?>
                             <input type="button" class="btn btn-primary py-0 ms-1 mb-1" data-bs-toggle="modal" data-bs-target="#role<?php echo $role['id']; ?>modal" value="Edit">
                         <?php endif; ?>
                         
-                        <?php if($role['id'] > 1) : ?>
+                        <?php if($role['id'] > 2) : ?>
                             <input type="hidden" name="id" value="<?php echo $role['id']; ?>">
                             <input type="submit" class="btn btn-danger py-0 me-0 ms-1 mb-1" name="deleteRole" value="Delete">
                         <?php endif; ?>

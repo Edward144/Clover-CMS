@@ -79,7 +79,7 @@
                     )"
                 );
 
-                $mysqli->query("INSERT IGNORE INTO `roles` (id, name, access) VALUES(0, 'Admin', 'ALL'), (1, 'Standard', NULL)");
+                $mysqli->query("INSERT IGNORE INTO `roles` (id, name, access) VALUES(1, 'Admin', 'ALL'), (2, 'Standard', NULL)");
 
                 ////Password Reset
                 $mysqli->query(
