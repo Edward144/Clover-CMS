@@ -514,8 +514,9 @@ function formbuilder_disablesubmit() {
 function formbuilder_sortable(element) {
     element.sortable({
         cancel: ".actions",
-        item: element.attr("class").split(" ")[1].trim("s"),
-        containment: "parent"
+        items: ".list-group-item",//element.attr("class").split(" ")[1].split(" ")[0].trim("s"),
+        containment: "parent",
+        cancel: "input,textarea,select"
     });
 }
 
