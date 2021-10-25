@@ -4,7 +4,7 @@
     
     define('CMS_VERSION', 'v1.1.0');
 
-    $setupLoc = (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . '/' . explode($_SERVER['DOCUMENT_ROOT'] . '/', dirname(__DIR__))[1] . 'admin/setup';
+    $setupLoc = (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . '/' . explode($_SERVER['DOCUMENT_ROOT'] . '/', dirname(__DIR__))[1] . '/admin/setup';
 
     if($_SERVER['REQUEST_URI'] != explode($_SERVER['SERVER_NAME'], $setupLoc)[1]) {
         if(!file_exists(dirname(__FILE__) . '/settings.php')) {
