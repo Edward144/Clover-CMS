@@ -223,7 +223,7 @@
                 //Create the admin user
                 $password = password_hash($_POST['aPassword'], PASSWORD_BCRYPT);
 
-                $createAdmin = $mysqli->prepare("INSERT IGNORE INTO `users` (first_name, last_name, username, email, password, role) VALUES('Admin', 'User', 'admin', ?, ?, 0)");
+                $createAdmin = $mysqli->prepare("INSERT IGNORE INTO `users` (first_name, last_name, username, email, password, role) VALUES('Admin', 'User', 'admin', ?, ?, 1)");
                 $createAdmin->bind_param('ss', $_POST['aEmail'], $password);
                 $createAdmin->execute();
 
