@@ -50,7 +50,7 @@
                     ('recaptcha_sitekey_v3', ''),
                     ('recaptcha_secretkey_v3', ''),
                     ('recaptcha_sitekey_v2', ''),
-                    ('recaptcha_secretkey_v2', '')
+                    ('recaptcha_secretkey_v2', ''),
                     ('logo', ''),
                     ('homepage', NULL),
                     ('newspage', NULL),
