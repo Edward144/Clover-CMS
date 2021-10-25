@@ -49,7 +49,7 @@
             $access = json_decode($user['access'], true);
             $access = ($access == null ? [] : $access);
             
-            if($user['role'] == 0 || in_array($pagename, $access)) {
+            if($user['role'] == 1 || in_array($pagename, $access)) {
                 $allowed = true;
             }
         }
