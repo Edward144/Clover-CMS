@@ -37,7 +37,7 @@
 					<div class="row bg-secondary text-light">						
 						<div class="col-md-auto px-0">
 							<div class="logo bg-primary py-2 px-3">
-								<img src="images/clover-cms-logo.png" alt="Setsquare CMS Logo" class="img-fluid">
+								<img src="images/setsquare-cms-logo.png" alt="Setsquare CMS Logo" class="img-fluid">
 							</div>
                         </div>
                         

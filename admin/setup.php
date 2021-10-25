@@ -283,7 +283,7 @@
 						<input type="hidden" name="doSetup">
 						
 						<div class="formHeader text-center bg-primary text-white p-3">
-							<h1 class="mb-0"><img src="../images/clover-cms-logo.png" alt="Setsquare CMS Logo" style="width: 50px;"> Setsquare CMS Setup</h1>
+							<h1 class="mb-0"><img src="../images/setsquare-cms-logo.png" alt="Setsquare CMS Logo" style="width: 50px;"> Setsquare CMS Setup</h1>
 						</div>
 
 						<div class="formBody border-right border-left border-right border-light p-3">
