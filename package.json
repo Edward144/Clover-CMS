@@ -18,5 +18,6 @@
   "homepage": "https://github.com/Setsquare-Solutions/Setsquare-CMS#readme",
   "dependencies": {
     "bootstrap": "^5.0.2"
-  }
+  },
+  "devDependencies": {}
 }
