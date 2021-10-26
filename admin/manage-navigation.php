@@ -150,7 +150,7 @@
                     <option selected disabled>--Select--</option>
                     
                     <?php while($existingItem = $existing->fetch_assoc()) : ?>
-                        <option value="<?php echo $existingItem['id']; ?>" data-name="<?php echo $existingItem['name']; ?>" data-url="<?php echo $existingItem['url']; ?>"><?php echo $existingItem['post_type'] . ': ' . $existingItem['name']; ?></option>
+                        <option value="<?php echo $existingItem['id']; ?>" data-name="<?php echo $existingItem['name']; ?>" data-url="<?php echo ($existingItem['post_type'] !== 'pages' ? $existingItem['post_type'] . '/' : '') . $existingItem['url']; ?>"><?php echo $existingItem['post_type'] . ': ' . $existingItem['name']; ?></option>
                     <?php endwhile; ?>
                 </select>
             </div>
