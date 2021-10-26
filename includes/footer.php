@@ -73,9 +73,24 @@
                         </div>
                         
                         <div class="links col-sm-6 col-lg-3 mb-3">
-                            <h3>Useful Links</h3>
+                            <?php 
+                                $menuId = 1;
+                                $footerMenu = $mysqli->prepare(
+                                    "SELECT nm.name AS menu_name FROM `navigation_structure` AS ns
+                                        LEFT OUTER JOIN `navigation_menus` AS nm ON nm.id = ns.menu_id
+                                    WHERE ns.menu_id = ? AND nm.name <> '' AND nm.name IS NOT NULL LIMIT 1"
+                                );
+                                $footerMenu->bind_param('i', $menuId);
+                                $footerMenu->execute();
+                                $menuResult = $footerMenu->get_result();
                             
-                            <?php new verticalnav(1); ?>
+                                if($menuResult->num_rows > 0) {
+                                    $menu = $menuResult->fetch_assoc();
+                                    
+                                    echo '<h3>' . $menu['manu_name'] . '</h3>';
+                                    new verticalnav($menuId);
+                                }
+                             ?>
                         </div>
                     </div>
                 </div>
