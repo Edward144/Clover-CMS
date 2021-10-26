@@ -128,7 +128,7 @@
                     )"
                 );
 
-                $mysqli->query("INSERT IGNORE INTO `posts` (id, post_type_id, name, content, author, state) VALUES(1, 1, 'Welcome', '<h1>Welcome to Clover CMS</h1><p>Set up is complete, you can now start creating content.</p>', 'Admin User', 2)");
+                $mysqli->query("INSERT IGNORE INTO `posts` (id, post_type_id, name, content, author, state) VALUES(1, 1, 'Welcome', '<h1>Welcome to Setsquare CMS</h1><p>Set up is complete, you can now start creating content.</p>', 'Admin User', 2)");
                 
                 //Comments
                 $mysqli->query(
@@ -234,13 +234,13 @@
                 else {
                     //Email confirmation to admin
                     $to = $_POST['aEmail'];
-                    $subject = 'Clover CMS has finished setup';
+                    $subject = 'Setsquare CMS has finished setup';
                     $content = 
                         '<p>Welcome ' . $_POST['aEmail'] . ',</p>
-                        <p>Clover CMS has finished it\'s setup and you can now login using the link below. You can login with username <strong>admin</strong> and your chosen password.</p>
+                        <p>Setsquare CMS has finished it\'s setup and you can now login using the link below. You can login with username <strong>admin</strong> and your chosen password.</p>
 
                         <div style="margin: 1rem auto;">
-                            <a href="' . (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $rootdir . 'admin-login" target="_blank" style="border-radius: 10px; box-sizing: border-box; background: #009688; color: #fff; padding: 0.5rem; border: 0; text-decoration: none;">Click here to login</a>
+                            <a href="' . (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $rootdir . 'admin-login" target="_blank" style="border-radius: 10px; box-sizing: border-box; background: #2196f3; color: #fff; padding: 0.5rem; border: 0; text-decoration: none;">Click here to login</a>
                         </div>';
 
                     systememail($to, $subject, $content);
@@ -262,7 +262,7 @@
 	<head>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		
-		<title>Clover CMS Setup</title>
+		<title>Setsquare CMS Setup</title>
 		
 		<link rel="preconnect" href="https://fonts.gstatic.com">
 		<link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
@@ -283,7 +283,7 @@
 						<input type="hidden" name="doSetup">
 						
 						<div class="formHeader text-center bg-primary text-white p-3">
-							<h1 class="mb-0"><img src="../images/clover-cms-logo.png" alt="Clover CMS Logo" style="width: 50px;"> Clover CMS Setup</h1>
+							<h1 class="mb-0"><img src="../images/setsquare-cms-logo.png" alt="Setsquare CMS Logo" style="width: 50px;"> Setsquare CMS Setup</h1>
 						</div>
 
 						<div class="formBody border-right border-left border-right border-light p-3">

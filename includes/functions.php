@@ -83,10 +83,10 @@
 		$metadata = '';
 		
 		if(!empty($title) && is_string($title)) {
-			$metadata .= '<title>' . $title . ' | Clover CMS</title>';
+			$metadata .= '<title>' . $title . ' | Setsquare CMS</title>';
 		}
 		else {
-			$metadata .= '<title>Clover CMS</title>';
+			$metadata .= '<title>Setsquare CMS</title>';
 		}
 		
 		if(!empty($description) && is_string($description)) {
@@ -192,9 +192,9 @@
 			'<html>				
 				<body style="font-family: sans-serif; background: #f3f3f3; padding: 5rem 2rem; max-width: 1000px;">
 					<div class="padding: 0 1rem; margin: 5rem auto;">
-						<div style="background: #009688; padding: 1rem; display: flex; align-items: center; justify-content: center;">
-							<img src="https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . 'images/clover-cms-logo.png" alt="Clover CMS Logo" style="display: block; width: 100%; max-width: 64px; margin-right: 1rem;">
-							<span style="font-size: 32px; color: #fff;">Clover CMS</span>
+						<div style="background: #212529; padding: 1rem; display: flex; align-items: center; justify-content: center;">
+							<img src="https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . 'images/setsquare-cms-logo.png" alt="Setsquare CMS Logo" style="display: block; width: 100%; max-width: 64px; margin-right: 1rem;">
+							<span style="font-size: 32px; color: #fff;">Setsquare CMS</span>
 						</div>
 
 						<div style="background: #fff; padding: 1rem;">';
