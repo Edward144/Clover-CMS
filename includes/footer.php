@@ -78,7 +78,7 @@
                                 $footerMenu = $mysqli->prepare(
                                     "SELECT nm.name AS menu_name FROM `navigation_structure` AS ns
                                         LEFT OUTER JOIN `navigation_menus` AS nm ON nm.id = ns.menu_id
-                                    WHERE ns.menu_id = ? AND nm.name <> '' AND nm.name IS NOT NULL LIMIT 1"
+                                    WHERE ns.menu_id = ? AND ns.visible = 1 AND ns.parent_id = 0 AND nm.name <> '' AND nm.name IS NOT NULL LIMIT 1"
                                 );
                                 $footerMenu->bind_param('i', $menuId);
                                 $footerMenu->execute();
@@ -87,8 +87,8 @@
                                 if($menuResult->num_rows > 0) {
                                     $menu = $menuResult->fetch_assoc();
                                     
-                                    echo '<h3>' . $menu['manu_name'] . '</h3>';
-                                    new verticalnav($menuId);
+                                    echo '<h3>' . $menu['menu_name'] . '</h3>';
+                                    new verticalnav(1);
                                 }
                              ?>
                         </div>
