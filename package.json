@@ -1,5 +1,5 @@
 {
-  "name": "setsquare-cms",
+  "name": "clover-cms",
   "version": "1.0.0",
   "description": "A simple php CMS built with bootstrap.",
   "main": "js/main.js",
@@ -8,16 +8,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Setsquare-Solutions/Setsquare-CMS.git"
+    "url": "git+https://github.com/Edward144/Clover-CMS.git"
   },
   "author": "Ed Hall",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Setsquare-Solutions/Setsquare-CMS/issues"
+    "url": "https://github.com/Edward144/Clover-CMS/issues"
   },
-  "homepage": "https://github.com/Setsquare-Solutions/Setsquare-CMS#readme",
+  "homepage": "https://github.com/Edward144/Clover-CMS#readme",
   "dependencies": {
     "bootstrap": "^5.0.2"
-  },
-  "devDependencies": {}
+  }
 }

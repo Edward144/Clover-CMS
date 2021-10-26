@@ -36,13 +36,13 @@
 				<div class="container-fluid">
 					<div class="row bg-secondary text-light">						
 						<div class="col-md-auto px-0">
-							<div class="logo bg-white py-2 px-3">
-								<img src="images/setsquare-cms-logo.png" alt="Setsquare CMS Logo" class="img-fluid">
+							<div class="logo bg-primary py-2 px-3">
+								<img src="images/clover-cms-logo.png" alt="Clover CMS Logo" class="img-fluid">
 							</div>
                         </div>
                         
                         <div class="col-sm-auto d-flex align-items-center">
-							<h2 class="h1 mb-0 py-2 py-sm-0">Setsquare CMS<?php echo (!empty($title) ? '<small> &bull; ' . $title . '</small>': ''); ?></h2>
+							<h2 class="h1 mb-0 py-2 py-sm-0">Clover CMS<?php echo (!empty($title) ? '<small> &bull; ' . $title . '</small>': ''); ?></h2>
                         </div>
                 
                         <div class="col-sm-auto d-flex align-items-stretch px-0 ms-auto me-0">
