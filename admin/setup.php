@@ -52,7 +52,7 @@
                     ('recaptcha_sitekey_v2', ''),
                     ('recaptcha_secretkey_v2', ''),
                     ('logo', ''),
-                    ('homepage', NULL),
+                    ('homepage', '1'),
                     ('newspage', NULL),
                     ('comment_approval', 'unapproved')"
                 );
@@ -128,7 +128,7 @@
                     )"
                 );
 
-                $mysqli->query("INSERT IGNORE INTO `posts` VALUES(id, post_type_id, name, content, author, state) (1, 1, 'Welcome', '<h1>Welcome to Setsquare CMS</h1><p>Set up is complete, you can now start creating content.</p>', 'Admin User', 2)");
+                $mysqli->query("INSERT IGNORE INTO `posts` (id, post_type_id, name, content, author, state) VALUES(1, 1, 'Welcome', '<h1>Welcome to Setsquare CMS</h1><p>Set up is complete, you can now start creating content.</p>', 'Admin User', 2)");
                 
                 //Comments
                 $mysqli->query(
