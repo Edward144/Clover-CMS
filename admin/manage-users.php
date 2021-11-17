@@ -217,6 +217,8 @@
                         <option value="<?php echo $role['id']; ?>" <?php echo ($c['role'] == $role['id'] ? 'selected' : ($role['id'] == 1 ? 'selected' : '')); ?>><?php echo $role['name']; ?></option>
                     <?php endwhile; ?>
                 <?php endif; ?>
+                
+                <option value="-1"><?php echo BASIC_USER; ?></option>
             </select>
         </div>
 		
@@ -369,7 +371,7 @@
 			<?php while($user = $users->fetch_assoc()) : ?>
 				<div id="user<?php echo $user['id']; ?>" class="existingUser d-flex flex-column col-lg-6 col-xl-4 mb-3">
 					<div class="existingUserHeader bg-primary text-white p-3">
-						<span class="username h6"><?php echo $user['id'] . '. ' . $user['username']; ?><small> (Role: <?php echo $user['role_name']; ?>)</small></span>
+						<span class="username h6"><?php echo $user['id'] . '. ' . $user['username']; ?><small> (Role: <?php echo (!empty($user['role_name']) ? $user['role_name'] : BASIC_USER); ?>)</small></span>
 					</div>
 					
 					<div class="existingUserBody d-flex flex-column flex-grow-1 border border-light shadow p-3">
@@ -449,6 +451,8 @@
                                                         <option value="<?php echo $role['id']; ?>" <?php echo ($user['role'] == $role['id'] ? 'selected' : ''); ?>><?php echo $role['name']; ?></option>
                                                     <?php endwhile; ?>
                                                 <?php endif; ?>
+                                                
+                                                <option value="-1" <?php echo ($user['role'] == -1 ? 'selected' : ''); ?>><?php echo BASIC_USER; ?></option>
                                             </select>
                                         </div>
                                     <?php endif; ?>

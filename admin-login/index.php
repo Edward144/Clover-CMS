@@ -8,7 +8,7 @@
 	}
 
 	if(isset($_POST['dologin'])) {
-		$checkUser = $mysqli->prepare("SELECT id, username, password FROM `users` WHERE username = ?");
+		$checkUser = $mysqli->prepare("SELECT id, username, password FROM `users` WHERE username = ? AND role > 0");
 		$checkUser->bind_param('s', $_POST['username']);
 		$checkUser->execute();
 		$userResult = $checkUser->get_result();

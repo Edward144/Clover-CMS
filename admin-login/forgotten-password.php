@@ -8,7 +8,7 @@
 	}
 
 	if(isset($_POST['sendreset'])) {
-		$findUser = $mysqli->prepare("SELECT id, first_name, last_name, email FROM `users` WHERE email = ? LIMIT 1");
+		$findUser = $mysqli->prepare("SELECT id, first_name, last_name, email FROM `users` WHERE email = ? AND role > 0 LIMIT 1");
 		$findUser->bind_param('s', $_POST['email']);
 		$findUser->execute();
 		$userResult = $findUser->get_result();
