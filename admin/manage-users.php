@@ -135,7 +135,7 @@
             $deleteroleMessage = 'Failed to delete role';
         }
         else {
-            $updateRoles = $mysqli->prepare("UPDATE `users` SET role = 1 WHERE role = ?");
+            $updateRoles = $mysqli->prepare("UPDATE `users` SET role = 2 WHERE role = ?");
             $updateRoles->bind_param('i', $_POST['id']);
             $updateRoles->execute();
             
