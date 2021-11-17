@@ -32,7 +32,7 @@
                 
                 $modified = (isset($oComment) && $_POST['comment'] == $oComment ? 0 : 1);
                     
-                $modify = $mysqli->prepare("UPDATE `comments` SET content = ?, original_content = content, modified = ?, approved = ? WHERE id = ?");
+                $modify = $mysqli->prepare("UPDATE `comments` SET original_content = content, content = ?, modified = ?, approved = ? WHERE id = ?");
                 $modify->bind_param('siii', $_POST['comment'], $modified, $_POST['approved'], $_POST['id']);    
             }
 
