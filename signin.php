@@ -51,7 +51,7 @@
 ?>
 
 <div class="content">
-    <div class="col-md-6 mx-auto my-3">
+    <div class="col-lg-6 mx-auto my-3">
         <div class="bg-light rounded shadow-sm p-3">
             <form id="profilesignin" method="post">
                 <h1>Sign in to your account</h1>

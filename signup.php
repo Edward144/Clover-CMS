@@ -82,7 +82,7 @@
 ?>
 
 <div class="content">
-    <div class="col-md-6 mx-auto my-3">
+    <div class="col-lg-6 mx-auto my-3">
         <div class="bg-light rounded shadow-sm p-3">
             <form id="profilesignup" method="post">
                 <h1>Register for an account</h1>
