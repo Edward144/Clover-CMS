@@ -21,6 +21,8 @@
 				
 				$_SESSION['adminid'] = $user['id'];
 				$_SESSION['adminuser'] = $user['username'];
+                $_SESSION['profileid'] = $_SESSION['adminid'];
+                $_SESSION['profileuser'] = $_SESSION['adminuser'];
 				
                 if(!empty($_SESSION['adminredirect'])) {
                     header('Location: ' . $_SESSION['adminredirect']);

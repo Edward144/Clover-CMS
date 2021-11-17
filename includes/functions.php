@@ -30,6 +30,27 @@
 		}
 	}
 
+    //Check if basic user is logged in
+    function issignedin() {
+		global $mysqli;
+		$valid = true;
+		
+        unset($_SESSION['profileredirect']);
+        
+		if(!empty($_SESSION['profileid'])) {			
+			$checkId = $mysqli->query("SELECT COUNT(*) FROM `users` WHERE id = {$_SESSION['profileid']}");
+			
+			if($checkId->fetch_array()[0] <= 0) {
+				$valid = false;
+			}
+		}
+		else {
+			$valid = false;
+		}
+        
+        return $valid;
+	}
+
     //Check if user has access to page
     function checkaccess($pagename, $menu = false) {
         global $mysqli;

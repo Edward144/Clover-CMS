@@ -159,6 +159,36 @@ Function names should consist of letters, numbers, hyphens and underscores only.
 
 Note: You should be able to pass double quotes as a parameter value, but make sure you escape them with a backslash `\"`.
 
+### Front End User Functionality
+
+### Subscriber Accounts
+
+As well as being created through the Manage Users section of the admin, website visitors can sign up as a "Subscriber" to the website. Subscriber level users have access to a profile page where they can manage their details, as well as delete or modify any comments they have made.
+
+Custom functionality can be built around these subscriber accounts to allow signed in users to access things such as downloadable resources or other functionality which may not be available to none registered users.
+
+The following urls can be used to allow users to sign up:
+
+* https://yoursite.com/signup - Allows users to register an account
+* https://yoursite.com/signin - Allows registered users to sign in
+* https://yoursite.com/myaccount - Allows users to manage their account
+
+Sessions are used to check whether a user is signed in or not, the following sessions are set:
+
+* $_SESSION['profileid'] - The auto-increment ID that has been assigned to the user
+* $_SESSION['profileuser'] - The username chosen by the user at sign up
+
+### Admin Accounts
+
+Administrative users (Admin, Standard, Custom roles etc) are able to login via the **https://yoursite.com/signin** along with the regular admin-login link, they can then access the CMS as if they had logged in at the primary **admin-login** link. They can also manage their details and comments at **https://yoursite.com/myaccount**.
+
+Sessions are also used to check the signed in status of an admin user:
+
+* $_SESSION['profileid'] - The auto-increment ID that has been assigned to the user
+* $_SESSION['profileuser'] - The username given to the user by an admin
+* $_SESSION['adminid'] - Identical to profileid, but must be set in order to access the CMS
+* $_SESSION['adminuser'] - Identical to profileuser, but must be set in order to access the CMS
+
 ## Credits
 
 * [Bootstrap](https://github.com/twbs/bootstrap)
