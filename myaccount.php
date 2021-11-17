@@ -14,7 +14,7 @@
 ?>
 
 <div class="content">
-    myaccount
+    myaccount <?php echo $_SESSION['profileuser']; ?>
 </div>
 
 <?php require_once(dirname(__FILE__) . '/includes/footer.php'); ?>
