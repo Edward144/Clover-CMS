@@ -4,6 +4,10 @@
     
     checkaccess(basename(__FILE__));
 
+    if(isset($_POST['username'])) {
+        $_POST['username'] = strtolower(preg_replace('/[^a-zA-Z0-9]/i', '', $_POST['username']));
+    }
+
 	//Create User
 	if(isset($_POST['createUser'])) {
 		$c = $_POST;

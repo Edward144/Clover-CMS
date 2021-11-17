@@ -23,7 +23,7 @@
         }
         else {
             //Create username from first and last names and check if it is available
-            $username = substr($_POST['firstName'] . $_POST['lastName'], 20);
+            $username = strtolower(substr(preg_replace('/[^a-zA-Z]/i', '', $_POST['firstName'] . $_POST['lastName']), 0, 20));
             $usernameAvailable = false;
             $ui = 0;
             
@@ -49,6 +49,9 @@
             if($_POST['password'] == $_POST['passwordConf']) {
                 $password = PASSWORD_HASH($_POST['password'], PASSWORD_BCRYPT);
                 
+                //TO DO - Insert into a new temporary table `users_pending` along with a token
+                //        Email out a link with the token to validate that the email exists before 
+                //        finally copying the data to the `users` table
                 $createUser = $mysqli->prepare("INSERT INTO `users` (first_name, last_name, email, username, password, role) VALUES(?, ?, ?, ?, ?, -1)");
                 $createUser->bind_param('sssss', $_POST['firstName'], $_POST['lastName'], $_POST['email'], $username, $password);
                 $createUser->execute();

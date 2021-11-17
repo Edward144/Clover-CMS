@@ -20,6 +20,7 @@
     //Update Profile
     if(isset($_POST['saveProfile'])) {
         $allowUpdate = true;
+        $_POST['username'] = strtolower(preg_replace('/[^a-zA-Z0-9]/i', '', $_POST['username']));
         
         //Check if email exists
         $checkEmail = $mysqli->prepare("SELECT COUNT(*) FROM `users` WHERE email = ? AND id <> ?");
