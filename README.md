@@ -178,8 +178,8 @@ The following urls can be used to allow users to sign up:
 
 Sessions are used to check whether a user is signed in or not, the following sessions are set:
 
-* $_SESSION['profileid'] - The auto-increment ID that has been assigned to the user
-* $_SESSION['profileuser'] - The username chosen by the user at sign up
+* `$_SESSION['profileid']` - The auto-increment ID that has been assigned to the user
+* `$_SESSION['profileuser']` - The username chosen by the user at sign up
 
 ### Admin Accounts
 
@@ -187,10 +187,10 @@ Administrative users (Admin, Standard, Custom roles etc) are able to login via t
 
 Sessions are also used to check the signed in status of an admin user:
 
-* $_SESSION['profileid'] - The auto-increment ID that has been assigned to the user
-* $_SESSION['profileuser'] - The username given to the user by an admin
-* $_SESSION['adminid'] - Identical to profileid, but must be set in order to access the CMS
-* $_SESSION['adminuser'] - Identical to profileuser, but must be set in order to access the CMS
+* `$_SESSION['profileid']` - The auto-increment ID that has been assigned to the user
+* `$_SESSION['profileuser']` - The username given to the user by an admin
+* `$_SESSION['adminid']` - Identical to profileid, but must be set in order to access the CMS
+* `$_SESSION['adminuser']` - Identical to profileuser, but must be set in order to access the CMS
 
 ## Credits
 
