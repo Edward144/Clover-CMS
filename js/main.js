@@ -189,3 +189,14 @@ $(".comments").on("click", "a.commentReply", function() {
         });
     }
 });
+
+//Toggle password update fields in myaccount
+$("#manageaccount #togglePassword").click(function() {
+    if($(this).attr("aria-expanded") === "true") {
+        $(this).text("Cancel Password Update");
+        $("#updatePassword").find("input[type='password']").val("");
+    }
+    else {
+        $(this).text("Update Password");
+    }
+});
