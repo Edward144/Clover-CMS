@@ -38,7 +38,7 @@ $(document).ready(function() {
 	sidebarcollapse();
 });
 
-//Validate forms
+//Validate forms - Identical to main.js, make sure to update in both places
 $("form").submit(function() {
 	var valid = true;
 	var passChar = 8;

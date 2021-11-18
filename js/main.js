@@ -35,6 +35,60 @@ $(document).ready(function() {
     sticky($("#pageHeader"));
 });
 
+//Validate forms - Identical to admin.js, make sure to update in both places
+$("form").submit(function() {
+	var valid = true;
+	var passChar = 8;
+	
+	$(this).find(".invalid-feedback").remove();
+	$(this).find(".is-invalid").removeClass("is-invalid");
+	
+	//Validate Passwords
+	if($(this).find("input[name='password']").length && $(this).find("input[name='passwordConf']").length) {
+		var pass = $(this).find("input[name='password']");
+		var passConf = $(this).find("input[name='passwordConf']");
+		
+		if(pass.val().length || passConf.val().length) {
+			if(pass.val().length < passChar) {
+				pass.addClass("is-invalid");
+				$("<div class='invalid-feedback'>Password must be at least " + passChar + " characters</div>").insertAfter(pass);
+
+				valid = false;
+			}
+			else if(!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/.test(pass.val())) {
+				pass.addClass("is-invalid");
+				$("<div class='invalid-feedback'>Password must contain at least one lowercase, one uppercase and one digit</div>").insertAfter(pass);
+
+				valid = false;
+			}
+			else if(pass.val() != passConf.val()) {
+				pass.addClass("is-invalid");
+				passConf.addClass("is-invalid");
+				$("<div class='invalid-feedback'>Passwords do not match</div>").insertAfter(passConf);
+
+				valid = false;
+			}
+		}
+	}
+    
+    //Validate Urls
+    if($(this).find("input[name='url']").length) {
+        var url = $(this).find("input[name='url']");
+        
+        if(!/^[a-zA-Z0-9\:\/\-\_\+\?\&\=\#\.]+$/.test(url.val())) {
+            url.addClass("is-invalid");
+            $("<div class='invalid-feedback'>Url contains invalid characters. Allowed characters are A-Z, 0-9, :, /, -, _, +, ?, &, =, #, .</div>").insertAfter(url);
+            
+            valid = false;
+        }
+    }
+	
+	if(valid == false) {
+		event.preventDefault();
+		return;
+	}
+});
+
 //Load new comments
 function comments_load(contentid, parentid) {
     if(parentid == 0) {
