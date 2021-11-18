@@ -69,6 +69,13 @@
                         role INT NOT NULL DEFAULT 1
                     )"
                 );
+                
+                //Pending Users
+                $mysqli->multi_query(
+                    "CREATE TABLE IF NOT EXISTS`users_pending` LIKE `users`;
+                    DROP INDEX email ON `users_pending`;
+                    DROP INDEX username ON `users_pending`;"
+                );
 
                 ////Roles
                 $mysqli->query(

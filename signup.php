@@ -25,12 +25,15 @@
             //Create username from first and last names and check if it is available
             $username = strtolower(substr(preg_replace('/[^a-zA-Z]/i', '', $_POST['firstName'] . $_POST['lastName']), 0, 20));
             $usernameAvailable = false;
-            $ui = 0;
+            
+            $minRand = 1000;
+            $maxRand = 9999;
+            $ui = rand($minRand, $maxRand);
             
             $checkUsername = $mysqli->prepare("SELECT COUNT(*) FROM `users` WHERE username = ?");
-            $usernameToCheck = $username;
+            $usernameToCheck = $username . $ui;
             
-            while($usernameAvailable == false) {
+            while($usernameAvailable == false) {                
                 $checkUsername->bind_param('s', $usernameToCheck);
                 $checkUsername->execute();
                 $usernameResult = $checkUsername->get_result()->fetch_array()[0];
@@ -40,7 +43,7 @@
                     $username = $usernameToCheck;
                 }
                 else {
-                    $ui++;
+                    $ui = rand($minRand, $maxRand);
                     $usernameToCheck = $username . $ui;
                 }
             }
@@ -49,28 +52,37 @@
             if($_POST['password'] == $_POST['passwordConf']) {
                 $password = PASSWORD_HASH($_POST['password'], PASSWORD_BCRYPT);
                 
-                //TO DO - Insert into a new temporary table `users_pending` along with a token
-                //        Email out a link with the token to validate that the email exists before 
-                //        finally copying the data to the `users` table
-                $createUser = $mysqli->prepare("INSERT INTO `users` (first_name, last_name, email, username, password, role) VALUES(?, ?, ?, ?, ?, -1)");
+                $createUser = $mysqli->prepare("INSERT INTO `users_pending` (first_name, last_name, email, username, password, role) VALUES(?, ?, ?, ?, ?, -1)");
                 $createUser->bind_param('sssss', $_POST['firstName'], $_POST['lastName'], $_POST['email'], $username, $password);
                 $createUser->execute();
                 
                 if(!$createUser->error) {
                     $lastId = $mysqli->insert_id;
+                    $content = 
+                        '<p>Hi ' . $_POST['firstName'] . ' ' . $_POST['lastName'] . ',</p>
+                        
+                        <p>Thank you for registering at ' . $_SERVER['SERVER_NAME'] . '. Please click on the link below to verify your email address. You will then be able to login with your username <strong>' . $username . '</strong> and your chosen password.</p>
+                        
+                        <p><a style="background: #009688; color: #fff; padding: 0.5rem; border-radius: 4px; text-decoration: none;" href="https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . 'myaccount?id=' . $lastId . '&email=' . $_POST['email'] . '" target="_blank">Verify my email address</a></p>';
                     
-                    $status = 'success';
-                    $signupmessage = 'Registration successful';
-                    
-                    $_SESSION['profileid'] = $lastId;
-                    $_SESSION['profileuser'] = $username;
-                    
-                    header('Location: myaccount');
-                    exit();
-                }
+                    if(systememail($_POST['email'], 'Email verification required', $content)) {
+                        $status = 'success';
+                        $signupmessage = 
+                            '<strong>Registration successful</strong><br>
+                            Before you can login you must verify your email address by clicking on the link that has been sent to you.';
+                    }
+                    else {
+                        $status = 'warning';
+                        $signupmessage = 
+                            '<strong>Registration successful</strong><br>
+                            We were unable to send an email verification link, you will be unable to sign in until your email has been verified. Please contact us for further assistance, or try registering again later.';
+                    }
+                }   
                 else {
                     $status = 'danger';
-                    $signupmessage = 'Failed to regiser, please try again later';
+                    $signupmessage = 
+                        '<strong>Registration unsuccessful</strong><br>
+                        An error has occurred during registration, please contact us for further assistance or try again later.';
                 }
             }
             else {

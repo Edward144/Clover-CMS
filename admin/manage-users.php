@@ -374,7 +374,7 @@
 		<div class="existingUsers row">
 			<?php while($user = $users->fetch_assoc()) : ?>
 				<div id="user<?php echo $user['id']; ?>" class="existingUser d-flex flex-column col-lg-6 col-xl-4 mb-3">
-					<div class="existingUserHeader bg-primary text-white p-3">
+					<div class="existingUserHeader <?php echo ($user['role'] == -1 ? 'bg-dark' : 'bg-primary'); ?> text-white p-3">
 						<span class="username h6"><?php echo $user['id'] . '. ' . $user['username']; ?><small> (Role: <?php echo (!empty($user['role_name']) ? $user['role_name'] : BASIC_USER); ?>)</small></span>
 					</div>
 					
