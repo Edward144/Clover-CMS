@@ -159,11 +159,13 @@ Function names should consist of letters, numbers, hyphens and underscores only.
 
 Note: You should be able to pass double quotes as a parameter value, but make sure you escape them with a backslash `\"`.
 
-### Front End User Functionality
+## Front End User Functionality
 
 ### Subscriber Accounts
 
 As well as being created through the Manage Users section of the admin, website visitors can sign up as a "Subscriber" to the website. Subscriber level users have access to a profile page where they can manage their details, as well as delete or modify any comments they have made.
+
+When a user registers for their own account instead of being set up through the CMS, a verification email will be sent out to the supplied email address. This email contains a link which must be clicked to confirm that the email address exists before they are allowed to access their account. This is to ensure that they can recieve any required communications such as password reset links. As well as to protect against the creation of bot accounts.
 
 Custom functionality can be built around these subscriber accounts to allow signed in users to access things such as downloadable resources or other functionality which may not be available to none registered users.
 
