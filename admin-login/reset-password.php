@@ -37,9 +37,6 @@
 			]);
 			exit();
 		}
-		elseif(isset($_POST['doreset'])) {
-
-		}
 	}
 
 	$expireTokens = $mysqli->prepare("UPDATE `password_reset` SET expired = 1 WHERE token = ? OR date_generated < ?");
