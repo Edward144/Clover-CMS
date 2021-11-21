@@ -70,12 +70,12 @@
         if(!empty($_POST['password']) && $_POST['password'] == $_POST['passwordConf']) {
             $password = PASSWORD_HASH($_POST['password'], PASSWORD_BCRYPT);
             
-            $updateAccount = $mysqli->prepare("UPDATE `users` SET first_name = ?, last_name = ?, password = ? WHERE id = ?");
-            $updateAccount->bind_param('sssi', $_POST['firstName'], $_POST['lastName'], $password, $_SESSION['profileid']);
+            $updateAccount = $mysqli->prepare("UPDATE `users` SET first_name = ?, last_name = ?, email = ?, password = ? WHERE id = ?");
+            $updateAccount->bind_param('ssssi', $_POST['firstName'], $_POST['lastName'], $_POST['email'], $password, $_SESSION['profileid']);
         }
         else {
-            $updateAccount = $mysqli->prepare("UPDATE `users` SET first_name = ?, last_name = ? WHERE id = ?");
-            $updateAccount->bind_param('ssi', $_POST['firstName'], $_POST['lastName'], $_SESSION['profileid']);
+            $updateAccount = $mysqli->prepare("UPDATE `users` SET first_name = ?, last_name = ?, email = ? WHERE id = ?");
+            $updateAccount->bind_param('sssi', $_POST['firstName'], $_POST['lastName'], $_POST['email'], $_SESSION['profileid']);
         }
         
         $updateAccount->execute();
@@ -116,7 +116,7 @@
                 <div class="row">
                     <div class="col-md form-group mb-3">
                         <label>Email</label>
-                        <input type="email" class="form-control" name="email" value="<?php echo $user['email']; ?>" required>
+                        <input type="email" class="form-control" name="email" value="<?php echo (!empty($_POST['email']) ? $_POST['email'] : $user['email']); ?>" required>
                     </div>
 
                     <div class="col-md form-group mb-3">
