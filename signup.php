@@ -104,7 +104,7 @@
 
                 <div class="form-group mb-3">
                     <label>First Name</label>
-                    <input type="text" class="form-control" name="firstName" value="<?php echo $_POST['firstName']; ?>" required>
+                    <input type="text" class="form-control" name="firstName" value="<?php echo $_POST['firstName']; ?>" required autofocus>
                 </div>
                 
                 <div class="form-group mb-3">
@@ -139,7 +139,7 @@
             </form>
         </div>
 
-        <p class="my-3"><a href="signin">Already have an account? Sign in here</a></p>
+        <p class="my-3"><small><a href="signin">Already have an account? Sign in here</a></small></p>
     </div>
 </div>
 

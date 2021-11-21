@@ -174,6 +174,7 @@ The following urls can be used to allow users to sign up:
 
 * https://yoursite.com/signup - Allows users to register an account
 * https://yoursite.com/signin - Allows registered users to sign in
+* https://yoursite.com/signin?forgottenpassowrd - Allows registered users to reset their passwords, only works for subscriber accounts
 * https://yoursite.com/myaccount - Allows users to manage their account
 
 Sessions are used to check whether a user is signed in or not, the following sessions are set:

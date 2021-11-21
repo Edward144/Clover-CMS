@@ -99,50 +99,50 @@
         <div class="bg-light rounded shadow-sm p-3">
             <span class="float-sm-end d-block text-end"><a href="<?php echo explode('?', $_SERVER['REQUEST_URI'])[0] ?>?logout" class="btn btn-dark">Sign Out</a></span>
             <h1>My Account: <?php echo $_SESSION['profileuser']; ?></h1>
-            
+
             <form id="manageaccount" method="post">                
                 <div class="row">
                     <div class="col-md form-group mb-3">
                         <label>First Name</label>
                         <input type="text" class="form-control" name="firstName" value="<?php echo (!empty($_POST['firstName']) ? $_POST['firstName'] : $user['first_name']); ?>" required>
                     </div>
-                    
+
                     <div class="col-md form-group mb-3">
                         <label>Last Name</label>
                         <input type="text" class="form-control" name="lastName" value="<?php echo (!empty($_POST['lastName']) ? $_POST['lastName'] : $user['last_name']); ?>" required>
                     </div>
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md form-group mb-3">
                         <label>Email</label>
                         <input type="email" class="form-control" name="email" value="<?php echo $user['email']; ?>" required>
                     </div>
-                    
+
                     <div class="col-md form-group mb-3">
                         <label>Account Type</label>
                         <input type="text" class="form-control" value="<?php echo $user['type']; ?>" readonly>
                     </div>
                 </div>
-                
+
                 <p><a href="#" id="togglePassword" data-bs-toggle="collapse" data-bs-target="#updatePassword" aria-expanded="false">Update Password</a></p>
-                
+
                 <div id="updatePassword" class="row collapse">
                     <div class="col-md form-group mb-3">
                         <label>New Password</label>
                         <input type="password" class="form-control" name="password" value="<?php echo (!empty($_POST['password']) ? $_POST['password'] : ''); ?>">
                     </div>
-                    
+
                     <div class="col-md form-group mb-3">
                         <label>Confirm New Password</label>
                         <input type="password" class="form-control" name="passwordConf" value="<?php echo (!empty($_POST['passwordConf']) ? $_POST['passwordConf'] : ''); ?>">
                     </div>
                 </div>
-                
+
                 <div class="form-group d-flex align-items-center justify-content-end">
                     <input type="submit" class="btn btn-primary text-light" name="updateAccount" value="Save Changes">
                 </div>
-                
+
                 <?php if(isset($accountmessage)) : ?>
                     <div class="alert alert-<?php echo $status; ?> mb-0 mt-3">
                         <?php echo $accountmessage; ?>
