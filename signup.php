@@ -65,7 +65,7 @@
                         
                         <p><a style="background: #009688; color: #fff; padding: 0.5rem; border-radius: 4px; text-decoration: none;" href="https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . 'myaccount?id=' . $lastId . '&email=' . $_POST['email'] . '" target="_blank">Verify my email address</a></p>';
                     
-                    if(systememail($_POST['email'], 'Email verification required', $content)) {
+                    if(sendemail($_POST['email'], 'Email verification required', $content)) {
                         $status = 'success';
                         $signupmessage = 
                             '<strong>Registration successful</strong><br>

@@ -202,6 +202,7 @@
     }
 
 	//PHP mail function with HTML template
+    ////For CMS purposes
 	function systememail($to, $subject, $content, $additionalHeaders = '', $from = '') {
 		$from = (empty($from) ? 'noreply@' . $_SERVER['SERVER_NAME'] : $from);
 		
@@ -235,6 +236,43 @@
 			return false;
 		}
 	}
+
+    ////For public facing purposes
+    function sendemail($to, $subject, $content, $additionHeaders = '', $from = '') {
+        //Get logo for header
+        //Get background colour for header
+        $from = (empty($from) ? 'noreply@' . $_SERVER['SERVER_NAME'] : $from);
+		
+		$headers  = 'From: ' . $from . "\r\n";
+		$headers .= 'MIME-Version: 1.0' . "\r\n";
+		$headers .= 'Content-type:text/html;charset=UTF-8' . "\r\n";
+		
+		$messageHeader = 
+			'<html>				
+				<body style="font-family: sans-serif; background: #f3f3f3; padding: 5rem 2rem; max-width: 1000px;">
+					<div class="padding: 0 1rem; margin: 5rem auto;">
+						<div style="background: #009688; padding: 1rem; display: flex; align-items: center; justify-content: center;">
+							<img src="https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . 'images/clover-cms-logo.png" alt="Clover CMS Logo" style="display: block; width: 100%; max-width: 64px; margin-right: 1rem;">
+							<span style="font-size: 32px; color: #fff;">Clover CMS</span>
+						</div>
+
+						<div style="background: #fff; padding: 1rem;">';
+		
+		$messageFooter =
+						'</div>
+					</div>
+				</body>
+			</html>';
+		
+		$message = $messageHeader . $content . $messageFooter;
+		
+		if(mail($to, $subject, $message, $headers, '-f' . $from)) {
+			return true;
+		}
+		else {
+			return false;
+		}
+    }
 
     //Carousel
     function carousel($postId, $builder = false, $json = '', $interval = 5000, $wrap = true, $controls = true) {        
