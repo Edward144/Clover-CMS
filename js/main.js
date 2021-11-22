@@ -200,3 +200,44 @@ $("#manageaccount #togglePassword").click(function() {
         $(this).text("Update Password");
     }
 });
+
+//Change comment to edit textbox
+$(".commentEdit").click(function() {
+    event.preventDefault();
+    
+    var comment = $(this).parents(".comment").first();
+    var commentBody = comment.children(".commentBody").first();
+    var commentContent = commentContent = commentBody.text();
+    
+    if($(this).text() == "Edit") {
+        $(this).text("Cancel Edit");
+        
+        $("<a href='#' class='commentUpdate me-3'>Save edit</a>").insertAfter($(this));
+        
+        commentBody.html(
+            "<form class='editComment' action='includes/actions/editcomment' method='post'>" + 
+                "<input type='hidden' name='id' value='" + comment.attr("id").split("comment")[1] + "'>" + 
+                "<input type='hidden' name='editComment'>" + 
+                "<input type='hidden' name='returnurl' value='" + window.location.href.split("#")[0] + "'>" +
+                "<textarea class='form-control' name='comment' required>" + commentContent + "</textarea>" + 
+            "</form>"
+        );
+    }
+    else {
+        $(this).text("Edit");
+        $(this).siblings(".commentUpdate").remove();
+        
+        commentBody.html(commentContent)
+    }
+});
+
+//Submit comment edit form
+$(".comment").on("click", ".commentUpdate", function() {
+    event.preventDefault();
+    
+    var form = $(this).parents(".comment").first().find(".editComment").first();
+    
+    if(form.find("textarea[name='comment']").val() != "") {
+        form.submit();
+    }
+});

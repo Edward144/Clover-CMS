@@ -151,6 +151,8 @@
                         ip_address VARCHAR(25) DEFAULT NULL,
                         modified INT DEFAULT 0,
                         original_content VARCHAR(1000) DEFAULT NULL
+                        edited_from VARCHAR(1000) DEFAULT NULL,
+                        edited INT DEFAULT 0
                     )"
                 );
 

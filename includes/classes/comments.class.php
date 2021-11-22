@@ -126,8 +126,9 @@
                             <div class="commentFooter d-flex align-items-start justify-content-end mb-3">' .
                                 $commentDetails .
                                 '<span class="commentAuthor ms-3">' . ($isGuest == true ? '(Guest) ' : '') . '<strong>' . htmlspecialchars(trim($author)) . '</strong></span>
-                                <span class="commentDate"><small>&nbsp;on ' . date('d/m/Y H:i', strtotime($comment['date_posted'])) . '</small></span>
-                            </div>' .
+                                <span class="commentDate"><small>&nbsp;on ' . date('d/m/Y H:i', strtotime($comment['date_posted'])) . '</small></span>' .
+                                ($comment['edited'] == 1 ? '&nbsp;edited on&nbsp;<span class="commentEditDate"><small>' . date('d/m/Y H:i', strtotime($comment['edit_date'])) . '</small></span>' : '') .
+                            '</div>' .
                             $this->postcomment($postid, $comment['id']) .
                             $this->loadcomments($postid, $comment['id'], 0) .
                         '</div>';
@@ -163,6 +164,19 @@
         private function postcomment($postid, $commentid = 0) {
             global $mysqli;
             
+            $commentDetails = [];
+            
+            if($commentid > 0) {
+                $comment = $mysqli->prepare("SELECT * FROM `comments` WHERE id = ?");
+                $comment->bind_param('i', $commentid);
+                $comment->execute();
+                $commentResult = $comment->get_result();
+                
+                if($commentResult->num_rows > 0) {
+                    $commentDetails = $commentResult->fetch_assoc();
+                }
+            }
+            
             if($this->commentsOpen == true) {                
                 if(!empty($_SESSION['adminid']) || !empty($_SESSION['userid'])) {
                     $checkUser = $mysqli->prepare("SELECT id, first_name, last_name FROM `users` WHERE id = ? OR id = ? LIMIT 1");
@@ -196,7 +210,7 @@
                 }
                 
                 return 
-                    ($commentid == 0 ? '<hr><h5>Post a comment</h5>' : '<h6 class="text-end mt-n4"><small><a href="#" class="commentReply" data-bs-toggle="collapse" data-bs-target="#post' . $commentid .'" aria-expanded="' . (!empty($_SESSION['message' . $commentid]) ? 'true' : 'false') . '">Reply</a></small></h6>') .
+                    ($commentid == 0 ? '<hr><h5>Post a comment</h5>' :'<h6 class="text-end mt-n4"><small>' . (isset($_SESSION['profileid']) && $_SESSION['profileid'] == $commentDetails['registered'] && $commentDetails['modified'] == 0 ? '<a href="#" class="commentEdit me-3">Edit</a>' : '') . '<a href="#" class="commentReply" data-bs-toggle="collapse" data-bs-target="#post' . $commentid .'" aria-expanded="' . (!empty($_SESSION['message' . $commentid]) ? 'true' : 'false') . '">Reply</a></small></h6>') .
                     
                     '<div class="commentForm ' . ($commentid > 0 ? (!empty($_SESSION['message' . $commentid]) ? 'collapse show' : 'collapse') : '') . '" id="post' . $commentid . '">
                         <form class="postComment" action="includes/actions/postcomment.php" method="post">
