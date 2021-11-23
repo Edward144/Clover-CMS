@@ -274,6 +274,33 @@
 		}
     }
 
+    //Check if visitors are allow to sign up or sign in
+    function signstatus() {
+        global $mysqli;
+        
+        $settings = $mysqli->query("SELECT * FROM `settings` WHERE name = 'allow_signup' OR name = 'allow_signin'");
+        $allowSignup = false;
+        $allowSignin = false;
+        
+        if($settings->num_rows > 0) {
+            while($setting = $settings->fetch_assoc()) {
+                switch($setting['name']) {
+                    case 'allow_signup': 
+                        $allowSignup = ($setting['value'] === 'true' ? true : false);
+                        break;
+                    case 'allow_signin': 
+                        $allowSignin = ($setting['value'] === 'true' ? true : false);
+                        break;
+                }
+            }
+        }
+        
+        return [
+            'signup' => $allowSignup,
+            'signin' => $allowSignin,
+        ];
+    }
+
     //Carousel
     function carousel($postId, $builder = false, $json = '', $interval = 5000, $wrap = true, $controls = true) {        
         global $mysqli;

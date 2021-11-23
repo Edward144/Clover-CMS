@@ -2,9 +2,16 @@
     
     require_once(dirname(__FILE__) . '/includes/database.php'); 
 	require_once(dirname(__FILE__) . '/includes/functions.php');
-    
+
+    if(signstatus()['signup'] == false) {
+        http_response_code(403);
+        header('Location: ' . ROOT_DIR);
+        exit();
+    }
+
     if(issignedin()) {
         header('Location: myaccount');
+        exit();
     }
 
     $title = 'Sign Up';

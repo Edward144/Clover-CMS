@@ -86,10 +86,12 @@
                 ('recaptcha_sitekey_v3', ?),
                 ('recaptcha_secretkey_v3', ?),
                 ('recaptcha_sitekey_v2', ?),
-                ('recaptcha_secretkey_v2', ?)
+                ('recaptcha_secretkey_v2', ?),
+                ('allow_signup', ?),
+                ('allow_signin', ?)
             ON DUPLICATE KEY UPDATE name = VALUES(name), value = VALUES(value)"
         );
-        $other->bind_param('sssss', $_POST['googleAnalytics'], $_POST['sitekeyv3'], $_POST['secretkeyv3'], $_POST['sitekeyv2'], $_POST['secretkeyv2']);
+        $other->bind_param('sssssss', $_POST['googleAnalytics'], $_POST['sitekeyv3'], $_POST['secretkeyv3'], $_POST['sitekeyv2'], $_POST['secretkeyv2'], $_POST['allowSignup'], $_POST['allowSignin']);
         $other->execute();
         
         if($other->error) {
@@ -270,6 +272,22 @@
 	
 	<form id="otherSettings" method="post">
 		<div class="form-group mb-3">
+			<label>Allow Sign Up</label>
+			<select class="form-control" name="allowSignup" required>
+                <option value="true" <?php echo ($settingValues['allow_signup'] === 'true' ? 'selected' : ''); ?>>True</option>
+                <option value="false" <?php echo ($settingValues['allow_signup'] === 'false' ? 'selected' : ''); ?>>False</option>
+            </select>
+		</div>
+        
+        <div class="form-group mb-3">
+			<label>Allow Sign In</label>
+			<select class="form-control" name="allowSignin" required>
+                <option value="true" <?php echo ($settingValues['allow_signin'] === 'true' ? 'selected' : ''); ?>>True</option>
+                <option value="false" <?php echo ($settingValues['allow_signin'] === 'false' ? 'selected' : ''); ?>>False</option>
+            </select>
+		</div>
+        
+        <div class="form-group mb-3">
 			<label>Google Analytics</label>
 			<input type="text" class="form-control" name="googleAnalytics" placeholder="UA-12345678-9" value="<?php echo $settingValues['google_analytics']; ?>">
 		</div>

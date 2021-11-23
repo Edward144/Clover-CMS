@@ -3,6 +3,14 @@
     require_once(dirname(__FILE__) . '/includes/database.php'); 
 	require_once(dirname(__FILE__) . '/includes/functions.php');
 
+    var_dump(signstatus());
+
+    if(signstatus()['signin'] == false) {
+        http_response_code(403);
+        header('Location: ' . ROOT_DIR);
+        exit();
+    }
+
     if(!issignedin() && isset($_GET['id']) & isset($_GET['email'])) {
         //Validate pending email address
         $checkEmail = $mysqli->prepare("SELECT * FROM `users_pending` WHERE id = ? AND email = ?");

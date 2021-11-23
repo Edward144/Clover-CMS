@@ -54,7 +54,9 @@
                     ('logo', ''),
                     ('homepage', '1'),
                     ('newspage', NULL),
-                    ('comment_approval', 'unapproved')"
+                    ('comment_approval', 'unapproved'),
+                    ('allow_signup', 'true'),
+                    ('allow_signin', 'true')"
                 );
 
                 ////Users

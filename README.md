@@ -126,6 +126,8 @@ Page settings lets you choose your homepage, and which page to display news post
 
 Social media lets you link to various social media profiles, these will appear within the footer. You can create custom profiles by adding to the socail_links table within the database. The names should be stored as lower case with hyphens instead of spaces. Font awesome is used to display the logo, so make sure that they have an icon available before creating new social media accounts, the name set in the database should match what Font Awesome uses without the fa- prefix.
 
+Other settings allows you to choose whether or not visitors can register for an account, and whether or not they can sign in to their accounts. You can also fill in Google ReCaptcha credentials here to protect forms from bots. ReCaptcha v3 is currently used to protect contact forms, while v2 is used to protect comments. Though custom functionality can be built to add recaptcha wherever you like.
+
 ### Profile
 
 This page allows users to update their own user details: name, email, username, password. Users cannot change their own role, this must be done by an admin or role which has access to Manage Users.
