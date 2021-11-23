@@ -3,8 +3,6 @@
     require_once(dirname(__FILE__) . '/includes/database.php'); 
 	require_once(dirname(__FILE__) . '/includes/functions.php');
 
-    var_dump(signstatus());
-
     if(signstatus()['signin'] == false) {
         http_response_code(403);
         header('Location: ' . ROOT_DIR);
