@@ -172,13 +172,48 @@
     }
 
 	//Generate random alphanumeric string, for passwords
-	function randomstring($length = 12, $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') {
+	function randomstring($length = 12, $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789', $Variance = true) {
 		$random = '';
-
-		while(strlen($random) != $length || !preg_match('$(^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])).*+$', $random)) {
+		$charactersL = 'abcdefghijklmnopqrstuvwxyz';
+		$charactersU = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	
+		while(strlen($random) != $length) {
 			$random .= substr($characters, rand(0, strlen($characters)), 1);
 		}
-
+        
+		if($Variance == true) {
+			//Add number if one is missing
+			if(!preg_match('$(^(?=.*\d)).*+$', $random)) {
+				$splitPoint = rand(1, $randomLength);
+				$randomPre = substr($test, 0, $splitPoint);
+				$randomPost = substr($test, $splitPoint + 1, $randomLength);
+				
+				$random = $randomPre . rand(0, 9) . $randomPost;
+			}
+		
+			//Add lowercase if one is missing
+			if(!preg_match('$(^(?=.*[a-z])).*+$', $random)) {
+				$splitPoint = rand(1, $randomLength);
+				$randomPre = substr($test, 0, $splitPoint);
+				$randomPost = substr($test, $splitPoint + 1, $randomLength);
+				
+				$lower = substr($charactersL, rand(0, strlen($charactersL)), 1);
+				
+				$random = $randomPre . $lower . $randomPost;
+			}			
+			
+			//Add uppercase if one is missing
+			if(!preg_match('$(^(?=.*[A-Z])).*+$', $random)) {
+				$splitPoint = rand(1, $randomLength);
+				$randomPre = substr($test, 0, $splitPoint);
+				$randomPost = substr($test, $splitPoint + 1, $randomLength);
+				
+				$upper = substr($charactersU, rand(0, strlen($charactersU)), 1);
+				
+				$random = $randomPre . $upper . $randomPost;
+			}		
+		}
+	
 		return $random;
 	}
 
