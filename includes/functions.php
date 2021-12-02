@@ -181,6 +181,8 @@
 			$random .= substr($characters, rand(0, strlen($characters)), 1);
 		}
         
+        $randomLength = strlen($random);
+        
 		if($Variance == true) {
 			//Add number if one is missing
 			if(!preg_match('$(^(?=.*\d)).*+$', $random)) {
