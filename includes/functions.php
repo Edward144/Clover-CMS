@@ -185,8 +185,8 @@
 			//Add number if one is missing
 			if(!preg_match('$(^(?=.*\d)).*+$', $random)) {
 				$splitPoint = rand(1, $randomLength);
-				$randomPre = substr($test, 0, $splitPoint);
-				$randomPost = substr($test, $splitPoint + 1, $randomLength);
+				$randomPre = substr($random, 0, $splitPoint);
+				$randomPost = substr($random, $splitPoint + 1, $randomLength);
 				
 				$random = $randomPre . rand(0, 9) . $randomPost;
 			}
@@ -194,8 +194,8 @@
 			//Add lowercase if one is missing
 			if(!preg_match('$(^(?=.*[a-z])).*+$', $random)) {
 				$splitPoint = rand(1, $randomLength);
-				$randomPre = substr($test, 0, $splitPoint);
-				$randomPost = substr($test, $splitPoint + 1, $randomLength);
+				$randomPre = substr($random, 0, $splitPoint);
+				$randomPost = substr($random, $splitPoint + 1, $randomLength);
 				
 				$lower = substr($charactersL, rand(0, strlen($charactersL)), 1);
 				
@@ -205,8 +205,8 @@
 			//Add uppercase if one is missing
 			if(!preg_match('$(^(?=.*[A-Z])).*+$', $random)) {
 				$splitPoint = rand(1, $randomLength);
-				$randomPre = substr($test, 0, $splitPoint);
-				$randomPost = substr($test, $splitPoint + 1, $randomLength);
+				$randomPre = substr($random, 0, $splitPoint);
+				$randomPost = substr($random, $splitPoint + 1, $randomLength);
 				
 				$upper = substr($charactersU, rand(0, strlen($charactersU)), 1);
 				
