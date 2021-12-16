@@ -3,12 +3,16 @@
     require_once(dirname(__FILE__, 2) . '/includes/database.php');
     require_once(dirname(__FILE__, 2) . '/includes/functions.php');
 
-    if(file_exists(dirname(__FILE__, 2) . '/includes/settings.php') && defined('ROOT_DIR')) {
+    if(file_exists(dirname(__FILE__, 2) . '/includes/settings.php') && defined('ROOT_DIR') && !isset($_GET['update'])) {
         header('Location: ' . ROOT_DIR);
         exit();
     }
     
-    if(isset($_POST['doSetup'])) {
+    if(isset($_POST['doSetup']) || isset($_GET['update'])) {
+        if(isset($_GET['update'])) {
+            goto runupdate;
+        }
+        
         //Check write permissions for settings
         $settings = fopen(dirname(__FILE__, 2) . '/includes/settings.php', 'w');
         
@@ -26,6 +30,7 @@
             }
             else {
                 //Create the required tables
+                runupdate:
                 ////Settings
                 $mysqli->query(
                     "CREATE TABLE IF NOT EXISTS `settings` (
@@ -206,6 +211,12 @@
                     ('youtube'),
                     ('linkedin')"
                 );
+                
+                //If we are updating then only update the database tables and do nothing else
+                if(isset($_GET['update'])) {
+                    header('Location: ./');
+                    exit();
+                }
 
                 //Create the settings file     
                 $rootdir = '/' . explode($_SERVER['DOCUMENT_ROOT'] . '/', dirname(__FILE__, 2))[1] . '/';
