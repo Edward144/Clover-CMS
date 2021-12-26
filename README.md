@@ -39,7 +39,7 @@ You can click the link on the confirmation message or in the email to get to the
 
 ### Bootstrap
 
-You may also wish to install bootstrap via npm, Clover CMS is using bootstrap 5.0.2, 5.1.0 has caused some issues so I would avoid it for now. The only reason you should need to install bootstrap separately is to use with scss. The two existing scss files both import from **../node_modules/bootstrap/scss/**. If you want to make changes to these files then you should also install bootstrap. 
+Bootstrap 5.0.2 is now being included by default, although it's inclusion is only required for the purposes of modifying the main css files through scss. If you do not wish to do this and want to free up some space then feel free to delete the node modules directory. You can re-install Bootstrap at any time by using:
 
 > npm install bootstrap@5.0.2
 
