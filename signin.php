@@ -85,9 +85,6 @@
 				$error = true;
 			}
         }
-        else {
-            $error = true;
-        }
         
         if($error == false) {
             $status = 'info';
