@@ -31,7 +31,7 @@
 				
 				<p><a style="background: #009688; color: #fff; padding: 0.5rem; border-radius: 4px; text-decoration: none;" href="https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . 'admin-login/reset-password?token=' . $token . '" target="_blank">Reset my password</a></p>';
 			
-			if(!systememail($to, $subject, $content)) {
+			if(!sendemail($to, $subject, $content)) {
 				$error = true;
 				$status = 'danger';
 				$loginmessage = 'An unexpected error has occurred';

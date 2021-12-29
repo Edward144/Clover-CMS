@@ -80,7 +80,7 @@
             $content .=
                 '<p><strong>Recaptcha Score</strong> ' . $response->score . '</p>';
             
-            if(!systememail($to, $subject, $content)) {
+            if(!sendemail($to, $subject, $content)) {
                 $_SESSION['status'] = 'danger';
                 $_SESSION['message'] = 'Your message failed to send please try again later';
             }

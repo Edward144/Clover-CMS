@@ -41,7 +41,7 @@
                 );
 
                 $mysqli->query(
-                    "INSERT INTO `settings` (name, value) VALUES
+                    "INSERT IGNORE INTO `settings` (name, value) VALUES
                     ('setup_complete', 0),
                     ('website_name', ''),
                     ('address_1', ''),
@@ -61,7 +61,16 @@
                     ('newspage', NULL),
                     ('comment_approval', 'unapproved'),
                     ('allow_signup', 'true'),
-                    ('allow_signin', 'true')"
+                    ('allow_signin', 'true'),
+                    ('use_smtp', 'false'),
+                    ('smtp_host', ''),
+                    ('smtp_username', ''),
+                    ('smtp_password', ''),
+                    ('smtp_port', ''),
+                    ('mail_from_address', ''),
+                    ('mail_from_friendly', ''),
+                    ('reply_to_address', ''),
+                    ('reply_to_friendly', '')"
                 );
 
                 ////Users
@@ -193,6 +202,8 @@
                         link VARCHAR(255)
                     )"
                 );
+                
+                $mysqli->query("INSERT IGNORE INTO `social_links` (name) VALUES('facebook'), ('facebook'), ('twitter'), ('instagram'), ('youtube'), ('linkedin')");
 
                 //Forms
                 $mysqli->query(
@@ -210,6 +221,14 @@
                     ('instagram'),
                     ('youtube'),
                     ('linkedin')"
+                );
+                
+                //Mail Log
+                $mysqli->query(
+                    "CREATE TABLE IF NOT EXISTS `mail_log` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        json_data LONGTEXT DEFAULT NULL
+                    )"
                 );
                 
                 //If we are updating then only update the database tables and do nothing else
@@ -268,7 +287,7 @@
                             <a href="' . (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . $rootdir . 'admin-login" target="_blank" style="border-radius: 10px; box-sizing: border-box; background: #009688; color: #fff; padding: 0.5rem; border: 0; text-decoration: none;">Click here to login</a>
                         </div>';
 
-                    systememail($to, $subject, $content);
+                    sendemail($to, $subject, $content);
 
                     //Mark as setup completed    
                     $mysqli->query("UPDATE `settings` SET value = 1 WHERE name = 'setup_complete'");
