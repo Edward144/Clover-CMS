@@ -104,6 +104,13 @@ body#tinymce {
 	max-width: initial;
 }
 
+@include media-breakpoint-up(lg) {
+    .main.settings form > .form-group {
+        max-width: 50%;
+        padding-right: calc(var(--bs-gutter-x) * .5);
+    }
+}
+
 /* ADMIN LOGIN */
 
 #adminLogin, #setup {

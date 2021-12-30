@@ -52,7 +52,7 @@
 				</div>
 			</header>
 			
-			<div class="main">
+			<div class="main <?php echo str_replace(' ', '-', strtolower($title)); ?>">
 				<div class="sidebar">
 					<?php include_once(dirname(__FILE__) . '/sidebar.php'); ?>
 				</div>

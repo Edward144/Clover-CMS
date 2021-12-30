@@ -244,10 +244,10 @@
     }
 
 	//PHP mail function with HTML template
+    $sendEmailDebug = '';
+
     function sendemail($to, $subject, $content, $template = '') {
-        global $mysqli;
-        
-        $debug = '';
+        global $mysqli, $sendEmailDebug;
         
         //Load template
         if(empty($template) || !file_exists($template)) {
@@ -271,7 +271,7 @@
                 $template = preg_replace('#<img(.*)src="' . $match . '"(.*)>#', '<img$1src="data:image/' . $extension . ';base64,' . $base64 . '"$2>', $template);*/
                 
                 $real = 'https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . explode(ROOT_DIR, realpath($match))[1]; 
-                
+                echo $match . ': ' . $real . ': ' . realpath($match) . '<br>';
                 if(file_exists(realpath($match))) {
                     $template = preg_replace('#<img(.*)src="' . $match . '"(.*)>#', '<img$1src="' . $real . '"$2>', $template);
                 }
@@ -294,6 +294,13 @@
         $mail->addAddress($to);
         $mail->Subject = $subject;
         $mail->Body = $template;
+        
+        $sendEmailDebug = '';
+        $mail->SMTPDebug = 3;
+        $mail->Debugoutput = function($output, $level) {
+            global $sendEmailDebug;
+            $sendEmailDebug .= $level . ': ' . $output . '<br>';
+        };
         
         //Set SMTP settings
         if(!empty($mailSettings['use_smtp']) && $mailSettings['use_smtp'] === 'true') {
@@ -344,9 +351,10 @@
         //Log Mail
         $log = [
             'connection_ip' => $_SERVER['REMOTE_ADDR'],
+            'time' => date('Y-m-d H:i:s'),
             'status' => $status,
             'Message' => $statusMessage,
-            'phpmailer' => $debug
+            'phpmailer' => $sendEmailDebug
         ];
         
         $updateLog = $mysqli->prepare("INSERT INTO `mail_log` (json_data) VALUE(?)");
