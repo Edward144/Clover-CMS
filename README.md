@@ -125,6 +125,8 @@ Website details contains all of the information that you might want to display a
 
 Page settings lets you choose your homepage, and which page to display news posts. If no homepage is set then the first page in the posts table in the database will be used as the homepage. If no news page is set then news posts simply won't be displayed anywhere.
 
+Mail settings allows you to customise how system emails are sent. System emails include account creation notifications, password reset links etc. You are able to set the email address that the emails are sent out from as well as the friendly name which appears as the sender. You are also able to set a reply to address to receive replies if you wish to do so. Finally you are able to set SMTP details if you wish to use a service such as Amazon SES.
+
 Social media lets you link to various social media profiles, these will appear within the footer. You can create custom profiles by adding to the socail_links table within the database. The names should be stored as lower case with hyphens instead of spaces. Font awesome is used to display the logo, so make sure that they have an icon available before creating new social media accounts, the name set in the database should match what Font Awesome uses without the fa- prefix.
 
 Other settings allows you to choose whether or not visitors can register for an account, and whether or not they can sign in to their accounts. You can also fill in Google ReCaptcha credentials here to protect forms from bots. ReCaptcha v3 is currently used to protect contact forms, while v2 is used to protect comments. Though custom functionality can be built to add recaptcha wherever you like.
