@@ -861,7 +861,6 @@ $(".carousel.builder").on("click", "button[name='carouselTextT'],button[name='ca
         case "B":
             carousel_textvertical(inner, "flex-end");
             break;
-            break;
         default: 
             break;
     }
