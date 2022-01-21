@@ -675,6 +675,23 @@
         return $output;
     }
 
+    //Convert string to unique value by appending integer
+    function uniquevalue($value, $check, $delimiter = '') {
+		if(!is_array($check)) {
+			$check = [];
+		}
+		
+		$valueToCheck = $value;
+		$increment = 1;
+		
+		while(in_array($valueToCheck, $check)) {
+			$valueToCheck = $value . $delimiter . $increment;
+			$increment++;
+		}
+		
+		return $valueToCheck;
+	}
+
     //Include class
     $classes = scandir(dirname(__FILE__) . '/classes');
 
