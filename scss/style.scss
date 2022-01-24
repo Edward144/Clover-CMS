@@ -67,6 +67,14 @@ body#tinymce {
     margin-right: -50vw;
 }
 
+.breadcrumbs .breadcrumb {
+    display: inline-block;
+}
+
+.breadcrumbs .breadcrumb.current {
+    font-weight: bold;
+}
+
 /* HEADER */
 
 .sticky {

@@ -20,6 +20,7 @@
     require_once(dirname(__FILE__) . '/includes/header.php');
 
     echo carousel($content['id']);
+    $breadcrumbs = new breadcrumbs($content['id']); echo $breadcrumbs->display();
 ?>
 
 <div class="uc content">
