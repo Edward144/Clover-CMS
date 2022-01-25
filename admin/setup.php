@@ -176,9 +176,11 @@
                 $mysqli->query(
                     "CREATE TABLE IF NOT EXISTS `navigation_menus` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
-                        name VARCHAR(255)
+                        name VARCHAR(191) UNIQUE
                     )"
                 );
+
+                $mysqli->query("INSERT IGNORE INTO `navigation_menus` (name) VALUES ('Breadcrumbs')");
 
                 ////Navigation Structure
                 $mysqli->query(
