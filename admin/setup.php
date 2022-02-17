@@ -31,16 +31,14 @@
             else {
                 //Create the required tables
                 runupdate:
-                ////Settings
-                $mysqli->query(
+                $queryErrors = '';
+                $queries = [
+                    //Settings
                     "CREATE TABLE IF NOT EXISTS `settings` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         name VARCHAR(191) UNIQUE,
                         value VARCHAR(255)
-                    )"
-                );
-
-                $mysqli->query(
+                    )",
                     "INSERT IGNORE INTO `settings` (name, value) VALUES
                     ('setup_complete', 0),
                     ('website_name', ''),
@@ -70,11 +68,8 @@
                     ('mail_from_address', ''),
                     ('mail_from_friendly', ''),
                     ('reply_to_address', ''),
-                    ('reply_to_friendly', '')"
-                );
-
-                ////Users
-                $mysqli->query(
+                    ('reply_to_friendly', '')",
+                    //Users
                     "CREATE TABLE IF NOT EXISTS `users` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         first_name VARCHAR(255),
@@ -83,51 +78,33 @@
                         username VARCHAR(191) UNIQUE,
                         password VARCHAR(60),
                         role INT NOT NULL DEFAULT 1
-                    )"
-                );
-                
-                //Pending Users
-                $mysqli->multi_query(
+                    )",
+                    //Users Pending
                     "CREATE TABLE IF NOT EXISTS`users_pending` LIKE `users`;
-                    DROP INDEX email ON `users_pending`;
-                    DROP INDEX username ON `users_pending`;"
-                );
-
-                ////Roles
-                $mysqli->query(
+                    DROP INDEX IF EXISTS email ON `users_pending`;
+                    DROP INDEX username ON `users_pending`;",
                     "CREATE TABLE IF NOT EXISTS `roles` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         name VARCHAR(191) UNIQUE,
                         access LONGTEXT
-                    )"
-                );
-
-                $mysqli->query("INSERT IGNORE INTO `roles` (id, name, access) VALUES(1, 'Admin', 'ALL'), (2, 'Standard', NULL)");
-
-                ////Password Reset
-                $mysqli->query(
+                    )",
+                    //Roles
+                    "INSERT IGNORE INTO `roles` (id, name, access) VALUES(1, 'Admin', 'ALL'), (2, 'Standard', NULL)",
                     "CREATE TABLE IF NOT EXISTS `password_reset` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         email VARCHAR(191) UNIQUE,
                         token VARCHAR(191) UNIQUE,
                         date_generated DATETIME DEFAULT CURRENT_TIMESTAMP(),
                         expired INT DEFAULT 0
-                    )"
-                );
-
-                ////Post Types
-                $mysqli->query(
+                    )",
+                    //Post Types
                     "CREATE TABLE IF NOT EXISTS `post_types` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         name VARCHAR(191) UNIQUE,
                         icon VARCHAR(50)
-                    )"
-                );
-
-                $mysqli->query("INSERT IGNORE INTO `post_types` (name, icon) VALUES ('pages', 'fa-file-alt'), ('news', 'fa-newspaper')");
-
-                ////Posts
-                $mysqli->query(
+                    )",
+                    "INSERT IGNORE INTO `post_types` (name, icon) VALUES ('pages', 'fa-file-alt'), ('news', 'fa-newspaper')",
+                    //Posts
                     "CREATE TABLE IF NOT EXISTS `posts` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         post_type_id INT,
@@ -148,13 +125,9 @@
                         meta_author VARCHAR(255),
                         meta_keywords VARCHAR(255),
                         allow_comments INT DEFAULT 0
-                    )"
-                );
-
-                $mysqli->query("INSERT IGNORE INTO `posts` (id, post_type_id, name, content, author, state) VALUES(1, 1, 'Welcome', '<h1>Welcome to Clover CMS</h1><p>Set up is complete, you can now start creating content.</p>', 'Admin User', 2)");
-                
-                //Comments
-                $mysqli->query(
+                    )",
+                    "INSERT IGNORE INTO `posts` (id, post_type_id, name, content, author, state) VALUES(1, 1, 'Welcome', '<h1>Welcome to Setsquare CMS</h1><p>Set up is complete, you can now start creating content.</p>', 'Admin User', 2)",
+                    //Comments
                     "CREATE TABLE IF NOT EXISTS `comments` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         post_id INT,
@@ -166,24 +139,16 @@
                         date_posted DATETIME DEFAULT CURRENT_TIMESTAMP(),
                         ip_address VARCHAR(25) DEFAULT NULL,
                         modified INT DEFAULT 0,
-                        original_content VARCHAR(1000) DEFAULT NULL
+                        original_content VARCHAR(1000) DEFAULT NULL,
                         edited_from VARCHAR(1000) DEFAULT NULL,
                         edited INT DEFAULT 0
-                    )"
-                );
-
-                ////Navigation Menus
-                $mysqli->query(
+                    )",
+                    //Navigation
                     "CREATE TABLE IF NOT EXISTS `navigation_menus` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         name VARCHAR(191) UNIQUE
-                    )"
-                );
-
-                $mysqli->query("INSERT IGNORE INTO `navigation_menus` (name) VALUES ('Breadcrumbs')");
-
-                ////Navigation Structure
-                $mysqli->query(
+                    )",
+                    "INSERT IGNORE INTO `navigation_menus` (name) VALUES ('Breadcrumbs')",
                     "CREATE TABLE IF NOT EXISTS `navigation_structure` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         menu_id INT DEFAULT 0,
@@ -193,49 +158,53 @@
                         target VARCHAR(50) DEFAULT NULL,
                         parent_id INT DEFAULT 0,
                         position INT DEFAULT 0
-                    )"
-                );
-
-                ////Social Links
-                $mysqli->query(
+                    )",
+                    //Social Links
                     "CREATE TABLE IF NOT EXISTS `social_links` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         name VARCHAR(191) UNIQUE,
                         link VARCHAR(255)
-                    )"
-                );
-                
-                $mysqli->query("INSERT IGNORE INTO `social_links` (name) VALUES('facebook'), ('facebook'), ('twitter'), ('instagram'), ('youtube'), ('linkedin')");
-
-                //Forms
-                $mysqli->query(
+                    )",
+                    "INSERT IGNORE INTO `social_links` (name) VALUES('facebook'), ('twitter'), ('instagram'), ('youtube'), ('linkedin')",
+                    //Forms
                     "CREATE TABLE IF NOT EXISTS `forms` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         name VARCHAR(255),
                         structure LONGTEXT
-                    )"
-                );
-
-                $mysqli->query(
-                    "INSERT INTO `social_links` ('name') VALUES
-                    ('facebook'),
-                    ('twitter'),
-                    ('instagram'),
-                    ('youtube'),
-                    ('linkedin')"
-                );
-                
-                //Mail Log
-                $mysqli->query(
+                    )",
+                    //Mail Log
                     "CREATE TABLE IF NOT EXISTS `mail_log` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         json_data LONGTEXT DEFAULT NULL
                     )"
-                );
-                
+                ];
+
+                foreach($queries as $query) {
+                    if(strpos($query, ';') !== false) {
+                        $mysqli->multi_query($query);
+                    }
+                    else {
+                        $mysqli->query($query);
+                    }
+
+                    while($mysqli->more_results()) {
+                        $mysqli->next_result();
+                    }
+
+                    if($mysqli->error) {
+                        $queryErrors .= $mysqli->error . '<br><br>';
+                    }
+                }
+
                 //If we are updating then only update the database tables and do nothing else
                 if(isset($_GET['update'])) {
-                    header('Location: ./');
+                    if(!empty($queryErrors)) {
+                        echo $queryErrors . 'a href="./">Return to dashboard</a>';
+                    }
+                    else {
+                        header('Location: ./');
+                    }
+
                     exit();
                 }
 
