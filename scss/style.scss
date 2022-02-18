@@ -590,3 +590,12 @@ table.calendar {
         margin-top: -1px;
     }
 }
+
+.calendarSmall .moreEvents {
+    padding-left: map-get($spacers, 1);
+    padding-right: map-get($spacers, 1);
+    padding-top: 0;
+    padding-bottom: 0;
+    color: $light;
+    margin-left: map-get($spacers, 2);
+}

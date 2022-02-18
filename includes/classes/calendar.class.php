@@ -229,6 +229,7 @@
 
                         <div class="col-sm calendarEvent">' .
                             (!empty($nextEvent['link']) ? '<a href="' . $nextEvent['link'] . '">' . $nextEventName . '</a>' : $nextEventName) .
+                            (!empty($todaysEvents) && count($todaysEvents) > 1 ? $this->moreeventsmodal($today, 'MORE') : '') .
                         '</div>
                     </div>';
 
@@ -270,6 +271,34 @@
             }
 
             return $events;
+        }
+
+        private function moreeventsmodal($date, $linkText = '') {
+            $id = 'events' . date('Ymd', strtotime($date));
+
+            $modal = 
+                '<div class="modal fade" id="' . $id . '" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+
+                            </div>
+
+                            <div class="modal-body">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>';
+
+            if(!empty($linkText)) {
+                $output = 
+                    '<button type="button" class="btn btn-primary moreEvents" data-bs-toggle="modal" data-bs-target="#' . $id . '"><small>' . $linkText . '</small></button>' . $modal;
+
+                return $output;
+            }
+            
+            return $modal;
         }
 
         public function loadevents($array = []) {
