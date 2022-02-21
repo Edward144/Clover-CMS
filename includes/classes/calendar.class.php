@@ -127,7 +127,7 @@
                 $calendar .=
                     '<td ' . ($today < date('Y-m-d') ? 'class="calendarPast"' : '') . '>
                         <div class="calendarInner">
-                            <span class="calendarDay' . ($today == date('Y-m-d') ? ' current' : '') . '">' . date('d', strtotime($today)) . '</span>' .
+                            <span class="calendarDay' . ($today == date('Y-m-d') ? ' current' : '') . '">' . date('d', strtotime($today)) . ' ' . $days . '</span>' .
                             $this->displayevents($today) . 
                         '</div>
                     </td>';
@@ -159,7 +159,7 @@
                 $firstOfWeek = date('Y-m-d', strtotime('last sunday', strtotime($this->calendarDate)));
             }
             else {
-                $firstOfWeek = $this->calendarDay;
+                $firstOfWeek = $this->calendarDate;
             }
 
             $calendar =
