@@ -465,6 +465,25 @@ li.nav-item > .dropdown-toggle:after {
     color: $danger;
 }
 
+.calendar *::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.calendar *::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+.calendar *::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+
+.calendar *::-webkit-scrollbar-thumb:active,
+.calendar *::-webkit-scrollbar-thumb:hover {
+    background: #000;
+}
+
 .calendar .calendarTable {
     margin-bottom: 0;
     table-layout: fixed;
