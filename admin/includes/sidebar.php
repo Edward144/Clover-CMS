@@ -6,6 +6,12 @@
 			'icon' => 'fa-chart-line'
 		],
         [
+            'name' => 'Events',
+            'link' => 'admin/manage-events',
+            'icon' => 'fa-calendar-alt',
+            'filename' => 'manage-events.php'
+        ],
+        [
             'name' => 'Comments',
             'link' => 'admin/manage-comments',
             'icon' => 'fa-comments',
