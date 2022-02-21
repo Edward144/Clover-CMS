@@ -19,7 +19,7 @@
 
     require_once(dirname(__FILE__) . '/includes/header.php');
 
-    echo carousel($content['id']);
+    echo carousel($content['id'], false, '', 'events');
     $breadcrumbs = new breadcrumbs($content['id']); echo $breadcrumbs->display();
 ?>
 

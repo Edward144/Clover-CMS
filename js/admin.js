@@ -119,7 +119,7 @@ $("input[name='clearSearch'],input[name='returnList']").click(function() {
 });
 
 //Delete content
-$("input[name='deleteContent']").click(function() {
+$("input[name='deleteContent'], input[name='deleteEvent']").click(function() {
     var btn = $(this);
 	if(confirm("Are you sure you want to delete this content?")) {
 		if(btn.attr("data-id").length) {

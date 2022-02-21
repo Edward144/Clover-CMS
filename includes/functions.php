@@ -392,13 +392,13 @@
     }
 
     //Carousel
-    function carousel($postId, $builder = false, $json = '', $interval = 5000, $wrap = true, $controls = true) {        
+    function carousel($postId, $builder = false, $json = '', $table = 'posts', $interval = 5000, $wrap = true, $controls = true) {        
         global $mysqli;
 
         $slides = '';
         $si = 0;
 
-        $getSlides = $mysqli->prepare("SELECT carousel FROM `posts` WHERE id = ?");
+        $getSlides = $mysqli->prepare("SELECT carousel FROM `$table` WHERE id = ?");
         $getSlides->bind_param('i', $postId);
         $getSlides->execute();
         $slidesResult = $getSlides->get_result();
