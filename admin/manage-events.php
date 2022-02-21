@@ -5,16 +5,15 @@
     checkaccess(basename(__FILE__));
 	$title = 'Manage Events';
 
-    /*
-    //Create Content
-    if(isset($_POST['createContent'])) {
+    //Create Event
+    if(isset($_POST['createEvent'])) {
         $unique = rtrim(base64_encode(date('Y-m-d H:i:s')), '=');
         $defaultContent = 
             '<h1>Enter your title</h1>
             <p>Enter your content...</p>';
         
-        $create = $mysqli->prepare("INSERT INTO `posts` (post_type_id, name, url, content, last_edited_by) VALUES(?, ?, ?, ?, ?)");
-        $create->bind_param('isssi', $pt['id'], $pt['name'], $unique, $defaultContent, $_SESSION['adminid']);
+        $create = $mysqli->prepare("INSERT INTO `events` (name, url, content, last_edited_by) VALUES('Event', ?, ?, ?)");
+        $create->bind_param('ssi', $unique, $defaultContent, $_SESSION['adminid']);
         $ex = $create->execute();
         
         if($ex === false) {
@@ -23,10 +22,10 @@
         }
         else {
             $lastId = $mysqli->insert_id;
-            $name = ucwords(str_replace('-', ' ', $pt['name'])) . ' ' . $lastId;
+            $name = 'Event ' . $lastId;
             $url = str_replace(' ', '-', strtolower($name));
             
-            $updateCreate = $mysqli->prepare("UPDATE `posts` SET name = ?, url = ? WHERE id = ?");
+            $updateCreate = $mysqli->prepare("UPDATE `events` SET name = ?, url = ? WHERE id = ?");
             $updateCreate->bind_param('ssi', $name, $url, $lastId);
             $updateCreate->execute();
                 
@@ -35,28 +34,31 @@
         }
     }
 
-	//Delete Content
+	//Delete Event
 	if(isset($_POST['method']) && $_POST['method'] == 'deleteContent') {
-		$delete = $mysqli->prepare("DELETE FROM `posts` WHERE id = ?");
+		$delete = $mysqli->prepare("DELETE FROM `events` WHERE id = ?");
 		$delete->bind_param('i', $_POST['id']);
 		$delete->execute();
         
 		if($delete->affected_rows > 0) {
-			echo json_encode(['status' => 'success', 'message' => 'Successfully deleted content']);
+			echo json_encode(['status' => 'success', 'message' => 'Successfully deleted event']);
 		}
 		else {
-			echo json_encode(['status' => 'danger', 'message' => 'Failed to delete content']);
+			echo json_encode(['status' => 'danger', 'message' => 'Failed to delete event']);
 		}
         
 		exit();
 	}
 
-    //Save Content
-    if(isset($_POST['saveContent'])) {
-        $allowComments = (isset($_POST['allowComments']) ? 1 : 0);
-        
-        $save = $mysqli->prepare("UPDATE `posts` SET name = ?, url = ?, template = ?, author = ?, date_created = ?, state = ?, featured_image = ?, carousel = ?, excerpt = ?, content = ?, meta_title = ?, meta_description = ?, meta_keywords = ?, meta_author = ?, last_edited = NOW(), last_edited_by = ?, allow_comments = ? WHERE id = ?");
-        $save->bind_param('sssssissssssssiii', $_POST['name'], $_POST['url'], $_POST['template'], $_POST['author'], $_POST['dateCreated'], $_POST['state'], $_POST['featuredImage'], $_POST['carousel'], $_POST['excerpt'], $_POST['content'], $_POST['metaTitle'], $_POST['metaDescription'], $_POST['metaKeywords'], $_POST['metaAuthor'], $_SESSION['adminid'], $allowComments, $_POST['id']);
+    //Save Event
+    if(isset($_POST['saveEvent'])) {
+        $styles = [
+            'background' => $_POST['backgroundStyle'],
+            'text' => $_POST['textStyle']
+        ];
+
+        $save = $mysqli->prepare("UPDATE `events` SET name = ?, url = ?, template = ?, author = ?, start_date = ?, end_date = ?, state = ?, featured_image = ?, carousel = ?, excerpt = ?, content = ?, meta_title = ?, meta_description = ?, meta_keywords = ?, meta_author = ?, last_edited = NOW(), last_edited_by = ?, styles = ? WHERE id = ?");
+        $save->bind_param('ssssssissssssssisi', $_POST['name'], $_POST['url'], $_POST['template'], $_POST['author'], $_POST['startDate'], $_POST['endDate'], $_POST['state'], $_POST['featuredImage'], $_POST['carousel'], $_POST['excerpt'], $_POST['content'], $_POST['metaTitle'], $_POST['metaDescription'], $_POST['metaKeywords'], $_POST['metaAuthor'], $_SESSION['adminid'], json_encode($styles), $_POST['id']);
         $save->execute();
         
         if($save->error) {
@@ -71,15 +73,15 @@
 
     //Add Carousel Slide
     if(isset($_POST['method']) && $_POST['method'] == 'carouselRegen') {
-        $carousel = carousel($_POST['carouselid'], true, $_POST['carouseldata']);
+        $carousel = carousel($_POST['carouselid'], true, $_POST['carouseldata'], 'events');
         echo json_encode($carousel);
         exit();
-    }*/
+    }
 ?>
 
 <?php if(isset($_GET['id'])) : ?>
     <?php 
-        $eventCheck = $mysqli->prepare("SELECT * FROM `posts` WHERE id = ?");
+        $eventCheck = $mysqli->prepare("SELECT * FROM `events` WHERE id = ?");
         $eventCheck->bind_param('i', $_GET['id']);
         $eventCheck->execute();
         $eventResult = $eventCheck->get_result();
@@ -91,6 +93,10 @@
         }
 
         $event = $eventResult->fetch_assoc();
+        $eventBackgrounds = $mysqli->query("SELECT * FROM `event_styles` WHERE type = 'background' ORDER BY selector");
+        $eventTexts = $mysqli->query("SELECT * FROM `event_styles` WHERE type = 'text' ORDER BY selector");
+
+        $styles = json_decode($event['styles'], true);
 
         require_once(dirname(__FILE__) . '/includes/header.php'); 
     ?>
@@ -130,10 +136,37 @@
             </div>
             
             <div class="form-group mb-3">
-                <label>Date Created</label>
-                <input type="datetime-local" class="form-control" name="dateCreated" value="<?php echo date('Y-m-d\TH:i', strtotime($event['date_created'])); ?>" required>
+                <label>Start Date</label>
+                <input type="datetime-local" class="form-control" name="startDate" value="<?php echo date('Y-m-d\TH:i', strtotime($event['start_date'])); ?>" required>
             </div>
-            
+
+            <div class="form-group mb-3">
+                <label>End Date</label>
+                <input type="datetime-local" class="form-control" name="endDate" value="<?php echo date('Y-m-d\TH:i', strtotime($event['end_date'])); ?>" required>
+            </div>
+
+            <?php if($eventBackgrounds->num_rows > 0) : ?>
+                <div class="form-group mb-3">
+                    <label>Calendar Background</label>
+                    <select class="form-control" name="backgroundStyle" required>
+                        <?php while($background = $eventBackgrounds->fetch_assoc()) : ?>
+                            <option value="<?php echo $background['value']; ?>" <?php echo ($styles['background'] == $background['value'] ? 'selected' : ''); ?>><?php echo $background['selector']; ?>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
+            <?php endif; ?>
+
+            <?php if($eventTexts->num_rows > 0) : ?>
+                <div class="form-group mb-3">
+                    <label>Calendar Text Colour</label>
+                    <select class="form-control" name="textStyle" required>
+                        <?php while($text = $eventTexts->fetch_assoc()) : ?>
+                            <option value="<?php echo $text['value']; ?>" <?php echo ($styles['text'] == $text['value'] ? 'selected' : ''); ?>><?php echo $text['selector']; ?>
+                        <?php endwhile; ?>
+                    </select>
+                </div>
+            <?php endif; ?>
+
             <div class="form-group mb-3">
                 <label>Visiblity</label>
                 <select class="form-control" name="state" required>
@@ -141,11 +174,6 @@
                     <option value="1" <?php echo ($event['state'] == 1 ? 'selected' : ''); ?>>Draft</option>
                     <option value="2" <?php echo ($event['state'] == 2 ? 'selected' : ''); ?>>Visible</option>
                 </select>
-            </div>
-            
-            <div class="form-group form-check mb-3">
-                <input type="checkbox" class="form-check-input" name="allowComments" <?php echo ($event['allow_comments'] == 1 ? 'checked' : ''); ?> id="allowcomments">
-                <label for="allowcomments" class="form-check-label">Allow Comments</label>
             </div>
             
             <hr>
@@ -189,8 +217,8 @@
             <hr>
             
             <div class="form-group mb-n1">
-                <input type="submit" class="btn btn-primary mb-1" name="saveContent" value="Save">
-                <input type="button" class="btn btn-danger mb-1" name="deleteContent" data-id="<?php echo $event['id']; ?>" value="Delete">
+                <input type="submit" class="btn btn-primary mb-1" name="saveEvent" value="Save">
+                <input type="button" class="btn btn-danger mb-1" name="deleteEvent" data-id="<?php echo $event['id']; ?>" value="Delete">
             </div>
             
             <?php if(isset($message)) : ?>
@@ -208,7 +236,7 @@
             
             <div class="form-group mb-3">
                 <label>Carousel</label>
-                <?php echo carousel($_GET['id'], true); ?>
+                <?php echo carousel($_GET['id'], true, '', 'events'); ?>
             </div>
             
             <div class="form-group mb-3">
@@ -298,7 +326,7 @@
 								<td class="shorten">
 									<div class="form-group mb-n1">
 										<a href="<?php echo explode('?', $_SERVER['REQUEST_URI'])[0] . '?id=' . $row['id']; ?>" class="btn btn-primary mb-1">Edit</a>
-										<input type="button" class="btn btn-danger mb-1" name="deleteContent" data-id="<?php echo $row['id']; ?>" value="Delete">
+										<input type="button" class="btn btn-danger mb-1" name="deleteEvent" data-id="<?php echo $row['id']; ?>" value="Delete">
 									</div>
 								</td>
 							</tr>
@@ -309,7 +337,7 @@
         
             <?php echo $pagination->display(); ?>
 		<?php else : ?>
-			<div class="alert alert-info">No content could be found</div>
+			<div class="alert alert-info">No events could be found</div>
 		<?php endif; ?>
 	</div>
 <?php endif; ?>
