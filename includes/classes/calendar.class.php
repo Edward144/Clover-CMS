@@ -184,7 +184,7 @@
                         $nextEvents = 
                             array_values(
                                 array_filter($todaysEvents, function($value) use ($currentTime) {
-                                    if($value['time'] < $currentTime && $value['end_time'] >= $currentTime && $value['time'] <= $value['end_time']) {
+                                    if(($value['time'] < $currentTime && $value['end_time'] >= $currentTime && $value['time'] <= $value['end_time']) || $value['time'] >= $currentTime) {
                                         return true;
                                     }
                                     elseif(!empty($value['time']) && empty($value['end_time']) && $value['time'] >= $currentTime) {
@@ -343,6 +343,7 @@
                     $time = date('H:i', strtotime($event['start_date']));
                     $endDate = date('Y-m-d', strtotime($event['end_date']));
                     $endTime = date('H:i', strtotime($event['end_date']));
+                    $endTime = ($endTime === $time ? null : $endTime);
 
                     $start = new DateTime($date);
                     $end = new DateTime(date('Y-m-d', strtotime($endDate . '+1 day')));
