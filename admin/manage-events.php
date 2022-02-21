@@ -250,26 +250,16 @@
 		<?php 
 			$search = (!empty($_GET['search']) ? '%' . $_GET['search'] . '%' : '%');
 		
-            $eventCount = $mysqli->prepare(
-				"SELECT posts.* FROM `posts` AS posts
-					LEFT OUTER JOIN `post_types` AS post_types ON post_types.id = posts.post_type_id
-				WHERE post_types.name = ? AND (posts.name LIKE ? OR posts.id LIKE ? OR posts.author LIKE ? OR posts.excerpt LIKE ? OR posts.content LIKE ?) 
-				ORDER BY date_created DESC"
-			);
-			$eventCount->bind_param('ssssss', $pt['name'], $search, $search, $search, $search, $search);
+            $eventCount = $mysqli->prepare("SELECT * FROM `events` WHERE name LIKE ? OR id LIKE ? OR author LIKE ? OR excerpt LIKE ? OR content LIKE ? ORDER BY start_date DESC");
+			$eventCount->bind_param('sssss', $search, $search, $search, $search, $search);
 			$eventCount->execute();
 			$eventCountResult = $eventCount->get_result();
         
             $pagination = new pagination($eventCountResult->num_rows);
 			$pagination->load();
         
-			$event = $mysqli->prepare(
-				"SELECT posts.* FROM `posts` AS posts
-					LEFT OUTER JOIN `post_types` AS post_types ON post_types.id = posts.post_type_id
-				WHERE post_types.name = ? AND (posts.name LIKE ? OR posts.id LIKE ? OR posts.author LIKE ? OR posts.excerpt LIKE ? OR posts.content LIKE ?) 
-				ORDER BY date_created DESC LIMIT {$pagination->itemsPerPage} OFFSET {$pagination->offset}"
-			);
-			$event->bind_param('ssssss', $pt['name'], $search, $search, $search, $search, $search);
+			$event = $mysqli->prepare("SELECT * FROM `events` WHERE name LIKE ? OR id LIKE ? OR author LIKE ? OR excerpt LIKE ? OR content LIKE ? ORDER BY start_date DESC LIMIT {$pagination->itemsPerPage} OFFSET {$pagination->offset}");
+			$event->bind_param('sssss', $search, $search, $search, $search, $search);
 			$event->execute();
 			$eventResult = $event->get_result();			
 		?>
@@ -281,7 +271,7 @@
 						<tr>
 							<th class="shorten">ID</th>
 							<th>Details</th>
-							<th class="shorten">Date Created</th>
+							<th class="shorten">Date</th>
 							<th class="shorten">Actions</th>
 						</tr>
 					</thead>
@@ -293,12 +283,16 @@
 								
 								<td>
 									<span><strong><?php echo $row['name']; ?></strong></span><br>
-									<small>URL: /<?php echo $row['url']; ?></small>
+                                    <?php echo (!empty($row['excerpt']) ? '<span>' . $row['excerpt'] . '</span><br>' : ''); ?>
+									<small>URL: <?php echo (substr($row['url'], 0, 4) === 'http' ? $row['url'] : '/events/' . $row['url']); ?></small>
 								</td>
 								
 								<td class="shorten">
-									<?php echo date('d/m/Y', strtotime($row['date_created'])); ?><br>
-									<?php echo date('H:i', strtotime($row['date_created'])); ?>
+									<?php echo date('d/m/Y H:i', strtotime($row['start_date'])); ?>
+
+                                    <?php if(date('d/m/y H:i', strtotime($row['end_date'])) > date('d/m/y H:i', strtotime($row['start_date']))) : ?>
+                                        to <br> <?php echo date('d/m/Y H:i', strtotime($row['end_date'])); ?>
+                                    <?php endif; ?>
 								</td>
 								
 								<td class="shorten">
