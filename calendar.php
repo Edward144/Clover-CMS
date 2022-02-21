@@ -69,7 +69,7 @@
         ];
 
         $calendar = new calendar((isset($_GET['date']) ? $_GET['date'] : ''));
-        $calendar->loadevents($testevents);
+        $calendar->loadevents();
         $calendar->display();
 
         echo '<br><br>';
