@@ -196,7 +196,8 @@
                         meta_title VARCHAR(255),
                         meta_description VARCHAR(500),
                         meta_author VARCHAR(255),
-                        meta_keywords VARCHAR(255)
+                        meta_keywords VARCHAR(255),
+                        styles TEXT DEFAULT NULL
                     )",
                     //Event Styles
                     "CREATE TABLE IF NOT EXISTS `event_styles` (
