@@ -246,14 +246,25 @@
             return strtotime($a['time']) - strtotime($b['time']);
         }
 
-        private function displayevents($date) {
+        private function displayevents($date, $charLimit = 0) {
             $events = '';
+
+            if(!is_numeric($charLimit) || $charLimit <= 0) {
+                $charLimit = $this->nameLength;
+            }
 
             if(!empty($this->events[$date])) {
                 usort($this->events[$date], [$this, 'sorteventtimes']);
 
                 foreach($this->events[$date] as $event) {
                     $styles = '';
+
+                    if(!empty($event['time']) && !empty($event['end_time'])) {
+                        $eventTime = $event['time'] . ' to ' . $event['end_time'];
+                    }
+                    elseif(!empty($event['time'])) {
+                        $eventTime = $event['time'];
+                    }
 
                     if(!empty($event['background_colour'])) {
                         $styles .= 'background-color: ' . $event['background_colour'];
@@ -264,9 +275,12 @@
                     }
 
                     $events .=
-                        '<div class="calendarEvent" style="' . $styles . '">' .
-                            (strlen($event['name']) > $this->nameLength ? rtrim(substr($event['name'], 0, $this->nameLength)) . '...' : $event['name']) .
-                        '</div>';
+                        '<a href="#" class="eventLink">
+                            <div class="calendarEvent" style="' . $styles . '">' .
+                                (!empty($eventTime) ? $eventTime . ': ' : '') .
+                                (strlen($event['name']) > $charLimit ? rtrim(substr($event['name'], 0, $charLimit)) . '...' : $event['name']) .
+                            '</div>
+                        </a>';
                 }
             }
 
@@ -277,16 +291,17 @@
             $id = 'events' . date('Ymd', strtotime($date));
 
             $modal = 
-                '<div class="modal fade" id="' . $id . '" tabindex="-1">
+                '<div class="modal fade calendarModal" id="' . $id . '" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-
+                                <h5 class="modal-title">Events for ' . date('jS F Y', strtotime($date)) . '</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
 
-                            <div class="modal-body">
-
-                            </div>
+                            <div class="modal-body">' .
+                                $this->displayevents($date, 200) . 
+                            '</div>
                         </div>
                     </div>
                 </div>';
@@ -295,7 +310,7 @@
                 $output = 
                     '<button type="button" class="btn btn-primary moreEvents" data-bs-toggle="modal" data-bs-target="#' . $id . '"><small>' . $linkText . '</small></button>' . $modal;
 
-                return $output;
+                return $output . $modal;
             }
             
             return $modal;

@@ -100,7 +100,7 @@ body#tinymce {
     left: 0;
     right: 0;
     width: 100%;
-    z-index: 9999;
+    z-index: 1000;
 }
 
 .siteTitle {
@@ -178,7 +178,7 @@ li.nav-item > .dropdown-toggle:after {
     right: 0;
     width: 320px;
     background: shade-color($secondary, 5);
-    z-index: 9999;
+    z-index: 1001;
 }
 
 .subMenu .nav-link {
@@ -508,7 +508,8 @@ table.calendar {
     z-index: 10;
 }
 
-.calendar .calendarEvent {
+.calendar .calendarEvent,
+.calendarModal .calendarEvent {
     display: block;
     background: $dark;
     color: $light;
@@ -540,6 +541,20 @@ table.calendar {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+}
+
+.calendar .eventLink,
+.calendarModal .eventLink {
+    text-decoration: none;
+    display: block;
+}
+
+.calendar .eventLink:hover,
+.calendar .eventLink:active,
+.calendarModal .eventLink:hover,
+.calendarModal .eventLink:active {
+    filter: brightness(0.85);
+    transition: filter 0.35s linear;
 }
 
 .calendarSmall > .row {
@@ -598,4 +613,20 @@ table.calendar {
     padding-bottom: 0;
     color: $light;
     margin-left: map-get($spacers, 2);
+}
+
+.calendarModal .modal-header {
+    background: $primary;
+    color: $light;
+    padding-top: map-get($spacers, 2);
+    padding-bottom: map-get($spacers, 2);
+}
+
+.calendarModal .modal-body {
+    padding-top: map-get($spacers, 2);
+    padding-bottom: map-get($spacers, 2);
+}
+
+.calendarModal .modal-header .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
 }
