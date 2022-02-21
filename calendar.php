@@ -40,7 +40,7 @@
                     'name' => 'last of the day',
                     'link' => '#',
                     'excerpt' => '',
-                    'background_colour' => '',
+                    'background_colour' => 'green',
                     'text_colour' => '',
                     'time' => '12:00',
                     'end_time' => '14:00'
@@ -51,7 +51,7 @@
                     'name' => 'march test 1',
                     'link' => '#',
                     'excerpt' => '',
-                    'background_colour' => '#ff0000',
+                    'background_colour' => 'cobalt',
                     'text_colour' => '',
                     'time' => '10:00',
                     'end_time' => '17:00'
@@ -60,7 +60,7 @@
                     'name' => 'march test 2',
                     'link' => '#',
                     'excerpt' => '',
-                    'background_colour' => '',
+                    'background_colour' => 'orange',
                     'text_colour' => '',
                     'time' => '12:00',
                     'end_time' => '14:00'
