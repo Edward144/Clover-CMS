@@ -6,9 +6,9 @@
 <div class="uc content">
     <?php 
         $testevents = [
-            '2022-02-18' => [
+            '2022-01-31' => [
                 0 => [
-                    'name' => 'this is a longer event name',
+                    'name' => 'jan test 1',
                     'link' => '#',
                     'excerpt' => '',
                     'background_colour' => '#ff0000',
@@ -26,7 +26,7 @@
                     'end_time' => '14:00'
                 ]
             ],
-            '2022-02-19' => [
+            '2022-02-27' => [
                 0 => [
                     'name' => 'first of the day',
                     'link' => '#',
@@ -46,9 +46,9 @@
                     'end_time' => '14:00'
                 ]
             ],
-            '2022-02-14' => [
+            '2022-03-03' => [
                 0 => [
-                    'name' => 'first of the day',
+                    'name' => 'march test 1',
                     'link' => '#',
                     'excerpt' => '',
                     'background_colour' => '#ff0000',
@@ -57,7 +57,7 @@
                     'end_time' => '17:00'
                 ],
                 1 => [
-                    'name' => 'last of the day',
+                    'name' => 'march test 2',
                     'link' => '#',
                     'excerpt' => '',
                     'background_colour' => '',
