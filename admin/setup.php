@@ -177,6 +177,27 @@
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         json_data LONGTEXT DEFAULT NULL
                     )",
+                    //Events
+                    "CREATE TABLE IF NOT EXISTS `events` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        name VARCHAR(255),
+                        excerpt VARCHAR(500),
+                        content TEXT,
+                        url VARCHAR(191) UNIQUE,
+                        author VARCHAR(255),
+                        featured_image VARCHAR(500),
+                        carousel LONGTEXT,
+                        template VARCHAR(255),
+                        start_date DATETIME DEFAULT CURRENT_TIMESTAMP(),
+                        end_date DATETIME DEFAULT CURRENT_TIMESTAMP(),
+                        last_edited DATETIME DEFAULT CURRENT_TIMESTAMP(),
+                        last_edited_by INT,
+                        state INT DEFAULT 0,
+                        meta_title VARCHAR(255),
+                        meta_description VARCHAR(500),
+                        meta_author VARCHAR(255),
+                        meta_keywords VARCHAR(255)
+                    )",
                     //Event Styles
                     "CREATE TABLE IF NOT EXISTS `event_styles` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
