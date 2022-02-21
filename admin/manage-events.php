@@ -5,22 +5,8 @@
     checkaccess(basename(__FILE__));
 	$title = 'Manage Events';
 
-    /*$checkType = $mysqli->prepare("SELECT id, name FROM `post_types` WHERE name = ?");
-    $checkType->bind_param('s', $_GET['post-type']);
-    $checkType->execute();
-    $checkResult = $checkType->get_result();
-
-    if($checkResult->num_rows <= 0 || !isset($_GET['post-type'])) {
-        http_response_code(404);
-        header('Location: ' . ROOT_DIR . 'admin');
-        exit();
-    }
-
-    $pt = $checkResult->fetch_assoc();
-
-    checkaccess('posttype_' . $pt['name']);
-
-	//Create Content
+    /*
+    //Create Content
     if(isset($_POST['createContent'])) {
         $unique = rtrim(base64_encode(date('Y-m-d H:i:s')), '=');
         $defaultContent = 
@@ -93,24 +79,24 @@
 
 <?php if(isset($_GET['id'])) : ?>
     <?php 
-        $contentCheck = $mysqli->prepare("SELECT * FROM `posts` WHERE id = ?");
-        $contentCheck->bind_param('i', $_GET['id']);
-        $contentCheck->execute();
-        $contentResult = $contentCheck->get_result();
+        $eventCheck = $mysqli->prepare("SELECT * FROM `posts` WHERE id = ?");
+        $eventCheck->bind_param('i', $_GET['id']);
+        $eventCheck->execute();
+        $eventResult = $eventCheck->get_result();
         
-        if($contentResult->num_rows <= 0) {
+        if($eventResult->num_rows <= 0) {
             http_response_code(404);
             header('Location: ' . explode('?', $_SERVER['REQUEST_URI'])[0]);
             exit();
         }
 
-        $content = $contentResult->fetch_assoc();
+        $event = $eventResult->fetch_assoc();
 
         require_once(dirname(__FILE__) . '/includes/header.php'); 
     ?>
 
     <form id="manageContent" class="row" method="post">
-        <input type="hidden" name="id" value="<?php echo $content['id']; ?>">
+        <input type="hidden" name="id" value="<?php echo $event['id']; ?>">
         
         <div class="col-lg-3 bg-light py-3">
             <div class="form-group mb-3">
@@ -119,12 +105,12 @@
             
             <div class="form-group mb-3">
                 <label>Name</label>
-                <input type="text" class="form-control" name="name" value="<?php echo $content['name']; ?>" required>
+                <input type="text" class="form-control" name="name" value="<?php echo $event['name']; ?>" required>
             </div>
             
             <div class="form-group mb-3">
                 <label>Url</label>
-                <input type="text" class="form-control" name="url" value="<?php echo $content['url']; ?>" required>
+                <input type="text" class="form-control" name="url" value="<?php echo $event['url']; ?>" required>
             </div>
             
             <div class="form-group mb-3">
@@ -133,32 +119,32 @@
                     <option value="">Standard</option>
                     
                     <?php foreach(glob($_SERVER['DOCUMENT_ROOT'] . ROOT_DIR . 'includes/templates/*.php') as $template) : ?>
-                        <option value="<?php echo pathinfo($template)['filename']; ?>" <?php echo ($content['template'] == pathinfo($template)['filename'] ? 'selected' : ''); ?>><?php echo pathinfo($template)['filename']; ?></option>
+                        <option value="<?php echo pathinfo($template)['filename']; ?>" <?php echo ($event['template'] == pathinfo($template)['filename'] ? 'selected' : ''); ?>><?php echo pathinfo($template)['filename']; ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
             
             <div class="form-group mb-3">
                 <label>Author</label>
-                <input type="text" class="form-control" name="author" value="<?php echo $content['author']; ?>">
+                <input type="text" class="form-control" name="author" value="<?php echo $event['author']; ?>">
             </div>
             
             <div class="form-group mb-3">
                 <label>Date Created</label>
-                <input type="datetime-local" class="form-control" name="dateCreated" value="<?php echo date('Y-m-d\TH:i', strtotime($content['date_created'])); ?>" required>
+                <input type="datetime-local" class="form-control" name="dateCreated" value="<?php echo date('Y-m-d\TH:i', strtotime($event['date_created'])); ?>" required>
             </div>
             
             <div class="form-group mb-3">
                 <label>Visiblity</label>
                 <select class="form-control" name="state" required>
-                    <option value="0" <?php echo ($content['state'] == 0 ? 'selected' : ''); ?>>Hidden</option>
-                    <option value="1" <?php echo ($content['state'] == 1 ? 'selected' : ''); ?>>Draft</option>
-                    <option value="2" <?php echo ($content['state'] == 2 ? 'selected' : ''); ?>>Visible</option>
+                    <option value="0" <?php echo ($event['state'] == 0 ? 'selected' : ''); ?>>Hidden</option>
+                    <option value="1" <?php echo ($event['state'] == 1 ? 'selected' : ''); ?>>Draft</option>
+                    <option value="2" <?php echo ($event['state'] == 2 ? 'selected' : ''); ?>>Visible</option>
                 </select>
             </div>
             
             <div class="form-group form-check mb-3">
-                <input type="checkbox" class="form-check-input" name="allowComments" <?php echo ($content['allow_comments'] == 1 ? 'checked' : ''); ?> id="allowcomments">
+                <input type="checkbox" class="form-check-input" name="allowComments" <?php echo ($event['allow_comments'] == 1 ? 'checked' : ''); ?> id="allowcomments">
                 <label for="allowcomments" class="form-check-label">Allow Comments</label>
             </div>
             
@@ -166,32 +152,32 @@
             
             <div class="form-group mb-3">
                 <label>Meta Title</label>
-                <input type="text" class="form-control" name="metaTitle" value="<?php echo $content['meta_title']; ?>">
+                <input type="text" class="form-control" name="metaTitle" value="<?php echo $event['meta_title']; ?>">
             </div>
             
             <div class="form-group mb-3">
                 <label>Meta Description</label>
-                <textarea type="textarea" class="form-control" name="metaDescription"><?php echo $content['meta_description']; ?></textarea>
+                <textarea type="textarea" class="form-control" name="metaDescription"><?php echo $event['meta_description']; ?></textarea>
             </div>
             
             <div class="form-group mb-3">
                 <label>Meta Keywords</label>
-                <input type="text" class="form-control" name="metaKeywords" value="<?php echo $content['meta_keywords']; ?>">
+                <input type="text" class="form-control" name="metaKeywords" value="<?php echo $event['meta_keywords']; ?>">
             </div>
             
             <div class="form-group mb-3">
                 <label>Meta Author</label>
-                <input type="text" class="form-control" name="metaAuthor" value="<?php echo $content['meta_author']; ?>">
+                <input type="text" class="form-control" name="metaAuthor" value="<?php echo $event['meta_author']; ?>">
             </div>
             
             <hr>
             
             <div class="form-group mb-3">
                 <label>Featured Image</label>
-                <input type="hidden" id="featuredImage" name="featuredImage" value="<?php echo $content['featured_image']; ?>">
+                <input type="hidden" id="featuredImage" name="featuredImage" value="<?php echo $event['featured_image']; ?>">
 
-                <?php if(!empty($content['featured_image'])) : ?>
-                    <img src="<?php echo $content['featured_image']; ?>" class="d-block img-fluid">
+                <?php if(!empty($event['featured_image'])) : ?>
+                    <img src="<?php echo $event['featured_image']; ?>" class="d-block img-fluid">
                 <?php endif; ?>
                 
                 <div class="buttons mt-3 mb-n1">
@@ -204,7 +190,7 @@
             
             <div class="form-group mb-n1">
                 <input type="submit" class="btn btn-primary mb-1" name="saveContent" value="Save">
-                <input type="button" class="btn btn-danger mb-1" name="deleteContent" data-id="<?php echo $content['id']; ?>" value="Delete">
+                <input type="button" class="btn btn-danger mb-1" name="deleteContent" data-id="<?php echo $event['id']; ?>" value="Delete">
             </div>
             
             <?php if(isset($message)) : ?>
@@ -217,7 +203,7 @@
         <div class="col py-3">
             <div class="form-group mb-3">
                 <label>Excerpt</label>
-                <textarea class="form-control countChars" maxlength="500" name="excerpt"><?php echo $content['excerpt']; ?></textarea>
+                <textarea class="form-control countChars" maxlength="500" name="excerpt"><?php echo $event['excerpt']; ?></textarea>
             </div>
             
             <div class="form-group mb-3">
@@ -227,7 +213,7 @@
             
             <div class="form-group mb-3">
                 <label>Content</label>
-                <textarea class="form-control tiny" name="content"><?php echo $content['content']; ?></textarea>
+                <textarea class="form-control tiny" name="content"><?php echo $event['content']; ?></textarea>
             </div>
         </div>
     </form>
@@ -264,31 +250,31 @@
 		<?php 
 			$search = (!empty($_GET['search']) ? '%' . $_GET['search'] . '%' : '%');
 		
-            $contentCount = $mysqli->prepare(
+            $eventCount = $mysqli->prepare(
 				"SELECT posts.* FROM `posts` AS posts
 					LEFT OUTER JOIN `post_types` AS post_types ON post_types.id = posts.post_type_id
 				WHERE post_types.name = ? AND (posts.name LIKE ? OR posts.id LIKE ? OR posts.author LIKE ? OR posts.excerpt LIKE ? OR posts.content LIKE ?) 
 				ORDER BY date_created DESC"
 			);
-			$contentCount->bind_param('ssssss', $pt['name'], $search, $search, $search, $search, $search);
-			$contentCount->execute();
-			$contentCountResult = $contentCount->get_result();
+			$eventCount->bind_param('ssssss', $pt['name'], $search, $search, $search, $search, $search);
+			$eventCount->execute();
+			$eventCountResult = $eventCount->get_result();
         
-            $pagination = new pagination($contentCountResult->num_rows);
+            $pagination = new pagination($eventCountResult->num_rows);
 			$pagination->load();
         
-			$content = $mysqli->prepare(
+			$event = $mysqli->prepare(
 				"SELECT posts.* FROM `posts` AS posts
 					LEFT OUTER JOIN `post_types` AS post_types ON post_types.id = posts.post_type_id
 				WHERE post_types.name = ? AND (posts.name LIKE ? OR posts.id LIKE ? OR posts.author LIKE ? OR posts.excerpt LIKE ? OR posts.content LIKE ?) 
 				ORDER BY date_created DESC LIMIT {$pagination->itemsPerPage} OFFSET {$pagination->offset}"
 			);
-			$content->bind_param('ssssss', $pt['name'], $search, $search, $search, $search, $search);
-			$content->execute();
-			$contentResult = $content->get_result();			
+			$event->bind_param('ssssss', $pt['name'], $search, $search, $search, $search, $search);
+			$event->execute();
+			$eventResult = $event->get_result();			
 		?>
 		
-		<?php if($contentResult->num_rows > 0) : ?>
+		<?php if($eventResult->num_rows > 0) : ?>
 			<div class="table-responsive">
 				<table class="table table-striped">
 					<thead class="table-dark">
@@ -301,7 +287,7 @@
 					</thead>
 					
 					<tbody>
-						<?php while($row = $contentResult->fetch_assoc()) : ?>
+						<?php while($row = $eventResult->fetch_assoc()) : ?>
 							<tr>
 								<th class="shorten" scope="row"><?php echo $row['id']; ?></th>
 								
