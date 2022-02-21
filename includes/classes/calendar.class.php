@@ -20,6 +20,7 @@
         private $calendarRows;
         private $events;
         private $controls;
+        private $smallControls;
 
         public function __construct($date = '') {
             if(!empty($date) && date_parse($date)['year'] == true) {
@@ -67,6 +68,8 @@
             
             $prevMonth = date('Y-m-d', strtotime($this->calendarDate . ' -1 month'));
             $nextMonth = date('Y-m-d', strtotime($this->calendarDate . ' +1 month'));
+            $prevWeek = date('Y-m-d', strtotime($this->calendarDate . ' -1 week'));
+            $nextWeek = date('Y-m-d', strtotime($this->calendarDate . ' +1 week'));
             $page = explode('?', $_SERVER['REQUEST_URI'])[0];
 
             $this->controls = 
@@ -74,84 +77,81 @@
                     <a href="' . $page . '?date=' . $prevMonth . $gets . '" class="btn btn-primary text-light">Previous Month</a>
                     <a href="' . $page . '?date=' . $nextMonth . $gets . '" class="btn btn-primary text-light">Next Month</a>
                 </div>';
+
+            $this->smallControls = 
+            '<div class="calendarControls">
+                <a href="' . $page . '?date=' . $prevWeek . $gets . '" class="btn btn-primary text-light">Previous Week</a>
+                <a href="' . $page . '?date=' . $nextWeek . $gets . '" class="btn btn-primary text-light">Next Week</a>
+            </div>';
         }
 
-        public function display() {
-            $offset = $this->firstDayOffset;
-            $newRow = true;
+        public function display($showControls = true) {
+            //Display headings based on order of days of the week
+            $headings = '';
+
+            foreach($this->daysOfWeek as $dow) {
+                $headings .= '<th>' . $dow . '</th>';
+            }
 
             $calendar = 
-                '<div class="table-responsive">
+                '<div class="calendar">
                     <h3 class="calendarHeading">' . date('F Y', strtotime($this->calendarDate)) .  '</h3>
 
-                    <table class="calendar table table-light">
-                        <thead>
-                            <tr>
-                                <th>Sunday</th>
-                                <th>Monday</th>
-                                <th>Tuesday</th>
-                                <th>Wednesday</th>
-                                <th>Thursday</th>
-                                <th>Friday</th>
-                                <th>Saturday</th>
-                            </tr>
-                        </thead>
+                    <div class="table-responsive">
+                        <table class="calendarTable table table-light">
+                            <thead>
+                                <tr>' .
+                                    $headings .
+                                '</tr>
+                            </thead>
 
-                        <tbody>';
+                            <tbody>';
 
             //Loop days of month and display table rows
-            for($d = 1 + $offset; $d <= intval(date('d', strtotime($this->lastOfMonth)) + $offset); $d++) {
-                $actualDay = $d - $offset;
-                $actualDayPre = ($actualDay < 10 ? '0' . $actualDay : $actualDay);
-                $today = date($this->currentYear . '-' . $this->currentMonth . '-' . $actualDayPre);
-                
+            $firstWeekStart = date('w', strtotime($this->firstOfMonth));
+            $lastWeekEnd = date('w', strtotime($this->lastOfMonth));
+            $i = 1;
+            $newRow = true;
+
+            for($d = 1 - $firstWeekStart; $d <= intval(date('d', strtotime($this->lastOfMonth)) + (6 - $lastWeekEnd)); $d++) {
+                $sign = ($d < 0 ? '-' : '+');
+                $days = abs($d);
+                $today = date('Y-m-d', strtotime($this->firstOfMonth . $sign . $days . 'days'));
+
                 if($newRow == true) {
                     $calendar .= 
                         '<tr>';
-
                     $newRow = false;
                 }
 
-                if($actualDay == 1) {
-                    for($b = 0; $b < $offset; $b++) {
-                        $calendar .=
-                            '<td></td>';
-                    }
-                }
-                
                 $calendar .=
                     '<td ' . ($today < date('Y-m-d') ? 'class="calendarPast"' : '') . '>
                         <div class="calendarInner">
-                            <span class="calendarDay' . ($today == date('Y-m-d') ? ' current' : '') . '">' . $actualDay . '</span>' .
+                            <span class="calendarDay' . ($today == date('Y-m-d') ? ' current' : '') . '">' . date('d', strtotime($today)) . '</span>' .
                             $this->displayevents($today) . 
                         '</div>
                     </td>';
 
-                if($d == intval(date('d', strtotime($this->lastOfMonth)) + $offset)) {
-                    for($l = 0; $l < $this->lastDayOffset; $l++) {
-                        $calendar .=
-                            '<td></td>';
-                    }
-                }
-
-                if($d % 7 == 0) {
+                if($i % 7 == 0) {
                     $calendar .= 
                         '</tr>';
-
                     $newRow = true;
                 }
+
+                $i++;
             }
 
             $calendar .=    
-                        '</tbody>
-                    </table>' . 
-                    $this->controls .
+                            '</tbody>
+                        </table>
+                    </div>' . 
+                    ($showControls === true ? $this->controls : '') .
                 '</div>';
 
             echo $calendar;
         }
 
-        public function displaysmall() {
+        public function displaysmall($showControls = true) {
             $todaysDate = date('Y-m-d');
 
             //Get the first day of the week
@@ -237,6 +237,7 @@
             }
 
             $calendar .=
+                ($showControls === true ? $this->smallControls : '') . 
                 '</div>';
 
             echo $calendar;
@@ -333,6 +334,7 @@
                 while($event = $getEvents->fetch_assoc()) {
                     $date = date('Y-m-d', strtotime($event['date_created']));
                     $time = date('H:i', strtotime($event['date_created']));
+                    $endTime = date('H:i', strtotime($event['date_created'])); //To be changed
 
                     $eventArray[$date][$i] = [
                         'name' => $event['name'],
@@ -340,7 +342,8 @@
                         'excerpt' => $event['excerpt'],
                         'background_colour' => $event['background'],
                         'text_colour' => $event['text'],
-                        'time' => $time
+                        'time' => $time,
+                        'end_time' => $endTime
                     ];
 
                     $i++;

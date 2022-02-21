@@ -465,12 +465,15 @@ li.nav-item > .dropdown-toggle:after {
     color: $danger;
 }
 
-table.calendar {
+.calendar .calendarTable {
+    margin-bottom: 0;
     table-layout: fixed;
 }
 
+.calendar th,
 .calendar td {
     position: relative;
+    width: 160px;
 }
 
 .calendar td:after {
@@ -613,6 +616,11 @@ table.calendar {
     padding-bottom: 0;
     color: $light;
     margin-left: map-get($spacers, 2);
+}
+
+.calendar .calendarControls,
+.calendarSmall .calendarControls {
+    margin-top: map-get($spacers, 3);
 }
 
 .calendarModal .modal-header {
