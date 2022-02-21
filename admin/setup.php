@@ -176,7 +176,27 @@
                     "CREATE TABLE IF NOT EXISTS `mail_log` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         json_data LONGTEXT DEFAULT NULL
-                    )"
+                    )",
+                    //Event Styles
+                    "CREATE TABLE IF NOT EXISTS `event_styles` (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        type VARCHAR(10) DEFAULT 'background',
+                        selector VARCHAR(191) UNIQUE DEFAULT NULL,
+                        value VARCHAR(50) DEFAULT NULL
+                    )",
+                    "INSERT IGNORE INTO `event_styles` (type, selector, value) VALUES
+                    ('text', 'Dark', '#000'),
+                    ('text', 'Light', '#fff'),
+                    ('background', 'Black', '#212529'),
+                    ('background', 'White', 'white'),
+                    ('background', 'Grey', 'grey'),
+                    ('background', 'Red', 'crimson'),
+                    ('background', 'Orange', 'coral'),
+                    ('background', 'Yellow', 'goldenrod'),
+                    ('background', 'Green', 'mediumseagreen'),
+                    ('background', 'Blue', 'cornflowerblue'),
+                    ('background', 'Purple', 'blueviolet'),
+                    ('background', 'Pink', 'magenta')"
                 ];
 
                 foreach($queries as $query) {
