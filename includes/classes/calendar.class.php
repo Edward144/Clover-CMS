@@ -325,16 +325,20 @@
                 return;
             }
 
+            $state = (!empty($_SESSION['adminid']) ? 1 : 2);
             $eventArray = [];
             $i = 0;
-
-            $getEvents = $mysqli->query("SELECT * FROM `events` WHERE state = 2");
             
-            if($getEvents->num_rows > 0) {
-                while($event = $getEvents->fetch_assoc()) {
+            $getEvents = $mysqli->prepare("SELECT * FROM `events` WHERE state >= ?");
+            $getEvents->bind_param('i', $state);
+            $getEvents->execute();
+            $eventResult = $getEvents->get_result();
+            
+            if($eventResult->num_rows > 0) {
+                while($event = $eventResult->fetch_assoc()) {
                     $styles = json_decode($event['styles'], true);
                     $styles = (!empty($styles) ? $styles : null);
-                    
+
                     $date = date('Y-m-d', strtotime($event['start_date']));
                     $time = date('H:i', strtotime($event['start_date']));
                     $endDate = date('Y-m-d', strtotime($event['end_date']));
