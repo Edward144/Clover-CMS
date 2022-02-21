@@ -268,15 +268,15 @@
                     }
 
                     if(!empty($event['background_colour'])) {
-                        $styles .= 'background-color: ' . $event['background_colour'];
+                        $styles .= 'background-color: ' . $event['background_colour'] . ';';
                     }
                     
                     if(!empty($event['text_colour'])) {
-                        $styles .= 'color: ' . $event['text_colour'];
+                        $styles .= 'color: ' . $event['text_colour'] . ';';
                     }
 
                     $events .=
-                        '<a href="#" class="eventLink">
+                        '<a href="' . $event['link'] . '" class="eventLink">
                             <div class="calendarEvent" style="' . $styles . '">' .
                                 (!empty($eventTime) ? $eventTime . ': ' : '') .
                                 (strlen($event['name']) > $charLimit ? rtrim(substr($event['name'], 0, $charLimit)) . '...' : $event['name']) .
@@ -328,23 +328,34 @@
             $eventArray = [];
             $i = 0;
 
-            $getEvents = $mysqli->query("SELECT * FROM `posts` WHERE post_type_id = 1 AND state = 2");
+            $getEvents = $mysqli->query("SELECT * FROM `events` WHERE state = 2");
             
             if($getEvents->num_rows > 0) {
                 while($event = $getEvents->fetch_assoc()) {
-                    $date = date('Y-m-d', strtotime($event['date_created']));
-                    $time = date('H:i', strtotime($event['date_created']));
-                    $endTime = date('H:i', strtotime($event['date_created'])); //To be changed
+                    $styles = json_decode($event['styles'], true);
+                    $styles = (!empty($styles) ? $styles : null);
+                    
+                    $date = date('Y-m-d', strtotime($event['start_date']));
+                    $time = date('H:i', strtotime($event['start_date']));
+                    $endDate = date('Y-m-d', strtotime($event['end_date']));
+                    $endTime = date('H:i', strtotime($event['end_date']));
 
-                    $eventArray[$date][$i] = [
-                        'name' => $event['name'],
-                        'link' => $event['url'],
-                        'excerpt' => $event['excerpt'],
-                        'background_colour' => $event['background'],
-                        'text_colour' => $event['text'],
-                        'time' => $time,
-                        'end_time' => $endTime
-                    ];
+                    $start = new DateTime($date);
+                    $end = new DateTime(date('Y-m-d', strtotime($endDate . '+1 day')));
+                    $interval = DateInterval::createFromDateString('1 day');
+                    $period = new DatePeriod($start, $interval, $end);
+
+                    foreach($period as $day) {
+                        $eventArray[$day->format('Y-m-d')][$i] = [
+                            'name' => $event['name'],
+                            'link' => (substr($event['url'], 0, 4) === 'http' ? $event['url'] : 'events/' . $event['url']),
+                            'excerpt' => $event['excerpt'],
+                            'background_colour' => $styles['background'],
+                            'text_colour' => $styles['text'],
+                            'time' => $time,
+                            'end_time' => $endTime
+                        ];
+                    }
 
                     $i++;
                 }
