@@ -90,14 +90,14 @@
             $headings = '';
 
             foreach($this->daysOfWeek as $dow) {
-                $headings .= '<th>' . $dow . '</th>';
+                $headings .= '<th>' . substr($dow, 0, 3) . '<span class="headingSuffix">' . substr($dow, 3, strlen($dow)) . '</span></th>';
             }
 
             $calendar = 
                 '<div class="calendar">
                     <h3 class="calendarHeading">' . date('F Y', strtotime($this->calendarDate)) .  '</h3>
 
-                    <div class="table-responsive">
+                    <div class="table-responsive-lg">
                         <table class="calendarTable table table-light">
                             <thead>
                                 <tr>' .
@@ -124,11 +124,21 @@
                     $newRow = false;
                 }
 
+                if(!empty($this->displayevents($today))) {
+                    $id = 'events' . date('Ymd', strtotime($today));
+                    $calendarDay = 
+                        '<a href="#" class="moreEventsLink" data-bs-toggle="modal" data-bs-target="#' . $id . '"><span class="calendarDay' . ($today == date('Y-m-d') ? ' current' : '') . '">' . date('d', strtotime($today)) . '</span></a>';
+                }
+                else {
+                    $calendarDay = 
+                        '<span class="calendarDay' . ($today == date('Y-m-d') ? ' current' : '') . '">' . date('d', strtotime($today)) . '</span>';
+                }
+
                 $calendar .=
                     '<td ' . ($today < date('Y-m-d') ? 'class="calendarPast"' : '') . '>
-                        <div class="calendarInner">
-                            <span class="calendarDay' . ($today == date('Y-m-d') ? ' current' : '') . '">' . date('d', strtotime($today)) . '</span>' .
-                            $this->displayevents($today) . 
+                        <div class="calendarInner">' .
+                            $calendarDay .
+                            $this->displayevents($today) . $this->moreeventsmodal($today) .
                         '</div>
                     </td>';
 
@@ -174,7 +184,15 @@
                 $currentTime = date('H:i');
                 $todaysEvents = $this->events[$today];
                 $nextEvents = null;
-                $nextEventName = 'No upcoming events';
+
+                switch($todaysDate) {
+                    case $todaysDate >= $today:
+                        $nextEventName = 'No past events';
+                        break;
+                    default:
+                        $nextEventName = 'No upcoming events';
+                        break;
+                }                
 
                 if(!empty($todaysEvents)) {
                     usort($todaysEvents, [$this, 'sorteventtimes']);
