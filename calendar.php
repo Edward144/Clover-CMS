@@ -75,9 +75,9 @@
 
     <div class="row">
         <div class="col">
-            left 
+        <?php $calendar->displaysmall(); ?>
         </div>
-        
+
         <div class="col">
             <?php $calendar->display(); ?>
         </div>
