@@ -70,11 +70,18 @@
 
         $calendar = new calendar((isset($_GET['date']) ? $_GET['date'] : ''));
         $calendar->loadevents();
-        $calendar->display();
-
-        echo '<br><br>';
-        $calendar->displaysmall();
+        
     ?>
+
+    <div class="row">
+        <div class="col">
+            left 
+        </div>
+        
+        <div class="col">
+            <?php $calendar->display(); ?>
+        </div>
+    </div>
 </div>
 
 <?php require_once(dirname(__FILE__) . '/includes/footer.php'); ?>
