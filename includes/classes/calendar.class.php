@@ -113,8 +113,8 @@
             $i = 1;
             $newRow = true;
 
-            for($d = 1 - $firstWeekStart; $d <= intval(date('d', strtotime($this->lastOfMonth)) + (6 - $lastWeekEnd)); $d++) {
-                $sign = ($d < 0 ? '-' : '+');
+            for($d = 0 - $firstWeekStart; $d < intval(date('d', strtotime($this->lastOfMonth)) + (6 - $lastWeekEnd)); $d++) {
+                $sign = ($d <= 0 ? '-' : '+');
                 $days = abs($d);
                 $today = date('Y-m-d', strtotime($this->firstOfMonth . $sign . $days . 'days'));
 
@@ -127,7 +127,7 @@
                 $calendar .=
                     '<td ' . ($today < date('Y-m-d') ? 'class="calendarPast"' : '') . '>
                         <div class="calendarInner">
-                            <span class="calendarDay' . ($today == date('Y-m-d') ? ' current' : '') . '">' . date('d', strtotime($today)) . ' ' . $days . '</span>' .
+                            <span class="calendarDay' . ($today == date('Y-m-d') ? ' current' : '') . '">' . date('d', strtotime($today)) . '</span>' .
                             $this->displayevents($today) . 
                         '</div>
                     </td>';
