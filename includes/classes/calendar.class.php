@@ -2,6 +2,7 @@
 
     class calendar {
         public $nameLength = 20;
+        public $modalLink = 'MORE';
         
         private $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         private $shortDaysOfWeek = []; //Populated in constructor
@@ -58,13 +59,21 @@
 
             //Set the controls
             $gets = '';
+            
+            $getDate = $_GET['date'];
+            $getUrl = $_GET['date'];
+
             unset($_GET['date']);
+            unset($_GET['url']);
 
             if(!empty($_GET)) {
                 foreach($_GET as $index => $value) {
                     $gets .= '&' . $index . '=' . $value;
                 }
             }
+
+            $_GET['date'] = $getDate;
+            $_GET['url'] = $getUrl;
             
             $prevMonth = date('Y-m-d', strtotime($this->calendarDate . ' -1 month'));
             $nextMonth = date('Y-m-d', strtotime($this->calendarDate . ' +1 month'));
@@ -247,7 +256,7 @@
 
                         <div class="col-sm calendarEvent">' .
                             (!empty($nextEvent['link']) ? '<a href="' . $nextEvent['link'] . '">' . $nextEventName . '</a>' : $nextEventName) .
-                            (!empty($todaysEvents) && count($todaysEvents) > 1 ? $this->moreeventsmodal($today, 'MORE') : '') .
+                            (!empty($todaysEvents) && count($todaysEvents) > 1 ? $this->moreeventsmodal($today, $this->modalLink) : '') .
                         '</div>
                     </div>';
 
@@ -387,6 +396,43 @@
             $this->events = $eventArray;
             return;
         }
+    }
+
+    function calendar($params) {
+        ob_start();
+
+        $calendar = new calendar($_GET['date']);
+        $calendar->loadevents();
+
+        if(isset($params['controls']) && $params['controls'] === 'false') {
+            $controls = false;
+        }
+        else {
+            $controls = true;
+        }
+
+        if(isset($params['modallink'])) {
+            $calendar->modalLink = $params['modallink'];
+        }
+
+        if(isset($params['namelength']) && intval($params['namelength']) > 0) {
+            $calendar->nameLength = intval($params['namelength']);
+        }
+
+        switch($params['type']) {
+            case 'small':
+                $calendar->displaysmall($controls);
+                break;
+            default:
+                $calendar->display($controls);
+                break;
+        }
+
+        $output = ob_get_contents();
+
+        ob_end_clean();
+
+        return $output;
     }
 
 ?>
