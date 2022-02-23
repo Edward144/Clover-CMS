@@ -30,8 +30,8 @@ function sidebarcollapse() {
 
 //Split full url from media manager
 function responsive_filemanager_callback(field_id) {
-	var url = $("#" + field_id).val();
-	$("input[name='" + field_id + "']").val(url).trigger("change");
+	var url = $("#" + field_id).val().split(location.protocol + "//" + location.hostname + root_dir)[1];
+    $("input[name='" + field_id + "']").val(url).trigger("change");
 }
 
 $(document).ready(function() {
@@ -795,7 +795,8 @@ $("body").on("click", "button[name='carouselDelete']", function() {
 
 //Change Image
 function carousel_rf_callback(field_id) {
-    var url = $("#" + field_id).val();
+    var url = $("#" + field_id).val().split(location.protocol + "//" + location.hostname + root_dir)[1];
+    
     $("#img" + field_id).attr("src", url);
     $("#" + field_id).remove();
     

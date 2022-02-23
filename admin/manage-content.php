@@ -194,7 +194,7 @@
                 <?php endif; ?>
                 
                 <div class="buttons mt-3 mb-n1">
-                    <a class="btn btn-secondary mb-1" data-fancybox="mediamanager" data-type="iframe" data-src="js/responsive_filemanager/filemanager/dialog.php?type=1&field_id=featuredImage">Select Image</a>
+                    <a class="btn btn-secondary mb-1" data-fancybox="mediamanager" data-type="iframe" data-src="js/responsive_filemanager/filemanager/dialog.php?type=1&field_id=featuredImage&callback=responsive_filemanager_callback">Select Image</a>
                     <input type="button" class="btn btn-dark mb-1" name="clearImage" value="Clear Image">
                 </div>
             </div>
@@ -335,7 +335,7 @@
 
 <script>
 	$("input[name='featuredImage']").change(function() {
-		$(this).val($(this).val().split("\"")[0]);
+        $(this).val($(this).val().split("\"")[0]);
 		$(this).siblings("img").remove();
 		
 		if($(this).val() != "") {
