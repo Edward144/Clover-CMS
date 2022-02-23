@@ -300,7 +300,8 @@ li.nav-item > .dropdown-toggle:after {
 
 /* MAIN */
 
-.uc.content img {
+.uc.content img,
+#tinymce img {
     max-width: 100%;
     height: auto;
 }
