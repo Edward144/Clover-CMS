@@ -83,12 +83,12 @@
 	$checkUrlResult = $checkUrl->get_result();
 
     //If a post doesn't exist then check events
-    $url = explode('events/', $url)[1];
+    /*$url = explode('events/', $url)[1];
 
     $checkEvent = $mysqli->prepare("SELECT * FROM `events` AS posts WHERE url = ? AND posts.state >= ? LIMIT 1");
 	$checkEvent->bind_param('si', $url, $state);
 	$checkEvent->execute();
-	$checkEventResult = $checkEvent->get_result();
+	$checkEventResult = $checkEvent->get_result();*/
 
 	if($checkUrlResult->num_rows > 0) {
 		$page = $checkUrlResult->fetch_assoc();
@@ -116,7 +116,7 @@
 			}
 		}
 	}
-    elseif($checkEventResult->num_rows > 0) {
+    /*elseif($checkEventResult->num_rows > 0) {
         $event = $checkEventResult->fetch_assoc();
         $notFound = false;
         $contentId = $event['id'];
@@ -130,7 +130,7 @@
         else {
             $template = 'event.php';
         }
-    }
+    }*/
 
 	if($notFound == true) {
 		http_response_code(404);

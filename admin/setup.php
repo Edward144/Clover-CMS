@@ -177,49 +177,7 @@
                     "CREATE TABLE IF NOT EXISTS `mail_log` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         json_data LONGTEXT DEFAULT NULL
-                    )",
-                    //Events
-                    "CREATE TABLE IF NOT EXISTS `events` (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
-                        name VARCHAR(255),
-                        excerpt VARCHAR(500),
-                        content TEXT,
-                        url VARCHAR(191) UNIQUE,
-                        author VARCHAR(255),
-                        featured_image VARCHAR(500),
-                        carousel LONGTEXT,
-                        template VARCHAR(255),
-                        start_date DATETIME DEFAULT CURRENT_TIMESTAMP(),
-                        end_date DATETIME DEFAULT CURRENT_TIMESTAMP(),
-                        last_edited DATETIME DEFAULT CURRENT_TIMESTAMP(),
-                        last_edited_by INT,
-                        state INT DEFAULT 0,
-                        meta_title VARCHAR(255),
-                        meta_description VARCHAR(500),
-                        meta_author VARCHAR(255),
-                        meta_keywords VARCHAR(255),
-                        styles TEXT DEFAULT NULL
-                    )",
-                    //Event Styles
-                    "CREATE TABLE IF NOT EXISTS `event_styles` (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
-                        type VARCHAR(10) DEFAULT 'background',
-                        selector VARCHAR(191) UNIQUE DEFAULT NULL,
-                        value VARCHAR(50) DEFAULT NULL
-                    )",
-                    "INSERT IGNORE INTO `event_styles` (type, selector, value) VALUES
-                    ('text', 'Dark', '#000'),
-                    ('text', 'Light', '#fff'),
-                    ('background', 'Black', '#212529'),
-                    ('background', 'White', 'white'),
-                    ('background', 'Grey', 'grey'),
-                    ('background', 'Red', 'crimson'),
-                    ('background', 'Orange', 'coral'),
-                    ('background', 'Yellow', 'goldenrod'),
-                    ('background', 'Green', 'mediumseagreen'),
-                    ('background', 'Blue', 'cornflowerblue'),
-                    ('background', 'Purple', 'blueviolet'),
-                    ('background', 'Pink', 'magenta')"
+                    )"
                 ];
 
                 foreach($queries as $query) {
