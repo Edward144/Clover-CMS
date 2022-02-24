@@ -435,4 +435,11 @@
         return $output;
     }
 
+    add_admin_navigation([[
+        'name' => 'Events',
+        'link' => 'admin/manage-events',
+        'icon' => 'fa-calendar-alt',
+        'filename' => 'manage-events.php'
+    ]], 1);
+
 ?>

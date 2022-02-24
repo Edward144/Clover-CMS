@@ -1,52 +1,4 @@
 <?php
-	$menuItems = [
-		[
-			'name' => 'Dashboard',
-			'link' => 'admin/',
-			'icon' => 'fa-chart-line'
-		],
-        [
-            'name' => 'Events',
-            'link' => 'admin/manage-events',
-            'icon' => 'fa-calendar-alt',
-            'filename' => 'manage-events.php'
-        ],
-        [
-            'name' => 'Comments',
-            'link' => 'admin/manage-comments',
-            'icon' => 'fa-comments',
-            'filename' => 'manage-comments.php'
-        ],
-        [
-			'name' => 'Forms',
-			'link' => 'admin/manage-forms',
-			'icon' => 'fa-pen-alt',
-            'filename' => 'manage-forms.php'
-		],
-		[
-			'name' => 'Navigation',
-			'link' => 'admin/manage-navigation',
-			'icon' => 'fa-sitemap',
-            'filename' => 'manage-navigation.php'
-		],
-		[
-			'name' => 'Users',
-			'link' => 'admin/manage-users',
-			'icon' => 'fa-users',
-            'filename' => 'manage-users.php'
-		],
-		[
-			'name' => 'Settings',
-			'link' => 'admin/settings',
-			'icon' => 'fa-cogs',
-            'filename' => 'settings.php'
-		],
-        [
-            'name' => 'Profile',
-            'link' => 'admin/my-profile',
-            'icon' => 'fa-user-cog'
-        ]
-	];
 
 	$postTypes = $mysqli->query("SELECT * FROM `post_types`");
 	$postItems = [];
@@ -65,13 +17,13 @@
             }
 		}
 		
-		array_splice($menuItems, 1, 0, $postItems);
+		array_splice($adminMenu, 1, 0, $postItems);
 	}
 
     //Insert blank target to any item that is missing it
-    foreach($menuItems as $index => $item) {
-        if(is_array($menuItems[$index]) && !array_key_exists('target', $menuItems[$index])) {
-            $menuItems[$index]['target'] = '';
+    foreach($adminMenu as $index => $item) {
+        if(is_array($adminMenu[$index]) && !array_key_exists('target', $adminMenu[$index])) {
+            $adminMenu[$index]['target'] = '';
         }
     }
 ?>
@@ -86,7 +38,7 @@
 		</a>
 	</li>
 	
-	<?php foreach($menuItems as $item) : ?>
+	<?php foreach($adminMenu as $item) : ?>
         <?php if((!empty($item['filename']) && file_exists(dirname(__DIR__) . '/' . $item['filename']) && checkaccess($item['filename'], true) !== false) || empty($item['filename']) || (!empty($item['filename']) && !file_exists(dirname(__DIR__) . '/' . $item['filename']))) : ?>
             <?php    
                 if($item['target'] == 'popup') {

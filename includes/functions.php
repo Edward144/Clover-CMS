@@ -692,6 +692,15 @@
 		return $valueToCheck;
 	}
 
+    //Insert item to admin navigation
+    function add_admin_navigation($items, $offset, $length = 0) {
+        global $adminMenu;
+
+        if(!empty($adminMenu)) {
+            array_splice($adminMenu, $offset, $length, $items);
+        }
+    }
+
     //Include class
     $classes = scandir(dirname(__FILE__) . '/classes');
 
