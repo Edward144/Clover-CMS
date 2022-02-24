@@ -16,4 +16,49 @@
     //The given name for none admin users
     define('BASIC_USER', 'Subscriber');
 
+    //Default admin sidebar menu items
+    define('ADMIN_MENU', [
+        [
+            'name' => 'Dashboard',
+            'link' => 'admin/',
+            'icon' => 'fa-chart-line'
+        ],
+        [
+            'name' => 'Comments',
+            'link' => 'admin/manage-comments',
+            'icon' => 'fa-comments',
+            'filename' => 'manage-comments.php'
+        ],
+        [
+            'name' => 'Forms',
+            'link' => 'admin/manage-forms',
+            'icon' => 'fa-pen-alt',
+            'filename' => 'manage-forms.php'
+        ],
+        [
+            'name' => 'Navigation',
+            'link' => 'admin/manage-navigation',
+            'icon' => 'fa-sitemap',
+            'filename' => 'manage-navigation.php'
+        ],
+        [
+            'name' => 'Users',
+            'link' => 'admin/manage-users',
+            'icon' => 'fa-users',
+            'filename' => 'manage-users.php'
+        ],
+        [
+            'name' => 'Settings',
+            'link' => 'admin/settings',
+            'icon' => 'fa-cogs',
+            'filename' => 'settings.php'
+        ],
+        [
+            'name' => 'Profile',
+            'link' => 'admin/my-profile',
+            'icon' => 'fa-user-cog'
+        ]
+    ]);
+    $adminMenu = ADMIN_MENU;
+
 ?>
