@@ -345,14 +345,13 @@
         }
 
         public function loadevents($array = []) {
-            global $mysqli;
+            global $mysqli, $state;
 
             if(is_array($array) && !empty($array)) {
                 $this->events = $array;
                 return;
             }
 
-            $state = (!empty($_SESSION['adminid']) ? 1 : 2);
             $eventArray = [];
             $i = 0;
             
@@ -493,5 +492,39 @@
         'icon' => 'fa-calendar-alt',
         'filename' => 'manage-events.php'
     ]], 1);
+
+    if(isset($_GET['url']) && substr($_GET['url'], 0, 7) === 'events/') {
+        $url = explode('events/', $_GET['url'])[1];
+        $templatePath = dirname(__FILE__, 3) . '/';
+
+        $checkEvent = $mysqli->prepare("SELECT * FROM `events` AS posts WHERE url = ? AND posts.state >= ? LIMIT 1");
+        $checkEvent->bind_param('si', $url, $state);
+        $checkEvent->execute();
+        $checkEventResult = $checkEvent->get_result();
+
+        if($checkEventResult->num_rows > 0) {
+            $event = $checkEventResult->fetch_assoc();
+            $notFound = false;
+            $contentId = $event['id'];
+            
+            if(!empty($event['template'])) {
+                if(file_exists(dirname(__FILE__, 3) . '/includes/templates/' . $page['template' . '.php'])) {
+                    $templatePath .= 'includes/templates/';
+                    $template = $event['template'] . '.php';
+                }
+            }
+            else {
+                $template = 'event.php';
+            }
+        }
+        
+        /*if($notFound !== false) {
+            http_response_code(404);
+            include_once(dirname(__FILE__, 3) . '/404.php');
+        }
+        else {
+            //require_once($templatePath . $template);
+        }*/
+    }
 
 ?>

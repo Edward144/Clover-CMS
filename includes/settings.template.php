@@ -16,6 +16,9 @@
     //The given name for none admin users
     define('BASIC_USER', 'Subscriber');
 
+    //Allow admins to view drafts
+    $state = (!empty($_SESSION['adminid']) ? 1 : 2);
+
     //Default admin sidebar menu items
     define('ADMIN_MENU', [
         [

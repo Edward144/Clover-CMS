@@ -6,7 +6,6 @@
      
 	require_once(dirname(__FILE__) . '/includes/database.php'); 
 	
-    $state = (!empty($_SESSION['adminid']) ? 1 : 2);
     $checkHomepage = $mysqli->query("SELECT value FROM `settings` WHERE name = 'homepage' LIMIT 1");
 
     if($checkHomepage->num_rows > 0) {
@@ -83,13 +82,6 @@
 	$checkUrlResult = $checkUrl->get_result();
 
     //If a post doesn't exist then check events
-    /*$url = explode('events/', $url)[1];
-
-    $checkEvent = $mysqli->prepare("SELECT * FROM `events` AS posts WHERE url = ? AND posts.state >= ? LIMIT 1");
-	$checkEvent->bind_param('si', $url, $state);
-	$checkEvent->execute();
-	$checkEventResult = $checkEvent->get_result();*/
-
 	if($checkUrlResult->num_rows > 0) {
 		$page = $checkUrlResult->fetch_assoc();
         
@@ -116,21 +108,10 @@
 			}
 		}
 	}
-    /*elseif($checkEventResult->num_rows > 0) {
-        $event = $checkEventResult->fetch_assoc();
-        $notFound = false;
-        $contentId = $event['id'];
-        
-        if(!empty($event['template'])) {
-			if(file_exists(dirname(__FILE__) . '/includes/templates/' . $page['template' . '.php'])) {
-				$templatePath .= 'includes/templates/';
-				$template = $event['template'] . '.php';
-			}
-		}
-        else {
-            $template = 'event.php';
-        }
-    }*/
+    else {
+        //If the page doesn't exist then include functions to check for any custom code within a class file
+        include_once(dirname(__FILE__) . '/includes/functions.php');
+    }
 
 	if($notFound == true) {
 		http_response_code(404);
