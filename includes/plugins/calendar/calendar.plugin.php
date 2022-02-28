@@ -495,7 +495,6 @@
 
     if(isset($_GET['url']) && substr($_GET['url'], 0, 7) === 'events/') {
         $url = explode('events/', $_GET['url'])[1];
-        $templatePath = dirname(__FILE__, 3) . '/';
 
         $checkEvent = $mysqli->prepare("SELECT * FROM `events` AS posts WHERE url = ? AND posts.state >= ? LIMIT 1");
         $checkEvent->bind_param('si', $url, $state);
@@ -508,23 +507,16 @@
             $contentId = $event['id'];
             
             if(!empty($event['template'])) {
-                if(file_exists(dirname(__FILE__, 3) . '/includes/templates/' . $page['template' . '.php'])) {
+                if(file_exists(dirname(__FILE__, 3) . '/templates/' . $event['template'] . '.php')) {
                     $templatePath .= 'includes/templates/';
                     $template = $event['template'] . '.php';
                 }
             }
             else {
-                $template = 'event.php';
+                $templatePath = dirname(__FILE__) . '/';
+                $template = 'event_template.php';
             }
         }
-        
-        /*if($notFound !== false) {
-            http_response_code(404);
-            include_once(dirname(__FILE__, 3) . '/404.php');
-        }
-        else {
-            //require_once($templatePath . $template);
-        }*/
     }
 
 ?>
