@@ -701,7 +701,7 @@
         }
     }
 
-    //Include class
+    //Include classes
     $classes = scandir(dirname(__FILE__) . '/classes');
 
     foreach($classes as $class) {
@@ -710,3 +710,15 @@
         }
     }
     
+    //Include plugins
+    $plugins = glob(dirname(__FILE__) . '/plugins/*', GLOB_ONLYDIR);
+
+    foreach($plugins as $plugin) {
+        $pluginFiles = scandir($plugin);
+
+        foreach($pluginFiles as $pluginFile) {
+            if(strpos($pluginFile, '.plugin') !== false) {
+                include_once($plugin . '/' . $pluginFile);
+            }
+        }
+    }
