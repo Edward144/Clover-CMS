@@ -100,7 +100,7 @@ body#tinymce {
     left: 0;
     right: 0;
     width: 100%;
-    z-index: 9999;
+    z-index: 1000;
 }
 
 .siteTitle {
@@ -178,7 +178,7 @@ li.nav-item > .dropdown-toggle:after {
     right: 0;
     width: 320px;
     background: shade-color($secondary, 5);
-    z-index: 9999;
+    z-index: 1001;
 }
 
 .subMenu .nav-link {
@@ -250,7 +250,7 @@ li.nav-item > .dropdown-toggle:after {
 }
 
 #pageFooter .socials .social a {
-    transition: color 0.35s ease;
+    transition: color 0.15s ease;
 }
 
 .social#facebook a {
@@ -299,6 +299,12 @@ li.nav-item > .dropdown-toggle:after {
 }
 
 /* MAIN */
+
+.uc.content img,
+#tinymce img {
+    max-width: 100%;
+    height: auto;
+}
 
 .carousel-inner {
     position: relative;
@@ -463,4 +469,261 @@ li.nav-item > .dropdown-toggle:after {
 .userForm label.required:after {    
     content: " *";
     color: $danger;
+}
+
+.calendar *::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+.calendar *::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+.calendar *::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+
+.calendar *::-webkit-scrollbar-thumb:active,
+.calendar *::-webkit-scrollbar-thumb:hover {
+    background: #000;
+}
+
+.calendar .calendarTable {
+    margin-bottom: 0;
+    table-layout: fixed;
+}
+
+.calendar th,
+.calendar td {
+    position: relative;
+}
+
+.calendar td:after {
+    content: "";
+    display: inline-block;
+    padding-top: 62.5%;
+}
+
+.calendar td .calendarInner {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    padding: map-get($spacers, 2);
+}
+
+.calendar .calendarPast:before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+    z-index: 10;
+}
+
+.calendar .calendarEvent,
+.calendarModal .calendarEvent {
+    display: block;
+    background: $dark;
+    color: $light;
+    padding-left: map-get($spacers, 1);
+    padding-right: map-get($spacers, 1);
+    border-radius: $border-radius;
+    margin-top: map-get($spacers, 1);
+    cursor: pointer;
+}
+
+.calendar .calendarDay,
+.calendarSmall .calendarDay {
+    width: 25px;
+    height: 25px;
+    padding: map-get($spacers, 1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar .calendarDay.current,
+.calendarSmall .calendarDay.current {
+    border-radius: 100%;
+    background: $dark;
+    color: $light;
+}
+
+.calendarControls {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.calendar .eventLink,
+.calendarModal .eventLink {
+    text-decoration: none;
+    display: block;
+}
+
+.calendar .eventLink:hover,
+.calendar .eventLink:active,
+.calendarModal .eventLink:hover,
+.calendarModal .eventLink:active {
+    filter: brightness(0.85);
+    transition: filter 0.15s ease-in-out;
+}
+
+.calendar .moreEventsLink {
+    border-radius: 100%;
+    text-decoration: none;
+    color: $light;
+    background: $primary;
+    transition: background 0.15s ease-in-out;
+}
+
+.calendar .moreEventsLink:hover,
+.calendar .moreEventsLink:active {
+    background: tint-color($primary, 10%);
+}
+
+.calendarSmall > .row {
+    margin-top: -1px;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.calendarSmall > .row:first-child {
+    margin-top: 0;
+}
+
+.calendarSmall > .row > div {
+    border-color: $dark;
+    border-style: solid;
+    border-width: 1px;
+    margin-left: -1px;
+    padding: map-get($spacers, 2);
+}
+
+.calendarSmall > .row > div:first-child {
+    margin-left: 0;
+}
+
+.calendarSmall .calendarDow {
+    width: 65px;
+    text-transform: uppercase;
+    background: $primary;
+    color: $light;
+}
+
+.calendarSmall .calendarDate {
+    width: 44px;
+    text-align: center;
+}
+
+.calendarSmall .calendarTime {
+    min-width: 120px;
+}
+
+.calendarSmall .calendarDate {
+    background: $light;
+}
+
+
+
+.calendarSmall .moreEvents {
+    padding-left: map-get($spacers, 1);
+    padding-right: map-get($spacers, 1);
+    padding-top: 0;
+    padding-bottom: 0;
+    color: $light;
+    margin-left: map-get($spacers, 2);
+}
+
+.calendar .calendarControls,
+.calendarSmall .calendarControls {
+    margin-top: map-get($spacers, 3);
+}
+
+.calendarModal .modal-header {
+    background: $primary;
+    color: $light;
+    padding-top: map-get($spacers, 2);
+    padding-bottom: map-get($spacers, 2);
+}
+
+.calendarModal .modal-body {
+    padding-top: map-get($spacers, 2);
+    padding-bottom: map-get($spacers, 2);
+}
+
+.calendarModal .modal-header .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.calendar-lg.calendar th,
+.calendar-lg.calendar td,
+.calendar-md.calendar th,
+.calendar-md.calendar td {
+    overflow: hidden;
+    padding: 0;
+}
+
+.calendar-lg.calendar td .calendarInner,
+.calendar-md.calendar td .calendarInner {
+    padding: 0;
+}
+
+.calendar-lg.calendar td .calendarInner > .eventLink,
+.calendar-md.calendar td .calendarInner > .eventLink {
+    display: none;
+}
+
+.calendar-md.calendar th .headingSuffix {
+    display: none;
+}
+
+.calendar-sm.calendarSmall > .row > div.calendarEvent {
+    margin-left: 0;
+    margin-top: -1px;
+}
+
+
+@include media-breakpoint-down(lg) {
+    .calendar th,
+    .calendar td {
+        overflow: hidden;
+        padding: 0;
+    }
+
+    .calendar td .calendarInner {
+        padding: 0;
+    }
+
+    .calendar td .calendarInner > .eventLink {
+        display: none;
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .calendar th .headingSuffix {
+        display: none;
+    }
+}
+
+@include media-breakpoint-down(sm) {
+    .calendarSmall > .row > div.calendarEvent {
+        margin-left: 0;
+        margin-top: -1px;
+    }
 }

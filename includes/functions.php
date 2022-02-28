@@ -4,7 +4,6 @@
     use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;
 
-	include_once(dirname(__FILE__) . '/settings.php');
 	include_once(dirname(__FILE__) . '/shortcodes.php');
     require_once(dirname(__DIR__) . '/vendor/autoload.php');
 
@@ -58,7 +57,7 @@
 
     //Check if user has access to page
     function checkaccess($pagename, $menu = false) {
-        global $mysqli;
+        global $mysqli, $adminMenu;
         $allowed = false;
         
         $getRole = $mysqli->prepare(
@@ -83,7 +82,7 @@
         if($allowed == false && $menu == false) {
             http_response_code(403);
             require_once(dirname(__DIR__) . '/admin/includes/header.php');
-
+            
             echo 
                 '<div>
                     <div class="alert alert-danger mt-3">
@@ -407,13 +406,13 @@
     }
 
     //Carousel
-    function carousel($postId, $builder = false, $json = '', $interval = 5000, $wrap = true, $controls = true) {        
+    function carousel($postId, $builder = false, $json = '', $table = 'posts', $interval = 5000, $wrap = true, $controls = true) {        
         global $mysqli;
 
         $slides = '';
         $si = 0;
 
-        $getSlides = $mysqli->prepare("SELECT carousel FROM `posts` WHERE id = ?");
+        $getSlides = $mysqli->prepare("SELECT carousel FROM `$table` WHERE id = ?");
         $getSlides->bind_param('i', $postId);
         $getSlides->execute();
         $slidesResult = $getSlides->get_result();
@@ -707,7 +706,16 @@
 		return $valueToCheck;
 	}
 
-    //Include class
+    //Insert item to admin navigation
+    function add_admin_navigation($items, $offset, $length = 0) {
+        global $adminMenu;
+
+        if(!empty($adminMenu)) {
+            array_splice($adminMenu, $offset, $length, $items);
+        }
+    }
+
+    //Include classes
     $classes = scandir(dirname(__FILE__) . '/classes');
 
     foreach($classes as $class) {
@@ -716,3 +724,15 @@
         }
     }
     
+    //Include plugins
+    $plugins = glob(dirname(__FILE__) . '/plugins/*', GLOB_ONLYDIR);
+
+    foreach($plugins as $plugin) {
+        $pluginFiles = scandir($plugin);
+
+        foreach($pluginFiles as $pluginFile) {
+            if(strpos($pluginFile, '.plugin') !== false) {
+                include_once($plugin . '/' . $pluginFile);
+            }
+        }
+    }

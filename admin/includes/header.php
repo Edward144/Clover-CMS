@@ -3,6 +3,11 @@
 	require_once(dirname(__FILE__, 3) . '/includes/functions.php'); 
 
 	isloggedin();
+
+	$title = (!empty($title) ? $title : '');
+	$description = (!empty($description) ? $description : '');
+	$keywords = (!empty($keywords) ? $keywords : '');
+	$author = (!empty($author) ? $author : '');
 ?>
 
 <!DOCTYPE html>

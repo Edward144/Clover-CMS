@@ -6,7 +6,6 @@
      
 	require_once(dirname(__FILE__) . '/includes/database.php'); 
 	
-    $state = (!empty($_SESSION['adminid']) ? 1 : 2);
     $checkHomepage = $mysqli->query("SELECT value FROM `settings` WHERE name = 'homepage' LIMIT 1");
 
     if($checkHomepage->num_rows > 0) {
@@ -82,6 +81,7 @@
 	$checkUrl->execute();
 	$checkUrlResult = $checkUrl->get_result();
 
+    //If a post doesn't exist then check events
 	if($checkUrlResult->num_rows > 0) {
 		$page = $checkUrlResult->fetch_assoc();
         
@@ -108,6 +108,10 @@
 			}
 		}
 	}
+    else {
+        //If the page doesn't exist then include functions to check for any custom code within a class file
+        include_once(dirname(__FILE__) . '/includes/functions.php');
+    }
 
 	if($notFound == true) {
 		http_response_code(404);

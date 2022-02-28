@@ -7,6 +7,10 @@ ErrorDocument 404 /admin/404.php
     
 	RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^plugin/(.*)$ page.php?file=$1 [L,QSA]
+
+	RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule ^manage-content/(.*)$ manage-content.php?post-type=$1 [L,QSA]
 	
 	#Remove PHP Extension

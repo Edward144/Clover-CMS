@@ -14,11 +14,12 @@
         }
         
         //Check write permissions for settings
+        $template = dirname(__FILE__, 2) . '/includes/settings.template.php';
         $settings = fopen(dirname(__FILE__, 2) . '/includes/settings.php', 'w');
         
-        if(!$settings) {
+        if(!$settings || !file_exists($template)) {
             $status = 'danger';
-            $setupmessage = 'Failed to create settings file, ensure permissions are correct for /includes directory';
+            $setupmessage = 'Failed to create settings file, ensure permissions are correct for /includes directory and "settings.template.php" exists';
         }
         else {
             //Connect to the database
@@ -199,7 +200,7 @@
                 //If we are updating then only update the database tables and do nothing else
                 if(isset($_GET['update'])) {
                     if(!empty($queryErrors)) {
-                        echo $queryErrors . 'a href="./">Return to dashboard</a>';
+                        echo $queryErrors . '<a href="./">Return to dashboard</a>';
                     }
                     else {
                         header('Location: ./');
@@ -208,31 +209,41 @@
                     exit();
                 }
 
-                //Create the settings file     
+                //Create the settings file
+                $template = file($template);
+                $templateContent = '';
+
                 $rootdir = '/' . explode($_SERVER['DOCUMENT_ROOT'] . '/', dirname(__FILE__, 2))[1] . '/';
                 $rootdir = ($rootdir == '//' ? '/' : $rootdir);
                 define('ROOT_DIR', $rootdir);
 
-                fwrite($settings, 
-                    "<?php
-                        //Database Details
-                        \$hostname = '" . $_POST['hostname'] . "';
-                        \$database = '" . $_POST['database'] . "';
-                        \$username = '" . $_POST['username'] . "';
-                        \$password = '" . $_POST['password'] . "';
+                foreach($template as $i => $line) {
+                    switch ($i) {
+                        case 0:
+                            $templateContent .= '<?php' . "\n";
+                            break;
+                        case 3:
+                            $templateContent .= "\t" . '$hostname = \'' . $_POST['hostname'] . '\';' . "\n";
+                            break;
+                        case 4:
+                            $templateContent .= "\t" . '$database = \'' . $_POST['database'] . '\';' . "\n";
+                            break;
+                        case 5:
+                            $templateContent .= "\t" . '$username = \'' . $_POST['username'] . '\';' . "\n";
+                            break;
+                        case 6:
+                            $templateContent .= "\t" . '$password = \'' . $_POST['password'] . '\';' . "\n";
+                            break;
+                        case 8:
+                            $templateContent .= "\t" . 'define(\'ROOT_DIR\', \'' . $rootdir . '\');' . "\n";
+                            break;
+                        default:
+                            $templateContent .= $line;
+                            break;
+                        }
+                }
 
-                        define('ROOT_DIR', '" . $rootdir . "');
-                        define('BASE_DIR', (!empty(\$_SERVER['HTTPS']) ? 'https' : 'http') . '://' . \$_SERVER['SERVER_NAME'] . ROOT_DIR);
-
-                        //Pages that must always be accessible by cms user roles
-                        //Manage content is included here as we will differentiate content by post type
-                        define('ALLOWED_PAGES', ['404.php', 'index.php', 'setup.php', 'template.php', 'manage-content.php']);
-                        
-                        //The given name for none admin users
-                        define('BASIC_USER', 'Subscriber');
-                    ?>"
-                );
-
+                fwrite($settings, $templateContent);
                 fclose($settings);
 
                 //Create the admin user
