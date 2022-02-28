@@ -4,7 +4,6 @@
     use PHPMailer\PHPMailer\SMTP;
     use PHPMailer\PHPMailer\Exception;
 
-	include_once(dirname(__FILE__) . '/settings.php');
 	include_once(dirname(__FILE__) . '/shortcodes.php');
     require_once(dirname(__DIR__) . '/vendor/autoload.php');
 
@@ -58,7 +57,7 @@
 
     //Check if user has access to page
     function checkaccess($pagename, $menu = false) {
-        global $mysqli;
+        global $mysqli, $adminMenu;
         $allowed = false;
         
         $getRole = $mysqli->prepare(
@@ -83,7 +82,7 @@
         if($allowed == false && $menu == false) {
             http_response_code(403);
             require_once(dirname(__DIR__) . '/admin/includes/header.php');
-
+            
             echo 
                 '<div>
                     <div class="alert alert-danger mt-3">
