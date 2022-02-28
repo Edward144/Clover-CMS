@@ -2,6 +2,5 @@ admin/template.php
 includes/settings.php
 includes/templates/*
 !includes/templates/.gitkeep
-.htaccess
 includes/plugins/*
 !includes/plugins/.gitkeep
