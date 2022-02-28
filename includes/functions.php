@@ -271,7 +271,7 @@
                 $template = preg_replace('#<img(.*)src="' . $match . '"(.*)>#', '<img$1src="data:image/' . $extension . ';base64,' . $base64 . '"$2>', $template);*/
                 
                 $real = 'https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . explode(ROOT_DIR, realpath($match))[1]; 
-                echo $match . ': ' . $real . ': ' . realpath($match) . '<br>';
+                
                 if(file_exists(realpath($match))) {
                     $template = preg_replace('#<img(.*)src="' . $match . '"(.*)>#', '<img$1src="' . $real . '"$2>', $template);
                 }
