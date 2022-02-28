@@ -3,5 +3,5 @@ includes/settings.php
 includes/templates/*
 !includes/templates/.gitkeep
 .htaccess
-include/plugins/*
-!include/plugins/.gitkeep
+includes/plugins/*
+!includes/plugins/.gitkeep
