@@ -488,7 +488,7 @@
     //Insert menu item for admin
     add_admin_navigation([[
         'name' => 'Events',
-        'link' => 'admin/manage-events',
+        'link' => 'admin/plugin/calendar/manage-events',
         'icon' => 'fa-calendar-alt',
         'filename' => 'manage-events.php'
     ]], 1);
