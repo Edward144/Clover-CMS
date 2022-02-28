@@ -17,6 +17,7 @@ It is recommended that you run at least PHP7.1 and ideally PHP7.4, there may be 
 * [Profile](#profile)
 * [Media Manager](#media-manager)
 * [Templates](#templates)
+* [Plugins](#plugins)
 * [Shortcodes](#shortcodes)
 * [User Accounts](#front-end-user-functionality)
 * [Credits](#credits)
@@ -146,6 +147,40 @@ If you have any issues then you can change back to 9.14.0 by renaming the **js/r
 ## Templates
 
 Content is displayed by default using the page.php file in the root directory. However you can create your own files within **includes/templates/** to display content however you like, look at page.php for reference. After saving your template file you can select it from the Template dropdown menu within each content item's single view.
+
+## Plugins
+
+You can create plugins by adding a new directory within the **includes/plugins/** directory. Give the directory a unique name and then create a plugin file within it. The plugin file should be named following the structure **my-plugin-name.plugin.php**. 
+
+The plugin file will contain the bulk of the code used for your plugin. Although you could instead require additional files from within the directory to make things easier to manage and keep track of. 
+
+You can use the function **add_admin_navigation($items, $offset, $length = 0)** to insert a link into the admin sidebar navigation. The first parameter will be an array of items to add to the menu, the second will be the position within the menu you wish to insert after, and the final parameter determines how many items will be added from the item array. This final parameter can generally be omitted.
+
+Each item within the items array will be an array itself. This array accepts several parameters:
+* name - The text displayed in the menu item
+* link - The href used for the link, when linking to an internal page this should be combined with
+* filename - The filename of the item, used to check that the user has access to it. If they do not then the link will be omitted. This can be ignored for external links.
+* icon - An icon code taken from [fontawesome.com](https://fontawsome.com) e.g. 'fa-page'
+* target - An optional parameter which can be set to "popup" or "_blank". "popup" will open the page in a new window, when using "popup" combine with 
+* popup_width - The width for the new window
+* popup_height - The height for the new window
+
+`$items = [
+    [
+        'name' => 'Manage Content',
+        'link' => 'admin/manage-content',
+        'filename' => 'manage-content.php',
+        'icon' => 'fa-page'
+    ],
+    [
+        'name' => 'Comments',
+        'link' => 'admin/manage-comments',
+        'filename' => 'manage-comments.php',
+        'icon' => 'fa-comment'
+    ],
+];
+
+add_admin_navigation($items, 4);`
 
 ## Shortcodes
 
