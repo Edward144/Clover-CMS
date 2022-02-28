@@ -39,7 +39,7 @@
 	</li>
 	
 	<?php foreach($adminMenu as $item) : ?>
-        <?php if((!empty($item['filename']) && file_exists(dirname(__DIR__) . '/' . $item['filename']) && checkaccess($item['filename'], true) !== false) || empty($item['filename']) || (!empty($item['filename']) && !file_exists(dirname(__DIR__) . '/' . $item['filename']))) : ?>
+        <?php if((!empty($item['filename']) && checkaccess($item['filename'], true) !== false) || empty($item['filename'])) : ?>
             <?php    
                 if($item['target'] == 'popup') {
                     $width = (isset($item['popup_width']) && is_numeric($item['popup_width']) ? $item['popup_width'] : 1000);
