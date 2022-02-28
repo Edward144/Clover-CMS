@@ -246,7 +246,7 @@
 	//PHP mail function with HTML template
     $sendEmailDebug = '';
 
-    function sendemail($to, $subject, $content, $template = '') {
+    function sendemail($to, $subject, $content, $attachments = [], $template = '') {
         global $mysqli, $sendEmailDebug;
         
         //Load template
@@ -265,13 +265,9 @@
         preg_match_all('/<img.*src="([^"]+)".*>/', $template, $matches);
         
         if(is_array($matches) && count($matches) > 0) {
-            foreach($matches[1] as $match) {
-                /*$extension = pathinfo($match)['extension'];
-                $base64 = base64_encode(file_get_contents($match));
-                $template = preg_replace('#<img(.*)src="' . $match . '"(.*)>#', '<img$1src="data:image/' . $extension . ';base64,' . $base64 . '"$2>', $template);*/
-                
+            foreach($matches[1] as $match) {                
                 $real = 'https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . explode(ROOT_DIR, realpath($match))[1]; 
-                echo $match . ': ' . $real . ': ' . realpath($match) . '<br>';
+                
                 if(file_exists(realpath($match))) {
                     $template = preg_replace('#<img(.*)src="' . $match . '"(.*)>#', '<img$1src="' . $real . '"$2>', $template);
                 }
@@ -291,9 +287,28 @@
         //Set basic details
         $mail = new PHPMailer();
         $mail->isHTML(true);
-        $mail->addAddress($to);
         $mail->Subject = $subject;
         $mail->Body = $template;
+
+        if(is_array($to) && !empty($to)) {
+            $mail->addAddress('noreply@' . $_SERVER['SERVER_NAME']);
+
+            foreach($to as $t) {
+                $mail->addBCC($t);    
+            }
+        }
+        else {
+            $mail->addAddress($to);
+        }
+
+        //Add attachments
+        if(is_array($attachments) && !empty($attachments)) {
+            foreach($attachments as $attachment) {
+                if(file_exists($attachment)) {
+                    $mail->addAttachment($attachment);
+                }
+            }
+        }
         
         $sendEmailDebug = '';
         $mail->SMTPDebug = 3;
