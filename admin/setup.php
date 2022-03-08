@@ -127,7 +127,7 @@
                         meta_keywords VARCHAR(255),
                         allow_comments INT DEFAULT 0
                     )",
-                    "INSERT IGNORE INTO `posts` (id, post_type_id, name, content, author, state) VALUES(1, 1, 'Welcome', '<h1>Welcome to Setsquare CMS</h1><p>Set up is complete, you can now start creating content.</p>', 'Admin User', 2)",
+                    "INSERT IGNORE INTO `posts` (id, post_type_id, name, content, author, state) VALUES(1, 1, 'Welcome', '<h1>Welcome to Clover CMS</h1><p>Set up is complete, you can now start creating content.</p>', 'Admin User', 2)",
                     //Comments
                     "CREATE TABLE IF NOT EXISTS `comments` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
