@@ -265,10 +265,14 @@
         
         if(is_array($matches) && count($matches) > 0) {
             foreach($matches[1] as $match) {                
-                $real = 'https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . explode(ROOT_DIR, realpath($match))[1]; 
-                
-                if(file_exists(realpath($match))) {
-                    $template = preg_replace('#<img(.*)src="' . $match . '"(.*)>#', '<img$1src="' . $real . '"$2>', $template);
+                if(strpos($match, 'https://') === false && strpos($match, 'http://') === false) {
+                    $clean = ltrim($match, './');
+                    $path = $_SERVER['DOCUMENT_ROOT'] . ROOT_DIR . $clean;
+                    $url = BASE_DIR . $clean;
+
+                    if(file_exists($path)) {
+                        $template = preg_replace('#<img(.*)src="' . $match . '"(.*)>#', '<img$1src="' . $url . '"$2>', $template);
+                    }
                 }
             }
         }
