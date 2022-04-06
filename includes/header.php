@@ -65,7 +65,7 @@
                                         </p>
                                     <?php endif; ?>
                                     
-                                    <?php if(!empty($settingsArray['phone'])) : ?>
+                                    <?php if(!empty($settingsArray['email'])) : ?>
                                         <p class="email ms-3">
                                             <span class="fa fa-envelope me-1"></span>
                                             <a href="mailto: <?php echo $settingsArray['email']; ?>" class="link-light"><?php echo $settingsArray['email']; ?></a>
