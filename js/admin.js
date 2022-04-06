@@ -168,7 +168,8 @@ $("#otherSettings").submit(function() {
     var valid = true;
     var analytics = $(this).find("input[name='googleAnalytics']");
     
-    if(analytics.val().length && !/^[A-Z]{2}\-[0-9]{8}\-[0-9]$/.test(analytics.val())) {
+    //e.g.                         UA-123456789-0                                          G-A1BC2DEF34
+    if(analytics.val().length && (!/^[A-Z]{2}\-[0-9]{8}\-[0-9]$/.test(analytics.val()) && !/^[A-Z]{1}\-[A-Z0-9]{10}$/.test(analytics.val()))) {
         analytics.addClass("is-invalid");
         $("<div class='invalid-feedback'>Value does not appear to be valid</div>").insertAfter(analytics);
 
