@@ -158,7 +158,7 @@
         $checkAnalytics = $mysqli->query("SELECT value FROM `settings` WHERE name = 'google_analytics' LIMIT 1");
         
         if($checkAnalytics->num_rows > 0) {
-            if(preg_match('/^([A-Z]{2}\-[0-9]{8}\-[0-9]{1})$/', $checkAnalytics->fetch_array()[0], $matches)) {
+            if(preg_match('/^([A-Z]{2}\-[0-9]{8}\-[0-9]{1})$/', $checkAnalytics->fetch_array()[0], $matches) || preg_match('/^([A-Z]{1}\-[A-Z0-9]{10})$/', $checkAnalytics->fetch_array()[0], $matches)) {
                 $gaTag = $matches[0];
                 
                 echo 
