@@ -465,8 +465,8 @@
                         }
                     }
                     
-                    if(!empty($slide['position'])) {
-                        $imageStyle .= 'object-position: ' . $slide['position'] . ';';
+                    if(!empty($slide['imageposition'])) {
+                        $imageStyle .= 'object-position: ' . $slide['imageposition'] . ';';
                     }
                     
                     if(!empty($slide['verticalalign'])) {
