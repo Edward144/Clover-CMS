@@ -1,5 +1,6 @@
 //Expand navbar dropdowns
 $(".navbar .dropdown-toggle").click(function() {
+    e.preventDefault();
     $(this).parent(".nav-item").toggleClass("exp");
 });
 
@@ -83,7 +84,7 @@ $("form").submit(function() {
         }
     }
 	
-	if(valid == false) {
+	if(valid === false) {
 		event.preventDefault();
 		return;
 	}
@@ -158,7 +159,7 @@ function comments_verifycaptcha(form) {
             dataType: "json",
             data: ({responses: JSON.stringify(responses), recaptchaverify: true}),
             success: function(data) {
-                if(data['valid'] == false) {
+                if(data['valid'] === false) {
                     $.each(recaptchas, function() {
                         grecaptcha.reset(recaptchaWidgets[$(this).attr("id").split("recaptcha")[1]]);
                     });
@@ -248,15 +249,15 @@ function calendar_resize(element) {
 
     if(width < 576) {
         element.addClass("calendar-sm");
-        element.removelass("calendar-lg calendar-md");
+        element.removeClass("calendar-lg calendar-md");
     }
     else if(width < 768) {
         element.addClass("calendar-md");
-        element.removelass("calendar-lg calendar-sm");
+        element.removeClass("calendar-lg calendar-sm");
     }
     else if(width < 992) {
         element.addClass("calendar-lg");
-        element.removelass("calendar-sm calendar-md");
+        element.removeClass("calendar-sm calendar-md");
     }
 }
 
