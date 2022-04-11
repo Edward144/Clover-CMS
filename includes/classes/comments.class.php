@@ -148,8 +148,6 @@
                             <script src="https://www.google.com/recaptcha/api.js?onload=recaptchaOnload&render=explicit" async defer></script>';       
                     }
                 }
-                
-                return $output;
             }
             elseif($this->commentsOpen == true && $parent == 0) {
                 $output =
@@ -159,6 +157,8 @@
                         $this->postcomment($postid) .
                     '</div>';
             }
+
+            return $output;
         }
         
         private function postcomment($postid, $commentid = 0) {
