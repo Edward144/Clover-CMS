@@ -251,7 +251,7 @@
         global $mysqli, $sendEmailDebug;
         
         //Load template
-        if(empty($template) || !file_exists($template)) {
+        if(empty($template) || !file_exists(dirname(__FILE__) . '/mail-templates/' . $template)) {
             $template = file_get_contents(dirname(__FILE__) . '/mail-templates/default.html');
         }
         else {
