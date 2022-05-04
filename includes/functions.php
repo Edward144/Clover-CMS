@@ -546,7 +546,7 @@
                             </div>'
                         : '') .
                     '</div>' .
-                    ($controls == true ? $controlsOut : '').
+                    ($controls == true && $si > 1 ? $controlsOut : '').
                 '</div>';
 
             if($builder == true) {
