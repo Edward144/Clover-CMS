@@ -86,7 +86,7 @@ $("form").submit(function() {
         }
     }
 	
-	if(valid == false) {
+	if(valid === false) {
 		event.preventDefault();
 		return;
 	}
@@ -115,7 +115,12 @@ $("input[type='submit'][data-confirm]").click(function() {
 
 //Clear search || Return to list
 $("input[name='clearSearch'],input[name='returnList']").click(function() {
-	window.location.href = window.location.href.split("?")[0];
+    if(document.referrer && document.referrer.indexOf(location.hostname) !== false) {
+        window.location.href = document.referrer;
+    }
+    else {
+	    window.location.href = window.location.href.split("?")[0];
+    }
 });
 
 //Delete content
@@ -176,7 +181,7 @@ $("#otherSettings").submit(function() {
         valid = false;
     }
     
-    if(valid == false) {
+    if(valid === false) {
         event.preventDefault();
         return;
     }
@@ -369,7 +374,7 @@ function formbuilder_save(output, builder = "", debug = false) {
 
     structure['groups'] = groups;
 
-    if(debug == true) {
+    if(debug === true) {
         console.log(structure);
     }
     else {
