@@ -102,7 +102,7 @@
                                 case 'checkbox': 
                                     $output .=
                                         '<div class="form-check">
-                                            <input type="checkbox" class="form-check-input" id="' . $input['inputid'] . '" name="' . $input['inputid'] . '"' . ($input['required'] == true ? ' class="required"' : '') . '>
+                                            <input type="checkbox" class="form-check-input" id="' . $input['inputid'] . '" name="' . $input['inputid'] . '"' . ($input['required'] == true ? ' class="required"' : '') . ($input['checked'] == true ? ' checked' : '') . '>
                                             <label for="' . $input['inputid'] . '"' . ($input['required'] == true ? ' class="required"' : '') . '>' . $input['label'] . '</label>
                                         </div>';
                                     break;
@@ -112,7 +112,7 @@
                                     break;
                                 case 'hidden':
                                     $output .=
-                                        '<input type="hidden" name="' . $input['id'] .  '" value="' . $input['value'] . '">';
+                                        '<input type="hidden" name="' . $input['inputid'] .  '" value="' . $input['value'] . '">';
                                     break;
                                 case 'button': 
                                     $output .=
