@@ -287,11 +287,11 @@ body#tinymce {
     margin-top: $spacer;
 }
 
-.navigationLevel .pendingIcon {
+.navigationLevel > .row .pendingIcon {
     display: none;
 }
 
-.navigationLevel.pending .pendingIcon {
+.navigationLevel.pending > .row .pendingIcon {
     display: inline-block;
 }
 
