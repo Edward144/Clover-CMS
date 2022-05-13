@@ -64,12 +64,12 @@
                                     <small class="text-muted">' . $level['url'] . '</small>
                                 </div>
 
-                                <div class="col-xl-1 text-center">' .
-                                    
-                                    '<span class="pendingIcon fas fa-spinner fa-spin-pulse" title="Pending changes">
+                                <div class="col-xl-auto text-center">
+                                    <span ' . ($level['visible'] == 0 ? 'class="fas fa-eye-slash" title="Hidden"' : 'class="fas fa-eye" title="Visible"') . '</span>
+                                    <span class="pendingIcon fas fa-spinner fa-pulse ms-2" title="Pending changes">
                                 </div>
 
-                                <div class="col-xl-3 text-end mb-n1">
+                                <div class="col-xl-auto text-end mb-n1">
                                     <button type="button" class="btn btn-primary mb-1" name="edit">Edit</button>
                                     <button type="button" class="btn btn-danger mb-1" name="delete">Delete</button>
                                 </div>
