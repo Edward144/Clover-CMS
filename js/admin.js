@@ -207,6 +207,10 @@ $(".structure").on("click", "button[name='edit']", function() {
     $(this).parents(".navigationLevel").first().find(".modal").first().modal("show");
 });
 
+$(".navigationLevel .modal input,.navigationLevel .modal select").on("change", function() {
+    $(this).parents(".navigationLevel").first().addClass("pending");
+});
+
 //Delete existing navigation item 
 $(".structure").on("click", "button[name='delete']", function() {
     if(confirm("Are you sure you want to delete this item?")) {
