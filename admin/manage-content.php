@@ -317,7 +317,7 @@
 
                                 <td class="shorten text-center">
                                     <span <?php echo ($row['state'] == 0 ? 'class="fas fa-eye-slash text-muted" title="Hidden"' : ($row['state'] == 1 ? 'class="fas fa-eye text-muted" title="Draft"' : 'class="fas fa-eye" title="Visible"')); ?>></span><br>
-                                    <span <?php echo ($row['allow_comments'] == 0 ? 'class="fas fa-comment-alt-slash text-muted" title="Comments not allowed"' : 'class="fas fa-comment-alt" title="Comments allowed"'); ?>></span><br>
+                                    <span <?php echo ($row['allow_comments'] == 0 ? 'class="fas fa-comment-slash text-muted" title="Comments not allowed"' : 'class="fas fa-comment" title="Comments allowed"'); ?>></span>
                                 </td>
 								
 								<td class="shorten">
