@@ -115,7 +115,7 @@ $("input[type='submit'][data-confirm]").click(function() {
 
 //Clear search || Return to list
 $("input[name='clearSearch'],input[name='returnList']").click(function() {
-    if(document.referrer && document.referrer.indexOf(location.hostname) !== false) {
+    if(document.referrer && document.referrer.indexOf(location.hostname) !== false && document.referrer != location.href) {
         window.location.href = document.referrer;
     }
     else {
