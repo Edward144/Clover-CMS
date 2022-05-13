@@ -315,8 +315,8 @@
 									<?php echo date('H:i', strtotime($row['date_created'])); ?>
 								</td>
 
-                                <td class="shorten">
-                                    <span <?php echo ($row['state'] == 0 ? 'class="fas fa-eye-slash" title="Hidden"' : ($row['state'] == 1 ? 'class="fas fa-eye text-muted" title="Draft"' : 'class="fas fa-eye" title="Visible"')); ?>></span><br>
+                                <td class="shorten text-center">
+                                    <span <?php echo ($row['state'] == 0 ? 'class="fas fa-eye-slash text-muted" title="Hidden"' : ($row['state'] == 1 ? 'class="fas fa-eye text-muted" title="Draft"' : 'class="fas fa-eye" title="Visible"')); ?>></span><br>
                                 </td>
 								
 								<td class="shorten">
