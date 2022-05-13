@@ -65,7 +65,7 @@
                                 </div>
 
                                 <div class="col-xl-auto text-center">
-                                    <span ' . ($level['visible'] == 0 ? 'class="fas fa-eye-slash" title="Hidden"' : 'class="fas fa-eye" title="Visible"') . '</span>
+                                    <span ' . ($level['visible'] == 0 ? 'class="fas fa-eye-slash" title="Hidden"' : 'class="fas fa-eye" title="Visible"') . '></span>
                                     <span class="pendingIcon fas fa-spinner fa-pulse ms-2" title="Pending changes">
                                 </div>
 
