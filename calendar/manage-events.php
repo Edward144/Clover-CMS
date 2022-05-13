@@ -300,6 +300,7 @@
 							<th class="shorten">ID</th>
 							<th>Details</th>
 							<th class="shorten">Date</th>
+							<th class="shorten">Status</th>
 							<th class="shorten">Actions</th>
 						</tr>
 					</thead>
@@ -322,6 +323,11 @@
                                         to <br> <?php echo date('d/m/Y H:i', strtotime($row['end_date'])); ?>
                                     <?php endif; ?>
 								</td>
+
+                                <td class="shorten text-center">
+                                    <span <?php echo ($row['state'] == 0 ? 'class="fas fa-eye-slash text-muted" title="Hidden"' : ($row['state'] == 1 ? 'class="fas fa-eye text-muted" title="Draft"' : 'class="fas fa-eye" title="Visible"')); ?>></span><br>
+                                    <span class="fas fa-circle" title="Event color" style="text-shadow: 0 0 3px black; color: <?php echo json_decode($row['styles'], true)['background']; ?>"></span>
+                                </td>
 								
 								<td class="shorten">
 									<div class="form-group mb-n1">
