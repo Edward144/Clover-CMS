@@ -112,7 +112,7 @@
                                     break;
                                 case 'hidden':
                                     $output .=
-                                        '<input type="hidden" name="' . $input['inputid'] .  '" value="' . $input['value'] . '">';
+                                        '<input type="hidden" name="hidden' . $input['inputid'] .  '" value="' . $input['value'] . '">';
                                     break;
                                 case 'button': 
                                     $output .=
