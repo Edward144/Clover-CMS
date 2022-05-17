@@ -115,7 +115,13 @@ $("input[type='submit'][data-confirm]").click(function() {
 
 //Clear search || Return to list
 $("input[name='clearSearch'],input[name='returnList']").click(function() {
-    if(document.referrer && document.referrer.indexOf(location.hostname) !== false && document.referrer != location.href) {
+    var queryString = location.href.split("?")[1];
+    var queryParameters = queryString.split("&");
+
+    if(queryParameters["return"].length) {
+        window.location.href = queryParameters["return"];
+    }
+    else if(document.referrer && document.referrer.indexOf(location.hostname) !== false && document.referrer != location.href) {
         window.location.href = document.referrer;
     }
     else {
