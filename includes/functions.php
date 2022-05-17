@@ -727,7 +727,7 @@
             $returnUrl = $_SERVER['REQUEST_URI'];
         }
 
-        return '<a href="' . explode('?', $_SERVER['REQUEST_URI'])[0] . '?id=' . $id . (!empty($returnUrl) ? '&return=' . $returnUrl : '') . '" class="btn btn-primary mb-1">' . $value . '</a>';
+        return '<a href="' . explode('?', $_SERVER['REQUEST_URI'])[0] . '?id=' . $id . (!empty($returnUrl) ? '&return=' . urlencode($returnUrl) : '') . '" class="btn btn-primary mb-1">' . $value . '</a>';
     }
 
     //Include classes
