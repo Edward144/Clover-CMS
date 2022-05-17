@@ -721,6 +721,15 @@
         }
     }
 
+    //Admin edit button
+    function editbutton($id, $value = 'Edit', $returnUrl = '') {
+        if(empty($returnUrl)) {
+            $returnUrl = $_SERVER['REQUEST_URI'];
+        }
+
+        return '<a href="' . explode('?', $_SERVER['REQUEST_URI'])[0] . '?id=' . $id . (!empty($returnUrl) ? '&return=' . $returnUrl : '') . '" class="btn btn-primary mb-1">' . $value . '</a>';
+    }
+
     //Include classes
     $classes = scandir(dirname(__FILE__) . '/classes');
 

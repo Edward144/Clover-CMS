@@ -322,7 +322,7 @@
 								
 								<td class="shorten">
 									<div class="form-group mb-n1">
-										<a href="<?php echo explode('?', $_SERVER['REQUEST_URI'])[0] . '?id=' . $row['id']; ?>" class="btn btn-primary mb-1">Edit</a>
+										<?php echo editbutton($row['id']); ?>
 										<input type="button" class="btn btn-danger mb-1" name="deleteContent" data-id="<?php echo $row['id']; ?>" value="Delete">
 									</div>
 								</td>
