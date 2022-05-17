@@ -155,50 +155,50 @@
                     }
                     
                     //Add Recaptcha validation
-		$captcha = $mysqli->query("SELECT name, value FROM `settings` WHERE name = 'recaptcha_sitekey_v3' OR name = 'recaptcha_secretkey_v3'");
+                    $captcha = $mysqli->query("SELECT name, value FROM `settings` WHERE name = 'recaptcha_sitekey_v3' OR name = 'recaptcha_secretkey_v3'");
 
-		if($captcha->num_rows > 0) {
-		    $cptch = [];
+                    if($captcha->num_rows > 0) {
+                        $cptch = [];
 
-		    while($row = $captcha->fetch_assoc()) {
-			$cptch[$row['name']] = $row['value'];
-		    }
+                        while($row = $captcha->fetch_assoc()) {
+                        $cptch[$row['name']] = $row['value'];
+                        }
 
-		    $sitekey = $cptch['recaptcha_sitekey_v3'];
-		    $secretkey = $cptch['recaptcha_secretkey_v3'];
+                        $sitekey = $cptch['recaptcha_sitekey_v3'];
+                        $secretkey = $cptch['recaptcha_secretkey_v3'];
 
-		    if(!empty($sitekey) && !empty($secretkey)) {
-			$output .=
-			    '<input type="hidden" id="g-recaptcha-response" name="g-recaptcha-response">
-			    <input type="hidden" name="action" value="validate_captcha">
-			    <input type="hidden" name="formid" value="' . $form['id'] . '">
-							    <input type="hidden" name="returnurl" value="' . $_SERVER['REQUEST_URI'] . '">
-
-			    <script src="https://www.google.com/recaptcha/api.js?render=' . $sitekey . '"></script>
-
-			    <script>
-				$("form#' . $structure['formid'] . '").submit(function() {
-				    event.preventDefault();
-
-				    grecaptcha.execute("' . $sitekey . '", {
-					action: \'validate_captcha\'
-				    }).then(function(token) {
-					$("#g-recaptcha-response").val(token);
-					$("form#' . $structure['formid'] . '").unbind("submit").submit();
-				    });
-				});
-			    </script>';
-		    }
-		}
-                    
-                    if(isset($_SESSION['message']) && isset($_SESSION['status'])) {
+                        if(!empty($sitekey) && !empty($secretkey)) {
                         $output .=
-                            '<div class="alert alert-' . $_SESSION['status'] . '">'
-                                . $_SESSION['message'] . 
+                            '<input type="hidden" id="g-recaptcha-response' . $form['id'] . '" name="g-recaptcha-response">
+                            <input type="hidden" name="action" value="validate_captcha">
+                            <input type="hidden" name="formid" value="' . $form['id'] . '">
+                                            <input type="hidden" name="returnurl" value="' . $_SERVER['REQUEST_URI'] . '">
+
+                            <script src="https://www.google.com/recaptcha/api.js?render=' . $sitekey . '"></script>
+
+                            <script>
+                            $("form#' . $structure['formid'] . '").submit(function() {
+                                event.preventDefault();
+
+                                grecaptcha.execute("' . $sitekey . '", {
+                                action: \'validate_captcha\'
+                                }).then(function(token) {
+                                $("#g-recaptcha-response' . $form['id'] . '").val(token);
+                                $("form#' . $structure['formid'] . '").unbind("submit").submit();
+                                });
+                            });
+                            </script>';
+                        }
+                    }
+                    
+                    if(isset($_SESSION['message' . $form['id']]) && isset($_SESSION['status' . $form['id']])) {
+                        $output .=
+                            '<div class="alert alert-' . $_SESSION['status' . $form['id']] . '">'
+                                . $_SESSION['message' . $form['id']] . 
                             '</div>';
                         
-                        unset($_SESSION['message']);
-                        unset($_SESSION['status']);
+                        unset($_SESSION['message' . $form['id']]);
+                        unset($_SESSION['status' . $form['id']]);
                     }
                     
                     $output .=

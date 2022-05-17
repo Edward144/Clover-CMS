@@ -81,18 +81,23 @@
                 '<p><strong>Recaptcha Score</strong> ' . $response->score . '</p>';
             
             if(!sendemail($to, $subject, $content)) {
-                $_SESSION['status'] = 'danger';
-                $_SESSION['message'] = 'Your message failed to send please try again later';
+                $status = 'danger';
+                $message = 'Your message failed to send please try again later';
             }
             else {
-                $_SESSION['status'] = 'success';
-                $_SESSION['message'] = 'Your message has been sent successfully';
+                $status = 'success';
+                $message = 'Your message has been sent successfully';
             }
         }
         else {
-            $_SESSION['status'] = 'warning';
-            $_SESSION['message'] = 'Captcha failed, please try again';
+            $status = 'warning';
+            $message = 'Captcha failed, please try again';
         }
+    }
+
+    if(isset($status) && isset($message)) {
+        $_SESSIOn['status' . $_POST['formid']] = $status;
+        $_SESSIOn['message' . $_POST['formid']] = $message;
     }
 
     header('Location: ' . $_POST['returnurl']);
