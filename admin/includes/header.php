@@ -37,6 +37,8 @@
 	
 	<body>
 		<div class="wrapper">
+			<div class="notifications"></div>
+
 			<header id="pageHeader">
 				<div class="container-fluid">
 					<div class="row bg-secondary text-light">						

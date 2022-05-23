@@ -128,11 +128,8 @@ $("input[name='returnList']").click(function() {
         queryParameters[value.split("=")[0]] = value.split("=")[1];
     });
 
-    if(queryParameters["return"].length) {
+    if(typeof queryParameters["return"] != "undefined" && queryParameters["return"].length) {
         window.location.href = decodeURIComponent(queryParameters["return"]);
-    }
-    else if(document.referrer && document.referrer.indexOf(location.hostname) !== false && document.referrer != location.href) {
-        window.location.href = document.referrer;
     }
     else {
 	    window.location.href = window.location.href.split("?")[0];
@@ -292,6 +289,52 @@ $(".structure input[name='saveStructure']").click(function() {
     
     structure.find("input[name='json']").val(JSON.stringify(json));
 });
+
+//Pop-up notifications
+function notification(element, text, classes, time) {
+    var date = new Date();
+    var notificationId = btoa(date).split("=")[0];
+
+    if(typeof element == "undefined" || !element.length) {
+        element = $("notifications");
+    }
+
+    if(typeof classes == "undefined") {
+        classes = "alert-dark";
+    }
+
+    if(typeof text == "undefined") {
+        text = "";
+    }
+
+    if(typeof time == "undefined") {
+        time = 30000;
+    }
+    else if(time < 1000) {
+        time = 1000;
+    }
+
+    element.append(
+        "<div class='notification alert " + classes + "' id='" + notificationId + "'>" +
+            "<span class='notificationText'>" + text + "</span>" +
+            "<div class='timerWrap'></div>" +
+            "<div class='timerBar'></div>" +
+        "</div>"
+    );
+
+    var thisNotification = $("#" + notificationId);
+    var timerBar = thisNotification.find(".timerBar").first();
+
+    timerBar.animate({
+        "width": "100%"
+    }, time, function() {
+        thisNotification.animate({
+            "right": "-9999px"
+        }, 1000, function() {
+            thisNotification.remove();
+        })
+    })
+}
 
 //Forms
 function formbuilder_generaterandom() {

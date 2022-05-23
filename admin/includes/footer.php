@@ -6,6 +6,8 @@
         <script src="js/css_colors.js"></script>
 		<script src="js/admin.min.js"></script>
 		<script src="js/tinyConfig.min.js"></script>
+        
+        <?php echo loadNotifications(); ?>
 
         <?php if(!empty($_POST)) : ?>
             <script>

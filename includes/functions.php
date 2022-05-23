@@ -730,6 +730,40 @@
         return '<a href="' . explode('?', $_SERVER['REQUEST_URI'])[0] . '?id=' . $id . (!empty($returnUrl) ? '&return=' . urlencode($returnUrl) : '') . '" class="btn btn-primary mb-1">' . $value . '</a>';
     }
 
+    //Create notification
+    if(!isset($notifications)) {
+        $notifications = [];
+    }
+
+    function notification($message, $status) {
+        global $notifications;
+
+        array_push($notifications, [
+            'message' => $message, 
+            'status' => $status
+        ]);
+    }
+
+    //Load notifications
+    function loadNotifications() {
+        global $notifications;
+        
+        if(!empty($notifications) && is_array($notifications)) {
+            $output = '';
+
+            foreach($notifications as $index => $notification) {
+                $output .= 
+                    '<script>
+                        notification($(".notifications"), "' . $notification['message'] . '", "alert-' . $notification['status'] . '");
+                    </script>';
+            }
+
+            unset($notifications);
+
+            return $output;
+        }
+    }
+
     //Include classes
     $classes = scandir(dirname(__FILE__) . '/classes');
 
