@@ -806,6 +806,8 @@ function carousel_regen(carousel) {
             if($("input[name='carousel']").length > 1) {
                 $("input[name='carousel']").last().remove();
             }
+
+            carousel.carousel("dispose");
         }
     });
 }
