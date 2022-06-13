@@ -303,8 +303,14 @@
                                                 <label>Page Access</label>
                                                 <select class="form-control" name="access[]" multiple>
                                                     <?php 
-                                                        $pages = array_filter(glob(dirname(__FILE__) . '/*'), 'is_file'); 
+                                                        $pages = [];
                                                         $postTypes = $mysqli->query("SELECT * FROM `post_types`");
+
+														foreach($adminMenu as $adminItem) {
+															if(!empty($adminItem['filename']) && !in_array($adminItem['filename'], $pages)) {
+																array_push($pages, $adminItem['filename']);
+															}
+														}
                                                     ?>
 
                                                     <?php if($postTypes->num_rows > 0) : ?>
