@@ -138,11 +138,11 @@ This page allows users to update their own user details: name, email, username, 
 
 ### Media Manager
 
-To handle file management Clover CMS uses [Responsive Filemanager](https://github.com/trippo/ResponsiveFilemanager). You are able to upload files, rename, delete and organsise using folders. Responsive filemanager is also used when inserting media into Tiny MCE or selecting images such as featured images and the site logo.
+To handle file management Clover CMS uses [Responsive Filemanager](https://github.com/trippo/ResponsiveFilemanager). You are able to upload files, rename, delete and organsise using folders. Responsive Filemanager is also used when inserting media into Tiny MCE or selecting images such as featured images and the site logo.
 
-The latest full release 9.14.0 is not compatible with PHP8.0, so the latest version from Github is currently being used, although this isn't a full release and doesn't seem to be working perfectly. 
+The latest full release 9.14.0 is not compatible with PHP8.0, I have made some modifications which allow it to work correctly. Enough testing has taken place that I am confident this modified version works fully as intended. As such I have removed the original copy of Responsive Filemanager.
 
-If you have any issues then you can change back to 9.14.0 by renaming the **js/responsive_filemanger** directories. Delete or preferably rename responsive_filemanger to something else, then rename responsive_filemanager_php7 to responsive_filemanager. This version has been tested working on PHP7.4.
+If you wish to use the unmodified 9.14.0 version, or if a newer PHP 8.0 compatible version has been released, then download it from the [Responsive Filemanager Github](https://github.com/trippo/ResponsiveFilemanager) and copy the files into the js directory replacing the current **responsive_filemanager** directory.
 
 ## Templates
 
