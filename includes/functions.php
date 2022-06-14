@@ -732,6 +732,8 @@
 
     //Create notification
     function createnotification($message, $classes = 'alert-dark', $duration = 10000) {
+        ob_clean();
+
         $currentNotifications = json_decode($_COOKIE['notifications'], true);
 
         if(!is_numeric($duration) || $duration < 1000) {
@@ -766,6 +768,9 @@
 
         $currentNotifications = array_values($currentNotifications);
         setcookie('notifications', json_encode($currentNotifications), time()+3600, '/');
+
+        header('Location: ' . $_SERVER['REQUEST_URI']);
+        exit();
     }
 
     //Remove notification
