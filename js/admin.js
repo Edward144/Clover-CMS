@@ -147,20 +147,10 @@ $("input[name='deleteContent'], input[name='deleteEvent']").click(function() {
 				dataType: "json",
 				data: ({id: $(this).attr("data-id"), method: "deleteContent"}),
 				success: function(data) {
+                    createnotification(data['message'], 'alert-' + data['status']);
+
 					if(data["status"] == "success") {
-						location.reload();
-					}
-					else {
-						var message = "<div class='alert alert-" + data["status"] + "'>" + data["message"] + "</div>";
-                        
-						if(btn.parents("table").first().length > 0) {
-							btn.parents("table").first().find(".alert").remove();
-							$(message).insertBefore(btn.parents("table").first());
-						}
-						else {
-							btn.parents("form").first().find(".alert").remove();
-							$(message).appendTo(btn.parents("form").first());
-						}
+                        location.reload();
 					}
 				}
 			});
