@@ -305,7 +305,7 @@ function createnotification(message, classes, duration) {
             url: window.location.pathname,
             method: "get",
             dataType: "json",
-            data: ({createnotification: true, notificationmessage: message, notifcationclasses: classes, notificationduration: duration}),
+            data: ({createnotification: true, notificationmessage: message, notificationclasses: classes, notificationduration: duration}),
             success: function(data) {
                 location.reload();
                 $(".notifications").html(data);
