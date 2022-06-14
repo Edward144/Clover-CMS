@@ -17,10 +17,6 @@
             createnotification('Failed to form', 'alert-danger');
         }
         else {
-            /*$status = 'success';
-            $createmsg = 'Form created successfully';*/
-            createnotification('Form created successfully', 'alert-success');
-
             header('Location: ./manage-forms?id=' . $lastId);
             exit();
         }
