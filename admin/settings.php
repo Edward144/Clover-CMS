@@ -54,7 +54,7 @@
         else {
             /*$status = 'success';
             $pageMessage = 'Settings saved successfully';*/
-            createnotification('Successfully saved page settings', 'alert-danger');
+            createnotification('Successfully saved page settings', 'alert-success');
         }
     }
 
