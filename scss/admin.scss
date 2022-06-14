@@ -117,26 +117,29 @@ body#tinymce {
     max-width: 320px;
     height: auto;
     position: absolute;
-    top: 4rem;
+    top: 5rem;
     right: 1rem;
     z-index: 999;
+    pointer-events: none;
+    transition: opacity 0.35s ease-in-out;
 }
 
-.notification {
+.notifications > .notification {
     width: 100%;
     margin-bottom: map-get($spacers, 2);
     border-radius: 5px;
     padding: map-get($spacers, 1) map-get($spacers, 2);
     overflow: hidden;
     box-shadow: $box-shadow-sm;
+    pointer-events: all;
 }
 
-.notification .notificationText {
+.notifications > .notification .notificationText {
     display: inline-block;
     margin-bottom: 5px;
 }
 
-.notification .timerWrap {
+.notifications > .notification .timerWrap {
     position: absolute;
     height: 5px;
     width: 100%;
@@ -152,7 +155,7 @@ body#tinymce {
     z-index: 4;
 }
 
-.notification .timerBar {
+.notifications > .notification .timerBar {
     width: 0%;
     height: 100%;
     background-color: $white;
@@ -162,6 +165,15 @@ body#tinymce {
     left: 0;
     right: 0;
     z-index: 5;
+}
+
+.notifications > .notification .notificationClose {
+    cursor: pointer;
+}
+
+.notifications > .notification .notificationClose:hover,
+.notifications > .notification .notificationClose:active {
+    color: tint-color($dark, 20);
 }
 
 /* ADMIN LOGIN */

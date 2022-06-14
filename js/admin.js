@@ -290,51 +290,100 @@ $(".structure input[name='saveStructure']").click(function() {
     structure.find("input[name='json']").val(JSON.stringify(json));
 });
 
-//Pop-up notifications
-function notification(element, text, classes, time) {
-    var date = new Date();
-    var notificationId = btoa(date).split("=")[0];
-
-    if(typeof element == "undefined" || !element.length) {
-        element = $("notifications");
+//Create notifcation
+function createnotification(message, classes, duration) {
+    if(typeof classes == 'undefined') {
+        classes = 'alert-dark';
     }
 
-    if(typeof classes == "undefined") {
-        classes = "alert-dark";
+    if(typeof duration == 'undefined') {
+        duration = 10000;
     }
 
-    if(typeof text == "undefined") {
-        text = "";
+    if(typeof message != 'undefined') {
+        $.ajax({
+            url: window.location.pathname,
+            method: "get",
+            dataType: "json",
+            data: ({createnotification: true, notificationmessage: message, notifcationclasses: classes, notificationduration: duration}),
+            success: function(data) {
+                location.reload();
+                $(".notifications").html(data);
+                checknotifications($(".notifications"));
+            }
+        });
     }
-
-    if(typeof time == "undefined") {
-        time = 30000;
-    }
-    else if(time < 1000) {
-        time = 1000;
-    }
-
-    element.append(
-        "<div class='notification alert " + classes + "' id='" + notificationId + "'>" +
-            "<span class='notificationText'>" + text + "</span>" +
-            "<div class='timerWrap'></div>" +
-            "<div class='timerBar'></div>" +
-        "</div>"
-    );
-
-    var thisNotification = $("#" + notificationId);
-    var timerBar = thisNotification.find(".timerBar").first();
-
-    timerBar.animate({
-        "width": "100%"
-    }, time, function() {
-        thisNotification.animate({
-            "right": "-9999px"
-        }, 1000, function() {
-            thisNotification.remove();
-        })
-    })
 }
+
+//Start timer for notifications
+function checknotifications(element) {
+    var currentTimestamp = Math.round((new Date()).getTime() / 1000);
+
+    element.children(".notification").each(function() {
+        var notificationTimestamp = $(this).attr("data-timestamp");
+        var duration = $(this).attr("data-duration");
+        var remainingSeconds = duration - (currentTimestamp - notificationTimestamp);
+
+        //Check if the notification has enough seconds remaining to be displayed
+        if(remainingSeconds > 0) {
+            var thisNotification = $("#" + $(this).attr("id"));
+            var timerBar = thisNotification.find(".timerBar").first();
+            var barWidth = Math.floor(100 - ((remainingSeconds / duration) * 100)) - 10;
+
+            //Set the initial starting width for the bar
+            timerBar.css({
+                "width": barWidth + "%"	
+            });
+
+            //Increase the width of the white bar
+            timerBar.animate({
+                "width": "100%"
+            }, remainingSeconds * 1000, function() {
+                //Slide the notification off the page and remove once the bar has filled
+                thisNotification.animate({
+                    "right": "-9999px"
+                }, 500, function() {
+                    thisNotification.remove();
+                });
+            });
+        }
+        //Otherwise immediately remove it
+        else {
+            $(this).remove();
+        }
+    });
+};
+
+$(function() {
+    setTimeout(function() {
+        checknotifications($(".notifications"));
+    }, 100);
+});
+
+//Manually remove notification
+function removenotification(element) {
+    var thisNotification = element;
+
+    //Remove this notification from the cookie array
+    $.ajax({
+        url: window.location.pathname,
+        method: "get",
+        dataType: "json",
+        data: ({removenotification: true, notificationtimestamp: thisNotification.attr("data-timestamp")})
+    });
+
+
+    //Animate the notification off screen and remove
+    thisNotification.animate({
+        "right": "-9999px"
+    }, 500, function() {
+        thisNotification.remove();
+    });
+}
+
+$(".notifications").on("click", ".notificationClose", function() {
+    removenotification($(this).parent(".notification"));
+});
 
 //Forms
 function formbuilder_generaterandom() {
