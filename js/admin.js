@@ -655,11 +655,10 @@ $("input[name='deleteForm']").click(function() {
             dataType: "json",
             data: ({id: id, deleteForm: true}),
             success: function(data) {
+                createnotification(data['message'], 'alert-' + data['status']);
+                
                 if(data['status'] == 'success') {
                     window.location.reload();
-                }
-                else {
-                    $("<div class='alert alert-" + data['status'] + " mt-3'>" + data['deletemsg'] + "</div>").appendTo($(".contentInner > div:first-child"));
                 }
             }
         });

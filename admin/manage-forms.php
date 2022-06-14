@@ -47,17 +47,15 @@
         $delete->execute();
         
         if($delete->error) {
-            /*$status = 'danger';
-            $deletemsg = 'Failed to delete form';*/
-            createnotification('Failed to delete form', 'alert-danger');
+            $status = 'danger';
+            $deletemsg = 'Failed to delete form';
         }
         else {
-            /*$status = 'success';
-            $deletemsg = 'Successfully delete form';*/
-            createnotification('Form deleted successfully', 'alert-success');
+            $status = 'success';
+            $deletemsg = 'Successfully delete form';
         }
         
-        //echo json_encode(['status' => $status, 'deletemsg' => $deletemsg]);
+        echo json_encode(['status' => $status, 'message' => $deletemsg]);
         exit(); 
     }
 ?>
