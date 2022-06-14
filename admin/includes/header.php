@@ -37,10 +37,6 @@
 	
 	<body>
 		<div class="wrapper">
-			<div class="notifications">
-				<?php echo displayNotifications(); ?>
-			</div>
-
 			<header id="pageHeader">
 				<div class="container-fluid">
 					<div class="row bg-secondary text-light">						

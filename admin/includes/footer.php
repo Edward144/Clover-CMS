@@ -1,6 +1,10 @@
 					</div>
 				</div>
 			</div>
+            
+            <div class="notifications">
+				<?php echo displayNotifications(); ?>
+			</div>
 		</div>
 
         <script src="js/css_colors.js"></script>
