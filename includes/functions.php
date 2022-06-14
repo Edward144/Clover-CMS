@@ -732,9 +732,7 @@
 
     //Create notification
     function createnotification($message, $classes = 'alert-dark', $duration = 10000) {
-        ob_clean();
-
-        $currentNotifications = json_decode($_COOKIE['notifications'], true);
+        $currentNotifications = json_decode($_SESSION['notifications'], true);
 
         if(!is_numeric($duration) || $duration < 1000) {
             $duration = 1000;
@@ -767,15 +765,13 @@
         });
 
         $currentNotifications = array_values($currentNotifications);
-        setcookie('notifications', json_encode($currentNotifications), time()+3600, '/');
-
-        header('Location: ' . $_SERVER['REQUEST_URI']);
-        exit();
+        //setcookie('notifications', json_encode($currentNotifications), time()+3600, '/');
+        $_SESSION['notifications'] = json_encode($currentNotifications);
     }
 
     //Remove notification
     function removenotification($timestamp) {
-        $currentNotifications = json_decode($_COOKIE['notifications'], true);
+        $currentNotifications = json_decode($_SESSION['notifications'], true);
 
         if(!empty($currentNotifications) && is_array($currentNotifications)) {
             $toRemove = array_search($timestamp, array_column($currentNotifications, 'datetime'));
@@ -788,13 +784,14 @@
         });
 
         $currentNotifications = array_values($currentNotifications);
-        setcookie('notifications', json_encode($currentNotifications), time()+3600, '/');
+        //setcookie('notifications', json_encode($currentNotifications), time()+3600, '/');
+        $_SESSION['notifications'] = json_encode($currentNotifications);
     }
 
     //Display notifications
     function displaynotifications() {
         $output = '';
-        $displayNotifications = json_decode($_COOKIE['notifications'], true);
+        $displayNotifications = json_decode($_SESSION['notifications'], true);
         
         if(!empty($displayNotifications) && is_array($displayNotifications)) {
             usort($displayNotifications, function($a, $b) {
