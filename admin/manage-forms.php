@@ -52,7 +52,7 @@
         }
         else {
             $status = 'success';
-            $deletemsg = 'Successfully delete form';
+            $deletemsg = 'Successfully deleted form';
         }
         
         echo json_encode(['status' => $status, 'message' => $deletemsg]);
