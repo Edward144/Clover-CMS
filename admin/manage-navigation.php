@@ -103,12 +103,14 @@
         }
         
         if($success == true) {
-            $status[$_POST['structureId']] = 'success';
-            $structuremessage[$_POST['structureId']] = 'Changes saved successfully';
+            /*$status[$_POST['structureId']] = 'success';
+            $structuremessage[$_POST['structureId']] = 'Changes saved successfully';*/
+            createnotification('Structure saved successfully', 'alert-success');
         }
         else {
-            $status[$_POST['structureId']] = 'danger';
-            $structuremessage[$_POST['structureId']] = ($partSuccess == true ? 'Changes saved with errors:<br>' . $errors : 'Changes failed to save');
+            /*$status[$_POST['structureId']] = 'danger';
+            $structuremessage[$_POST['structureId']] = ($partSuccess == true ? 'Changes saved with errors:<br>' . $errors : 'Changes failed to save');*/
+            createnotification(($partSuccess == true ? 'Changes saved with errors:<br>' . $errors : 'Failed to save structure'), 'alert-danger');
         }
     }
 ?> 
