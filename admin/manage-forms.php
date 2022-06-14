@@ -12,8 +12,6 @@
         $rename = $mysqli->query("UPDATE `forms` SET name = CONCAT(name, ' {$lastId}') WHERE id = {$lastId}");
 
         if($mysqli->error) {
-            /*$status = 'danger';
-            $createmsg = 'Failed to create form';*/
             createnotification('Failed to form', 'alert-danger');
         }
         else {
@@ -29,13 +27,9 @@
         $save->execute();
 
         if($save->error) {
-            /*$status = 'danger';
-            $savemsg = 'Failed to save form';*/
             createnotification('Failed to save form', 'alert-danger');
         }
         else {
-            /*$status = 'success';
-            $savemsg = 'Saved form successfully';*/
             createnotification('Form save successfully', 'alert-success');
         }
     }
@@ -95,12 +89,6 @@
                 <input type="submit" class="btn btn-primary mb-1" name="saveForm" value="Save Form">
                 <input type="button" class="btn btn-danger mb-1" data-id="<?php echo $form['id']; ?>" name="deleteForm" value="Delete">
             </div>
-            
-            <?php if(!empty($savemsg)) : ?>
-                <div class="alert alert-<?php echo $status; ?> mt-3 mb-0">
-                    <?php echo $savemsg; ?>    
-                </div>
-            <?php endif; ?>
         </form>
     </div>
 
@@ -118,12 +106,6 @@
             <div class="form-group mb-3">
                 <input type="submit" class="btn btn-primary" name="createForm" value="Create Form">
             </div>
-            
-            <?php if(!empty($createmsg)) : ?>
-                <div class="alert alert-<?php echo $status; ?>">
-                    <?php echo $createmsg; ?>
-                </div>
-            <?php endif; ?>
         </form>
         
         <h3>Search Forms</h3>
@@ -141,12 +123,6 @@
 				</div>
 			</div>
 		</form>
-        
-        <?php if(!empty($deletemsg)) : ?>
-            <div class="alert alert-<?php echo $status; ?>">
-                <?php echo $deletemsg; ?>
-            </div>
-        <?php endif; ?>
     </div>
 
     <div class="col py-3">

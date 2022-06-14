@@ -239,12 +239,6 @@
 		<div class="form-group d-flex align-items-center mb-3">
 			<input type="submit" class="btn btn-primary" name="createUser" value="Create User">
 		</div>
-		
-		<?php if(isset($message)) : ?>
-			<div class="alert alert-<?php echo $status; ?> mb-0">
-				<?php echo $message; ?>
-			</div>
-		<?php endif; ?>
 	</form>
     
     <hr>
@@ -262,12 +256,6 @@
         <div class="form-group d-flex align-items-center mb-3">
 			<input type="submit" class="btn btn-primary" name="createRole" value="Create Role">
 		</div>
-        
-        <?php if(isset($roleMessage)) : ?>
-            <div class="alert alert-<?php echo $status; ?>">
-                <?php echo $roleMessage; ?>
-            </div>
-        <?php endif; ?>
     </form>
     
     <?php $roles = $mysqli->query("SELECT * FROM `roles` WHERE id > 1 ORDER BY id ASC"); ?>
@@ -350,12 +338,6 @@
                                             <div class="form-group d-flex align-items-center mb-3">
                                                 <input type="submit" class="btn btn-primary" name="saveRole" value="Save Changes">
                                             </div>
-
-                                            <?php if(isset($editroleMessage) && isset($messageId) && $messageId == $role['id']) : ?>
-                                                <div class="alert alert-<?php echo $status; ?>">
-                                                    <?php echo $editroleMessage; ?>
-                                                </div>
-                                            <?php endif; ?>
                                         </form>
                                     </div>
                                 </div>
@@ -365,12 +347,6 @@
                 </li>
             <?php endwhile; ?>
         </ul>
-    
-        <?php if(isset($deleteroleMessage)) : ?>
-            <div class="alert alert-<?php echo $status; ?> mt-3">
-                <?php echo $deleteroleMessage; ?>
-            </div>
-        <?php endif; ?>
     <?php endif; ?>
 </div>
 
@@ -405,12 +381,6 @@
 								<form id="deleteUser" class="d-inline" method="post">
 									<input type="hidden" name="id" value="<?php echo $user['id']; ?>">
 									<input type="submit" class="btn btn-danger mb-1" data-confirm="Are you sure you want to delete this user?" name="deleteUser" value="Delete User">
-									
-									<?php if(isset($deleteMessage)) : ?>
-										<div class="alert alert-<?php echo $status; ?> mb-0">
-											<?php echo $deleteMessage; ?>
-										</div>
-									<?php endif; ?>
 								</form>
 							<?php endif; ?>
 						</div>
@@ -480,12 +450,6 @@
 									<div class="form-group d-flex align-items-center mb-3">
 										<input type="submit" class="btn btn-primary" name="saveUser" value="Save Changes">
 									</div>
-									
-									<?php if(isset($editMessage) && isset($messageId) && $messageId == $user['id']) : ?>
-										<div class="alert alert-<?php echo $status; ?>">
-											<?php echo $editMessage; ?>
-										</div>
-									<?php endif; ?>
 								</form>
 							</div>
 						</div>

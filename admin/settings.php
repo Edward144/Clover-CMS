@@ -23,13 +23,9 @@
         $details->execute();
         
         if($details->error) {
-            /*$status = 'danger';
-            $detailsMessage = 'Failed to save changes';*/
             createnotification('Failed to save website details', 'alert-danger');
         }
         else {
-            /*$status = 'success';
-            $detailsMessage = 'Settings saved successfully';*/
             createnotification('Successfuly saved website details', 'alert-success');
         }
     }
@@ -47,13 +43,9 @@
         $page->execute();
         
         if($page->error) {
-            /*$status = 'danger';
-            $pageMessage = 'Failed to save changes';*/
             createnotification('Failed to save page settings', 'alert-danger');
         }
         else {
-            /*$status = 'success';
-            $pageMessage = 'Settings saved successfully';*/
             createnotification('Successfully saved page settings', 'alert-success');
         }
     }
@@ -79,13 +71,9 @@
         $mail->execute();
         
         if($mail->error) {
-            /*$status = 'danger';
-            $mailMessage = 'Failed to save changes';*/
             createnotification('Failed to save mail settings', 'alert-danger');
         }
         else {
-            /*$status = 'success';
-            $mailMessage = 'Settings saved successfully';*/
             createnotification('Successfully saved mail settings', 'alert-success');
         }
     }
@@ -105,13 +93,9 @@
         $social->execute();
         
         if($social->error) {
-            /*$status = 'danger';
-            $socialMessage = 'Failed to save changes';*/
             createnotification('Failed to save social settings', 'alert-danger');
         }
         else {
-            /*$status = 'success';
-            $socialMessage = 'Settings saved successfully';*/
             createnotification('Successfully saved social settings', 'alert-success');
         }
     }
@@ -133,13 +117,9 @@
         $other->execute();
         
         if($other->error) {
-            /*$status = 'danger';
-            $otherMessage = 'Failed to save changes';*/
             createnotification('Failed to save other settings', 'alert-danger');
         }
         else {
-            /*$status = 'success';
-            $otherMessage = 'Settings saved successfully';*/
             createnotification('Successfully saved other settings', 'alert-success');
         }
     }
@@ -222,12 +202,6 @@
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary" name="saveWebDetails" value="Save Details">
                 </div>
-
-                <?php if(isset($detailsMessage)) : ?>
-                    <div class="alert alert-<?php echo $status; ?> mt-3">
-                        <?php echo $detailsMessage; ?>
-                    </div>
-                <?php endif; ?>
             </div>
         </div>
 	</form>
@@ -278,12 +252,6 @@
 		<div class="form-group">
 			<input type="submit" class="btn btn-primary" name="savePageSettings" value="Save Pages">
 		</div>
-        
-        <?php if(isset($pageMessage)) : ?>
-            <div class="alert alert-<?php echo $status; ?> mt-3">
-                  <?php echo $pageMessage; ?>
-            </div>
-       <?php endif; ?>
 	</form>
 </div>
 
@@ -351,12 +319,6 @@
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary" name="saveMailSettings" value="Save Mail">
                 </div>
-                
-                <?php if(isset($mailMessage)) : ?>
-                    <div class="alert alert-<?php echo $status; ?> mt-3">
-                          <?php echo $mailMessage; ?>
-                    </div>
-                <?php endif; ?>
             </div>
         </div>
     </form>
@@ -377,12 +339,6 @@
 			<div class="form-group">
 				<input type="submit" class="btn btn-primary" name="saveSocialMedia" value="Save Socials">
 			</div>
-            
-            <?php if(isset($socialMessage)) : ?>
-                <div class="alert alert-<?php echo $status; ?> mt-3">
-                    <?php echo $socialMessage; ?>
-                </div>
-           <?php endif; ?>
 		</form>
 	</div>
 <?php endif; ?>
@@ -447,12 +403,6 @@
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary" name="saveOtherSettings" value="Save Settings">
                 </div>
-
-                <?php if(isset($otherMessage)) : ?>
-                    <div class="alert alert-<?php echo $status; ?> mt-3">
-                        <?php echo $otherMessage; ?>
-                    </div>
-                <?php endif; ?>
             </div>
         </div>
 	</form>
