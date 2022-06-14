@@ -54,12 +54,14 @@
         $insert->execute();
         
         if($insert->error) {
-            $status = 'danger';
-            $insertmessage = 'Failed to insert item into menu';
+            /*$status = 'danger';
+            $insertmessage = 'Failed to insert item into menu';*/
+            createnotification('Failed to insert inem into menu', 'alert-danger');
         }
         else {
-            $status = 'success';
-            $insertmessage = 'Item inserted successfully';
+            /*$status = 'success';
+            $insertmessage = 'Item inserted successfully';*/
+            createnotification('Item inserted successfully', 'alert-success');
         }
     }
 

@@ -29,8 +29,9 @@
         $ex = $create->execute();
         
         if($ex === false) {
-            $status = 'danger';
-            $message = 'Failed to create content';
+            /*$status = 'danger';
+            $message = 'Failed to create content';*/
+            createnotification('Failed to create content', 'alert-danger');
         }
         else {
             $lastId = $mysqli->insert_id;
@@ -71,12 +72,14 @@
         $save->execute();
         
         if($save->error) {
-            $status = 'danger';
-            $message = 'Failed to save changes';
+            /*$status = 'danger';
+            $message = 'Failed to save changes';*/
+            createnotification('Failed to save changes', 'alert-danger');
         }
         else {
-            $status = 'success';
-            $message = 'Saved changes successfully';
+            /*$status = 'success';
+            $message = 'Saved changes successfully';*/
+            createnotification('Changes saved successfully', 'alert-success');
         }
     }
 

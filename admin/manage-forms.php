@@ -12,12 +12,14 @@
         $rename = $mysqli->query("UPDATE `forms` SET name = CONCAT(name, ' {$lastId}') WHERE id = {$lastId}");
 
         if($mysqli->error) {
-            $status = 'danger';
-            $createmsg = 'Failed to create form';
+            /*$status = 'danger';
+            $createmsg = 'Failed to create form';*/
+            createnotification('Failed to form', 'alert-danger');
         }
         else {
-            $status = 'success';
-            $createmsg = 'Form created successfully';
+            /*$status = 'success';
+            $createmsg = 'Form created successfully';*/
+            createnotification('Form created successfully', 'alert-success');
 
             header('Location: ./manage-forms?id=' . $lastId);
             exit();
@@ -31,12 +33,14 @@
         $save->execute();
 
         if($save->error) {
-            $status = 'danger';
-            $savemsg = 'Failed to save form';
+            /*$status = 'danger';
+            $savemsg = 'Failed to save form';*/
+            createnotification('Failed to save form', 'alert-danger');
         }
         else {
-            $status = 'success';
-            $savemsg = 'Saved form successfully';
+            /*$status = 'success';
+            $savemsg = 'Saved form successfully';*/
+            createnotification('Form save successfully', 'alert-success');
         }
     }
 
@@ -47,15 +51,17 @@
         $delete->execute();
         
         if($delete->error) {
-            $status = 'danger';
-            $deletemsg = 'Failed to delete form';
+            /*$status = 'danger';
+            $deletemsg = 'Failed to delete form';*/
+            createnotification('Failed to delete form', 'alert-danger');
         }
         else {
-            $status = 'success';
-            $deletemsg = 'Successfully delete form';
+            /*$status = 'success';
+            $deletemsg = 'Successfully delete form';*/
+            createnotification('Form deleted successfully', 'alert-success');
         }
         
-        echo json_encode(['status' => $status, 'deletemsg' => $deletemsg]);
+        //echo json_encode(['status' => $status, 'deletemsg' => $deletemsg]);
         exit(); 
     }
 ?>

@@ -22,13 +22,15 @@
         $details->bind_param('sssssssss', $_POST['websiteName'], $_POST['address1'], $_POST['address2'], $_POST['city'], $_POST['county'], $_POST['postcode'], $_POST['phone'], $_POST['email'], $_POST['logo']);
         $details->execute();
         
-        if($other->error) {
-            $status = 'danger';
-            $detailsMessage = 'Failed to save changes';
+        if($details->error) {
+            /*$status = 'danger';
+            $detailsMessage = 'Failed to save changes';*/
+            createnotification('Failed to save website details', 'alert-danger');
         }
         else {
-            $status = 'success';
-            $detailsMessage = 'Settings saved successfully';
+            /*$status = 'success';
+            $detailsMessage = 'Settings saved successfully';*/
+            createnotification('Successfuly saved website details', 'alert-success');
         }
     }
 
@@ -45,12 +47,14 @@
         $page->execute();
         
         if($page->error) {
-            $status = 'danger';
-            $pageMessage = 'Failed to save changes';
+            /*$status = 'danger';
+            $pageMessage = 'Failed to save changes';*/
+            createnotification('Failed to save page settings', 'alert-danger');
         }
         else {
-            $status = 'success';
-            $pageMessage = 'Settings saved successfully';
+            /*$status = 'success';
+            $pageMessage = 'Settings saved successfully';*/
+            createnotification('Successfully saved page settings', 'alert-danger');
         }
     }
 
@@ -75,12 +79,14 @@
         $mail->execute();
         
         if($mail->error) {
-            $status = 'danger';
-            $mailMessage = 'Failed to save changes';
+            /*$status = 'danger';
+            $mailMessage = 'Failed to save changes';*/
+            createnotification('Failed to save mail settings', 'alert-danger');
         }
         else {
-            $status = 'success';
-            $mailMessage = 'Settings saved successfully';
+            /*$status = 'success';
+            $mailMessage = 'Settings saved successfully';*/
+            createnotification('Successfully saved mail settings', 'alert-success');
         }
     }
 
@@ -99,12 +105,14 @@
         $social->execute();
         
         if($social->error) {
-            $status = 'danger';
-            $socialMessage = 'Failed to save changes';
+            /*$status = 'danger';
+            $socialMessage = 'Failed to save changes';*/
+            createnotification('Failed to save social settings', 'alert-danger');
         }
         else {
-            $status = 'success';
-            $socialMessage = 'Settings saved successfully';
+            /*$status = 'success';
+            $socialMessage = 'Settings saved successfully';*/
+            createnotification('Successfully saved social settings', 'alert-success');
         }
     }
 
@@ -125,12 +133,14 @@
         $other->execute();
         
         if($other->error) {
-            $status = 'danger';
-            $otherMessage = 'Failed to save changes';
+            /*$status = 'danger';
+            $otherMessage = 'Failed to save changes';*/
+            createnotification('Failed to save other settings', 'alert-danger');
         }
         else {
-            $status = 'success';
-            $otherMessage = 'Settings saved successfully';
+            /*$status = 'success';
+            $otherMessage = 'Settings saved successfully';*/
+            createnotification('Successfully saved other settings', 'alert-success');
         }
     }
 
