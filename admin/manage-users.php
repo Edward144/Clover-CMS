@@ -39,6 +39,8 @@
 				unset($c);
 			}
 		}
+
+		createnotification($message, 'alert-' . $status);
 	}
 
 	//Edit User
@@ -97,6 +99,8 @@
 				$status = 'success';
 				$editMessage = 'User updated successfully';
 			}
+
+			createnotification($editMessage, 'alert-' . $status);
 		}
 	}
 
@@ -126,6 +130,8 @@
             $status = 'success';
             $roleMessage = 'Role created successfully';
         }
+
+		createnotification($roleMessage, 'alert-' . $status);
     }
 
     //Delete Role
@@ -152,6 +158,8 @@
                 $deleteroleMessage = 'Deleted role and updated users';
             }
         }
+
+		createnotification($deleteroleMessage, 'alert-' . $status);
     }
 
     //Edit Role
@@ -174,6 +182,8 @@
             $status = 'success';
             $editroleMessage = 'Changes saved successfully';
         }
+
+		createnotification($editroleMessage, 'alert-' . $status);
     }
 ?>
 
