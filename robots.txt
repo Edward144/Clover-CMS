@@ -4,7 +4,6 @@ Disallow: /admin-login/
 Disallow: /scss/
 Disallow: /css/
 Disallow: /js/
-Disallow: /bootstrap-5.0.1/
 Disallow: /images/
 Disallow: /node_modules/
 Disallow: /setup/
