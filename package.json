@@ -1,6 +1,6 @@
 {
   "name": "clover-cms",
-  "version": "1.0.0",
+  "version": "1.4.4",
   "description": "A simple php CMS built with bootstrap.",
   "main": "js/main.js",
   "scripts": {
