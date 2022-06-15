@@ -19,6 +19,8 @@
         if($ex === false) {
             $status = 'danger';
             $message = 'Failed to create content';
+
+            createnotification($message, 'alert-' . $status);
         }
         else {
             $lastId = $mysqli->insert_id;
@@ -69,6 +71,8 @@
             $status = 'success';
             $message = 'Saved changes successfully';
         }
+
+        createnotification($message, 'alert-' . $status);
     }
 
     //Add Carousel Slide
@@ -220,12 +224,6 @@
                 <input type="submit" class="btn btn-primary mb-1" name="saveEvent" value="Save">
                 <input type="button" class="btn btn-danger mb-1" name="deleteEvent" data-id="<?php echo $event['id']; ?>" value="Delete">
             </div>
-            
-            <?php if(isset($message)) : ?>
-                <div class="alert alert-<?php echo $status; ?> mb-0 mt-3">
-                    <?php echo $message; ?>
-                </div>
-            <?php endif; ?>
         </div>
 
         <div class="col py-3">
