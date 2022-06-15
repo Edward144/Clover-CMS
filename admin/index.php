@@ -15,6 +15,9 @@
     }
 
     $getPostTypes = $mysqli->query("SELECT * FROM `post_types`");
+
+    //Recent logins
+    $recentSignins = $mysqli->query("SELECT * FROM `users` WHERE role >= 0 AND last_signin <> '' AND last_signin IS NOT NULL ORDER BY last_signin DESC LIMIT 5");
 ?>
 
 <div class="col py-3">
@@ -24,7 +27,7 @@
     <?php if($getPostTypes->num_rows > 0) : ?>
         <h3>Latest Edits</h3>
     
-        <div class="row latestEdits">
+        <div class="row latestEdits mb-n3">
             <?php while($postType = $getPostTypes->fetch_assoc()) : ?>
                 <?php
                     $posts = $mysqli->prepare(
@@ -63,6 +66,29 @@
                 <?php endif; ?>
             <?php endwhile; ?>
         </div>
+
+        <hr>
+    <?php endif; ?>
+
+    <?php if($recentSignins->num_rows > 0) : ?>
+        <div class="row recentSignins mb-n3">
+            <div class="col-lg-6 col-xl-4 mb-3">
+                <div class="signinList">
+                    <h5 class="mb-0 px-3 py-2 bg-primary text-white">Recent User Logins</h5>
+                    
+                    <ul class="list-group flex-grow-1">
+                        <?php while($signin = $recentSignins->fetch_assoc()) : ?>
+                            <li class="list-group-item d-flex align-items-start justify-content-between flex-wrap">
+                                <span><?php echo $signin['first_name'] . ' ' . $signin['last_name'] . ' (' . $signin['username'] . ')'; ?></span>
+                                <span class="ms-auto me-0"><?php echo date('d/m/Y H:i', strtotime($signin['last_signin'])); ?></span>
+                            </li>
+                        <?php endwhile; ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <hr>
     <?php endif; ?>
 </div>
 

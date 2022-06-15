@@ -28,6 +28,13 @@
 			
 			if(password_verify($_POST['password'], $user['password'])) {
 				$failed = false;
+
+                $currDate = date('Y-m-d H:i:s');
+
+				//Update last sign in time
+				$lastSignIn = $mysqli->prepare("UPDATE `users` SET last_signin = ? WHERE id = ?");
+				$lastSignIn->bind_param('si', $currDate, $user['id']);
+				$lastSignIn->execute();
 				
 				$_SESSION['profileid'] = $user['id'];
 				$_SESSION['profileuser'] = $user['username'];

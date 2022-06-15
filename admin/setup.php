@@ -78,7 +78,8 @@
                         email VARCHAR(191) UNIQUE,
                         username VARCHAR(191) UNIQUE,
                         password VARCHAR(60),
-                        role INT NOT NULL DEFAULT 1
+                        role INT NOT NULL DEFAULT 1,
+                        last_signin DATETIME DEFAULT NULL
                     )",
                     //Users Pending
                     "CREATE TABLE IF NOT EXISTS`users_pending` LIKE `users`;
