@@ -223,16 +223,16 @@
                             $templateContent .= '<?php' . "\n";
                             break;
                         case 3:
-                            $templateContent .= "\t" . '$hostname = \'' . $_POST['hostname'] . '\';' . "\n";
+                            $templateContent .= "\t" . 'define(\'DB_HOST\', \'' . $_POST['hostname'] . '\');' . "\n";
                             break;
                         case 4:
-                            $templateContent .= "\t" . '$database = \'' . $_POST['database'] . '\';' . "\n";
+                            $templateContent .= "\t" . 'define(\'DB_DATABASE\', \'' . $_POST['database'] . '\');' . "\n";
                             break;
                         case 5:
-                            $templateContent .= "\t" . '$username = \'' . $_POST['username'] . '\';' . "\n";
+                            $templateContent .= "\t" . 'define(\'DB_USERNAME\', \'' . $_POST['username'] . '\');' . "\n";
                             break;
                         case 6:
-                            $templateContent .= "\t" . '$password = \'' . $_POST['password'] . '\';' . "\n";
+                            $templateContent .= "\t" . 'define(\'DB_PASSWORD\', \'' . $_POST['password'] . '\');' . "\n";
                             break;
                         case 8:
                             $templateContent .= "\t" . 'define(\'ROOT_DIR\', \'' . $rootdir . '\');' . "\n";
