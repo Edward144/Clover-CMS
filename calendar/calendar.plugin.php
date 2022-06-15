@@ -1,5 +1,7 @@
 <?php
 
+    //V1.0.3
+
     class calendar {
         public $nameLength = 20;
         public $modalLink = 'MORE';
