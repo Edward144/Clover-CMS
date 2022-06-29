@@ -29,7 +29,9 @@
                 
                 if(!empty($structure)) {
                     $output .=
-                        '<form id="' . $structure['formid'] . '" class="userForm form' . $form['id'] . '" action="' . $structure['action'] . '" method="' . $structure['method'] . '">';
+                        '<form id="userform' . $structure['formid'] . '" class="userForm form' . $form['id'] . '" action="' . $structure['action'] . '" method="' . $structure['method'] . '">
+                            <input type="hidden" name="returnurl" value="' . $_SERVER['REQUEST_URI'] . '">
+                            <input type="hidden" name="formid" value="' . $form['id'] . '">';
                     
                     $groupCount = count($structure['groups']);
                     $gi = 0;
@@ -161,7 +163,7 @@
                         $cptch = [];
 
                         while($row = $captcha->fetch_assoc()) {
-                        $cptch[$row['name']] = $row['value'];
+                            $cptch[$row['name']] = $row['value'];
                         }
 
                         $sitekey = $cptch['recaptcha_sitekey_v3'];
@@ -171,8 +173,6 @@
                         $output .=
                             '<input type="hidden" id="g-recaptcha-response' . $form['id'] . '" name="g-recaptcha-response">
                             <input type="hidden" name="action" value="validate_captcha">
-                            <input type="hidden" name="formid" value="' . $form['id'] . '">
-                                            <input type="hidden" name="returnurl" value="' . $_SERVER['REQUEST_URI'] . '">
 
                             <script src="https://www.google.com/recaptcha/api.js?render=' . $sitekey . '"></script>
 

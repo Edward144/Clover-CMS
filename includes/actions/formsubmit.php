@@ -13,6 +13,7 @@
         $form = $formResult->fetch_assoc();
     }
     else {
+        $form = [];
         $form['name'] = 'a form';
     }
 
