@@ -97,8 +97,8 @@
     }
 
     if(isset($status) && isset($message)) {
-        $_SESSIOn['status' . $_POST['formid']] = $status;
-        $_SESSIOn['message' . $_POST['formid']] = $message;
+        $_SESSION['status' . $_POST['formid']] = $status;
+        $_SESSION['message' . $_POST['formid']] = $message;
     }
 
     header('Location: ' . $_POST['returnurl']);
