@@ -177,16 +177,16 @@
                             <script src="https://www.google.com/recaptcha/api.js?render=' . $sitekey . '"></script>
 
                             <script>
-                            $("form#' . $structure['formid'] . '").submit(function() {
-                                event.preventDefault();
+                                $("form#userform' . $structure['formid'] . '").submit(function() {
+                                    event.preventDefault();
 
-                                grecaptcha.execute("' . $sitekey . '", {
-                                action: \'validate_captcha\'
-                                }).then(function(token) {
-                                $("#g-recaptcha-response' . $form['id'] . '").val(token);
-                                $("form#' . $structure['formid'] . '").unbind("submit").submit();
+                                    grecaptcha.execute("' . $sitekey . '", {
+                                        action: \'validate_captcha\'
+                                    }).then(function(token) {
+                                        $("#g-recaptcha-response' . $form['id'] . '").val(token);
+                                        $("form#userform' . $structure['formid'] . '").unbind("submit").submit();
+                                    });
                                 });
-                            });
                             </script>';
                         }
                     }
