@@ -491,7 +491,7 @@
     add_admin_navigation([[
         'name' => 'Events',
         'link' => 'admin/plugin/calendar/manage-events',
-        'icon' => 'fa-calendar-alt',
+        'icon' => 'fa fa-calendar-alt',
         'filename' => 'manage-events.php'
     ]], 1);
 
