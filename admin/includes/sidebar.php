@@ -60,7 +60,7 @@
             <li class="nav-item shadow-sm">
                 <a class="nav-link btn-dark" href="<?php echo $item['link']; ?>" <?php echo $target; ?>>
                     <span><?php echo $item['name']; ?></span>
-                    <?php echo (!empty($item['icon']) ? '<span class="fa ' . $item['icon'] . '"></span>' : ''); ?>
+                    <?php echo (!empty($item['icon']) ? '<span class="' . $item['icon'] . '"></span>' : ''); ?>
                 </a>
             </li>
         <?php endif; ?>

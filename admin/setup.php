@@ -105,7 +105,7 @@
                         name VARCHAR(191) UNIQUE,
                         icon VARCHAR(50)
                     )",
-                    "INSERT IGNORE INTO `post_types` (name, icon) VALUES ('pages', 'fa-file-alt'), ('news', 'fa-newspaper')",
+                    "INSERT IGNORE INTO `post_types` (name, icon) VALUES ('pages', 'fa fa-file-alt'), ('news', 'fa fa-newspaper')",
                     //Posts
                     "CREATE TABLE IF NOT EXISTS `posts` (
                         id INT AUTO_INCREMENT PRIMARY KEY,

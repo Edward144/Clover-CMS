@@ -24,42 +24,42 @@
         [
             'name' => 'Dashboard',
             'link' => 'admin/',
-            'icon' => 'fa-chart-line'
+            'icon' => 'fa fa-chart-line'
         ],
         [
             'name' => 'Comments',
             'link' => 'admin/manage-comments',
-            'icon' => 'fa-comments',
+            'icon' => 'fa fa-comments',
             'filename' => 'manage-comments.php'
         ],
         [
             'name' => 'Forms',
             'link' => 'admin/manage-forms',
-            'icon' => 'fa-pen-alt',
+            'icon' => 'fa fa-pen-alt',
             'filename' => 'manage-forms.php'
         ],
         [
             'name' => 'Navigation',
             'link' => 'admin/manage-navigation',
-            'icon' => 'fa-sitemap',
+            'icon' => 'fa fa-sitemap',
             'filename' => 'manage-navigation.php'
         ],
         [
             'name' => 'Users',
             'link' => 'admin/manage-users',
-            'icon' => 'fa-users',
+            'icon' => 'fa fa-users',
             'filename' => 'manage-users.php'
         ],
         [
             'name' => 'Settings',
             'link' => 'admin/settings',
-            'icon' => 'fa-cogs',
+            'icon' => 'fa fa-cogs',
             'filename' => 'settings.php'
         ],
         [
             'name' => 'Profile',
             'link' => 'admin/my-profile',
-            'icon' => 'fa-user-cog'
+            'icon' => 'fa fa-user-cog'
         ]
     ]);
     $adminMenu = ADMIN_MENU;
