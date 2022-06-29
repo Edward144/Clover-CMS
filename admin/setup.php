@@ -84,7 +84,7 @@
                     //Users Pending
                     "CREATE TABLE IF NOT EXISTS`users_pending` LIKE `users`;
                     DROP INDEX IF EXISTS email ON `users_pending`;
-                    DROP INDEX username ON `users_pending`;",
+                    DROP INDEX IF EXISTS username ON `users_pending`;",
                     "CREATE TABLE IF NOT EXISTS `roles` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
                         name VARCHAR(191) UNIQUE,
