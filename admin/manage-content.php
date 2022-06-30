@@ -249,7 +249,7 @@
 	</div>
 
 	<div class="col py-3">
-		<h3>Current <?php echo $pt['name']; ?></h3>
+		<h3>Current <?php echo ucwords(str_replace('-', ' ', $pt['name'])); ?></h3>
 		
 		<?php 
 			$search = (!empty($_GET['search']) ? '%' . $_GET['search'] . '%' : '%');
