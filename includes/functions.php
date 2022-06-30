@@ -36,8 +36,6 @@
     function issignedin() {
 		global $mysqli;
 		$valid = true;
-		
-        unset($_SESSION['profileredirect']);
         
 		if(!empty($_SESSION['profileid'])) {			
 			$checkId = $mysqli->query("SELECT COUNT(*) FROM `users` WHERE id = {$_SESSION['profileid']}");
