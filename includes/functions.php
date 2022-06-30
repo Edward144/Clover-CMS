@@ -11,8 +11,6 @@
 	function isloggedin() {
 		global $mysqli;
 		$valid = true;
-		
-        unset($_SESSION['adminredirect']);
         
 		if(!empty($_SESSION['adminid'])) {			
 			$checkId = $mysqli->query("SELECT COUNT(*) FROM `users` WHERE id = {$_SESSION['adminid']}");
@@ -26,10 +24,10 @@
 		}
 		
 		if($valid == false) {
-            $_SESSION['adminredirect'] = $_SERVER['REQUEST_URI'];
+            $redirect = $_SERVER['REQUEST_URI'];
             
 			http_response_code(403);
-			header('Location: https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . 'admin-login');
+			header('Location: https://' . $_SERVER['SERVER_NAME'] . ROOT_DIR . 'admin-login' . (!empty($redirect) ? '?redirect=' . urlencode($redirect) : ''));
 			exit();
 		}
 	}

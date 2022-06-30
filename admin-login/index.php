@@ -30,8 +30,8 @@
                 $_SESSION['profileid'] = $_SESSION['adminid'];
                 $_SESSION['profileuser'] = $_SESSION['adminuser'];
 				
-                if(!empty($_SESSION['adminredirect'])) {
-                    header('Location: ' . $_SESSION['adminredirect']);
+                if(!empty($_POST['redirectto']) && strpos($_POST['redirectto'], ROOT_DIR . 'admin/') === 0) {
+                    header('Location: ' . $_POST['redirectto']);
                 }
                 else {
 				    header('Location: ../admin');
@@ -84,7 +84,7 @@
 				<div class="content">
 					<form id="adminLogin" class="shadow rounded bg-white overflow-hidden mx-auto my-5" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
 						<input type="hidden" name="dologin">
-						<input type="hidden" name="redirectto" value="<?php echo $_SESSION['adminredirect']; ?>">
+						<input type="hidden" name="redirectto" value="<?php echo urldecode($_GET['redirect']); ?>">
                         
 						<div class="formHeader text-center bg-primary text-white p-3">
 							<h1 class="mb-0"><span class="fa fa-unlock-alt me-3"></span>Admin Login</h1>
