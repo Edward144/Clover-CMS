@@ -1,5 +1,5 @@
 //Expand navbar dropdowns
-$(".navbar .dropdown-toggle").click(function() {
+$(".navbar .dropdown-toggle").click(function(e) {
     e.preventDefault();
     $(this).parent(".nav-item").toggleClass("exp");
 });
