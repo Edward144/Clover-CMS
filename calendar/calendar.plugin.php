@@ -1,7 +1,8 @@
 <?php
 
-    //V1.0.3
-
+    //V1.0.5
+    define('EVENTS_PREFIX', 'events/');
+    
     class calendar {
         public $nameLength = 20;
         public $modalLink = 'MORE';
@@ -381,7 +382,7 @@
                     foreach($period as $day) {
                         $eventArray[$day->format('Y-m-d')][$i] = [
                             'name' => $event['name'],
-                            'link' => (substr($event['url'], 0, 4) === 'http' ? $event['url'] : 'events/' . $event['url']),
+                            'link' => (substr($event['url'], 0, 4) === 'http' ? $event['url'] : EVENT_PREFIX . $event['url']),
                             'excerpt' => $event['excerpt'],
                             'background_colour' => $styles['background'],
                             'text_colour' => $styles['text'],
@@ -495,8 +496,8 @@
         'filename' => 'manage-events.php'
     ]], 1);
 
-    if(isset($_GET['url']) && substr($_GET['url'], 0, 7) === 'events/') {
-        $url = explode('events/', $_GET['url'])[1];
+    if(isset($_GET['url']) && substr($_GET['url'], 0, strlen(EVENT_PREFIX)) === EVENT_PREFIX) {
+        $url = explode(EVENT_PREFIX, $_GET['url'])[1];
 
         $checkEvent = $mysqli->prepare("SELECT * FROM `events` AS posts WHERE url = ? AND posts.state >= ? LIMIT 1");
         $checkEvent->bind_param('si', $url, $state);
