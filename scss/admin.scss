@@ -509,3 +509,63 @@ body#tinymce {
 .carousel .carouselControls .carouselPicker:hover {
     opacity: 1;
 }
+
+.sectionHeading {
+    display: flex;
+    align-items: center;
+}
+
+.sectionHeading > h5 {
+    margin-bottom: 0;
+}
+
+.sectionHeading > .btn {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.sectionHeading > .btn > span {
+    transition: transform 0.35s linear;
+}
+
+.sectionHeading > .btn[aria-expanded="true"] > span {
+    transform: rotate(-90deg);
+}
+
+/* STRIPE */
+
+$stripe: #635BFF;
+$stripeTest: #EC6805;
+
+.stripeModeBanner {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 100;
+    border-radius: $border-radius;
+    background-color: $stripe;
+    color: $white;
+    padding: map-get($spacers, 1) map-get($spacers, 2);
+    width: auto;
+}
+
+.stripeModeBanner#stripeLive {
+    background-color: tint-color($success, 25%);
+    display: none;
+}
+
+.stripeModeBanner#stripeTest {
+    background-color: $stripeTest;
+}
+
+.btn-stripe {
+    background-color: $stripe;
+    color: $white;
+    transition: background-color 0.35 ease-in-out;
+}
+
+.btn-stripe:hover,
+.btn-stripe:active {
+    background-color: shade-color($stripe, 25%);
+    color: $white;
+}
