@@ -461,8 +461,16 @@
                         }
                     }
                     
+                    if(!empty($slide['image'])) {
+                        $imageStyle .= 'background-image: url(\'' . $slide['image'] . '\');';
+                    }
+
                     if(!empty($slide['imageposition'])) {
-                        $imageStyle .= 'object-position: ' . $slide['imageposition'] . ';';
+                        $imageStyle .= 'background-position: ' . $slide['imageposition'] . ';';
+                    }
+
+                    if(!empty($slide['imagescale'])) {
+                        $imageStyle .= 'background-size: ' . $slide['imagescale'] . ';';
                     }
                     
                     if(!empty($slide['verticalalign'])) {
@@ -470,19 +478,18 @@
                     }
                     
                     if($builder == true) {
-                        $title = '<input type="text" name="carouselTitle" class="carouselTitle display-3" value="' . $slide['title'] . '" placeholder="Slide title" style="' . $titleStyle . '">';
+                        $title = '<input type="text" name="carouselTitle" class="carouselTitle display-4" value="' . $slide['title'] . '" placeholder="Slide title" style="' . $titleStyle . '">';
                         $tagline = '<input type="text" name="carouselTagline" class="carouselTitle display-6" value="' . $slide['tagline'] . '" placeholder="Slide tagline" style="' . $taglineStyle . '">';
                     }
                     else {
-                        $title = (!empty($slide['title']) ? '<h3 class="carouselTitle display-3" style="' . $titleStyle . '">' . $slide['title'] . '</h3>' : '');
+                        $title = (!empty($slide['title']) ? '<h3 class="carouselTitle display-4" style="' . $titleStyle . '">' . $slide['title'] . '</h3>' : '');
                         $tagline = (!empty($slide['tagline']) ? '<h6 class="carouselTagline display-6" style="' . $taglineStyle . '">' . $slide['tagline'] . '</h6>' : '');
                     }
 
 
                     $slides .=
-                        '<div class="carousel-item' . ($si == 0 ? ' active' : '') . '">
+                        '<div class="carousel-item' . ($si == 0 ? ' active' : '') . '" style="' . $imageStyle . '">
                             <div class="carousel-item-inner container-xl" style="' . $innerStyle . '">' .
-                                (!empty($slide['image']) ? '<img src="' . $slide['image'] . '" class="background" style="' . $imageStyle . '">' : '') . 
                                 $title . 
                                 $tagline .
                             '</div>
@@ -506,7 +513,6 @@
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>';
-
 
         if($si > 1) {
             $controlsOut .=

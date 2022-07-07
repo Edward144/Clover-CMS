@@ -363,13 +363,13 @@ body#tinymce {
 .carousel-inner {
     position: relative;
     overflow: hidden;
-    min-height: 50vh;
+    min-height: 320px;
 }
 
 .carousel-inner:after {
     content: "";
     display: inline-block;
-    padding-top: 40%;
+    padding-top: 56.25%;
 }
 
 .carousel-inner > .carousel-item {
@@ -378,6 +378,9 @@ body#tinymce {
     width: 100%;
     padding: $spacer;
     background-color: $dark;
+    background-size: 100%;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
 }
 
 .carousel-item-inner {

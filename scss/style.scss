@@ -309,13 +309,13 @@ li.nav-item > .dropdown-toggle:after {
 .carousel-inner {
     position: relative;
     overflow: hidden;
-    min-height: 50vh;
+    min-height: 320px;
 }
 
 .carousel-inner:after {
     content: "";
     display: inline-block;
-    padding-top: 40%;
+    padding-top: 56.25%;
 }
 
 .carousel-inner > .carousel-item {
@@ -323,6 +323,9 @@ li.nav-item > .dropdown-toggle:after {
     height: 100%;
     width: 100%;
     padding: $spacer;
+    background-size: 100%;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
 }
 
 .carousel-item-inner {
@@ -334,18 +337,6 @@ li.nav-item > .dropdown-toggle:after {
     margin: auto;
     padding-left: map-get($spacers, 2);
     padding-right: map-get($spacers, 2);
-}
-
-.carousel-item img.background {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
 }
 
 .carousel-item .carouselTitle,
@@ -638,8 +629,6 @@ li.nav-item > .dropdown-toggle:after {
 .calendarSmall .calendarDate {
     background: $light;
 }
-
-
 
 .calendarSmall .moreEvents {
     padding-left: map-get($spacers, 1);

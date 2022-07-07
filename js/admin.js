@@ -768,11 +768,11 @@ function carousel_loadcontrols(carousel) {
                     "<button type='button' class='btn btn-danger' name='carouselDelete' data-toggle='tooltip' data-placement='bottom' title='Delete Slide'><span class='fas fa-trash'></span></button>" +
                 "</div>"
             ).prependTo($(this));
-            
-            $("[data-toggle='tooltip']").tooltip();
         }
         
         carousel_checkimage($(this));
+
+        $("[data-toggle='tooltip']").tooltip();
     });
 }
 
@@ -791,18 +791,20 @@ function carousel_save(carousel) {
         var i = 0;
         
         carousel.find(".carousel-item:not(.additionalSlide)").each(function() {
-            var image = $(this).find("img.background").attr("src");
+            var image = $(this).css("background-image").split("url(\"")[1].split("\")")[0].split(location.protocol + "//" + location.hostname + root_dir)[1].trim();
             var title = $(this).find("input[name='carouselTitle']").val();
             var tagline = $(this).find("input[name='carouselTagline']").val();
             var titlecolor = $(this).find("input[name='carouselTitle']").css("color");
             var taglinecolor = $(this).find("input[name='carouselTagline']").css("color");
-            var position = $(this).find("img.background").css("object-position");
+            var position = $(this).css("background-position");
+            var scale = $(this).css("background-size");
             var textalign = $(this).find("input[name='carouselTitle']").css("text-align");
             var verticalalign = $(this).find(".carousel-item-inner").css("justify-content");
             
             json[i] = {
                 "image": image,
                 "imageposition": position,
+                "imagescale": scale,
                 "title": title,
                 "titlecolor": titlecolor,
                 "tagline": tagline,
@@ -906,18 +908,17 @@ $("body").on("click", "button[name='carouselDelete']", function() {
 function carousel_rf_callback(field_id) {
     var url = $("#" + field_id).val().split(location.protocol + "//" + location.hostname + root_dir)[1];
     
-    $("#img" + field_id).attr("src", url);
+    $("#slide" + field_id).css("background-image", "url('" + url + "')");
     $("#" + field_id).remove();
     
-    carousel_checkimage($("#img" + field_id).parents(".carousel-item").first());
+    carousel_checkimage($("#slide" + field_id));
 }
 
 function carousel_selectimage(item) {
     var random = btoa(new Date()).split("=")[0];
-    
-    item.find("img.background").remove();
+
     item.prepend("<input type='hidden' id='" + random + "' name='" + random + "'>");
-    item.prepend("<img src='' class='background' id='img" + random + "'>");
+    item.attr("id", "slide" + random);
     
     $.fancybox.open({
         src: "js/responsive_filemanager/filemanager/dialog.php?type=1&field_id=" + random + "&callback=carousel_rf_callback",
@@ -926,7 +927,7 @@ function carousel_selectimage(item) {
 }
 
 $("body").on("click", "button[name='carouselImage']", function() {
-    carousel_selectimage($(this).parent(".carouselControls").siblings(".carousel-item-inner").first());
+    carousel_selectimage($(this).parents(".carousel-item").first());
 });
 
 //Position Text
@@ -1134,57 +1135,85 @@ $(".carousel.builder").on("change", "input[type='color']", function() {
 
 //Position Image
 function carousel_checkimage(item) {
-    var image = item.find("img.background");
-    
-    if(image.length && image.attr("src").length && !item.find(".carouselControls button[name='carouselImageH']").length && !item.find(".carouselControls button[name='carouselImageV']").length) {
+    var image = item.css("background-image");
+
+    //if(image.length && image.attr("src").length && !item.find(".carouselControls button[name='carouselImageH']").length && !item.find(".carouselControls button[name='carouselImageV']").length) {
+    if(image.length && !item.find(".carouselControls button[name='carouselImageH']").length && !item.find(".carouselControls button[name='carouselImageV']").length) {
         $(
             "<button type='button' class='btn btn-dark' name='carouselImageH' data-toggle='tooltip' data-placement='bottom' title='Image Horizontal'><span class='fas fa-arrows-alt-h'></span></button>" +
-            "<button type='button' class='btn btn-dark' name='carouselImageV' data-toggle='tooltip' data-placement='bottom' title='Image Vertical'><span class='fas fa-arrows-alt-v'></span></button>"
+            "<button type='button' class='btn btn-dark' name='carouselImageV' data-toggle='tooltip' data-placement='bottom' title='Image Vertical'><span class='fas fa-arrows-alt-v'></span></button>" +
+            "<button type='button' class='btn btn-dark' name='carouselImageS' data-toggle='tooltip' data-placement='bottom' title='Image Scale'><span class='fas fa-expand-alt'></span></button>"
         ).insertBefore(item.find(".carouselControls button[name='carouselDelete']"));
     }
 }
 
-function carousel_imageposition(item, horizontal, vertical) {
-    var objectPosition = item.css("object-position");
-    var currentHorz = objectPosition.split(" ")[0].trim();
-    var currentVert = objectPosition.split(" ")[1].trim();
-    var newPosition = "";
-    
+function carousel_imageposition(item, horizontal, vertical, scale) {
+    var backgroundPosition = item.css("background-position");    
+    var backgroundHorz = backgroundPosition.split(" ")[0].trim();
+    var backgroundVert = backgroundPosition.split(" ")[1].trim();
+    var newBackgroundPosition = "";
+
+    var backgroundScale = item.css("background-size");
+    var newBackgroundScale = "";
+
+    //Set the background position
     if(horizontal == "" && vertical == "") {
-        item.css("object-position", "");
+        newBackgroundPosition = "50% 50%";
     }
     else {
         if(!/^(\-?)[\d]+(px|pt|em|rem|\%){1}$/.test(horizontal)) {
-            horizontal = currentHorz;
+            horizontal = backgroundHorz;
         }
 
         if(!/^(\-?)[\d]+(px|pt|em|rem|\%){1}$/.test(vertical)) {
-            vertical = currentVert;
+            vertical = backgroundVert;
         }
-        
-        newPosition = horizontal + " " + vertical;
-        item.css("object-position", newPosition);
+
+        newBackgroundPosition = horizontal + " " + vertical;
     }
+
+    item.css("background-position", newBackgroundPosition);
+
+    //Set the background size
+    if(scale == "") {
+        newBackgroundScale = "100%";
+    }
+    else if(scale == "cover" || scale == "auto") {
+        newBackgroundScale = scale;
+    }
+    else {
+        if(!/^(\-?)[\d]+(px|pt|em|rem|\%){1}$/.test(scale)) {
+            scale = backgroundScale;
+        }
+
+        newBackgroundScale = scale;
+    }
+
+    item.css("background-size", newBackgroundScale);
 }
 
-$(".carousel.builder").on("click", "button[name='carouselImageH'],button[name='carouselImageV']", function() {
-    var objectPosition = $(this).parents(".carousel-item").first().find("img.background").css("object-position");
+$(".carousel.builder").on("click", "button[name='carouselImageH'],button[name='carouselImageV'],button[name='carouselImageS']", function() {
+    var backgroundPosition = $(this).parents(".carousel-item").first().css("background-position");
+    var backgroundSize = $(this).parents(".carousel-item").first().css("background-size");
     var imageValue = "";
     var type = $(this).attr("name").split("carouselImage")[1];
     
-    
     if(type == "H") {
-        imageValue = objectPosition.split(" ")[0];
+        imageValue = backgroundPosition.split(" ")[0];
         type = "Horizontal";
     }
     else if(type == "V") {
-        imageValue = objectPosition.split(" ")[1];
+        imageValue = backgroundPosition.split(" ")[1];
         type = "Vertical";
+    }
+    else if(type == "S") {
+        imageValue = backgroundSize;
+        type = "Scale";
     }
     
     if(!$(this).next(".carouselInput").length) {
         $(this).addClass("hasInput");
-        $("<div class='carouselInput'><input type='text' class='form-control py-0 px-1' name='carouselImage" + type + "' placeholder='px, pt, em, rem, %' value='" + imageValue + "'></div>").insertAfter($(this));
+        $("<div class='carouselInput'><input type='text' class='form-control py-0 px-1' name='carouselImage" + type + "' placeholder='px, pt, em, rem, %" + (type == "Scale" ? ", cover, auto" : "") + "' value='" + imageValue + "'></div>").insertAfter($(this));
     }
     else {
         $(this).removeClass("hasInput");
@@ -1192,28 +1221,35 @@ $(".carousel.builder").on("click", "button[name='carouselImageH'],button[name='c
     }
 });
 
-$(".carousel.builder").on("keyup", "input[name='carouselImageHorizontal'],input[name='carouselImageVertical']", function() {
+$(".carousel.builder").on("keyup", "input[name='carouselImageHorizontal'],input[name='carouselImageVertical'],input[name='carouselImageScale']", function() {
     var horz = "";
     var vert = "";
+    var scale = "";
     var controls = $(this).parents(".carouselControls").first();
     
+    horz = (controls.find("input[name='carouselImageHorizontal']").length ? controls.find("input[name='carouselImageHorizontal']").val() : "");
+    vert = (controls.find("input[name='carouselImageVertical']").length ? controls.find("input[name='carouselImageVertical']").val() : "");
+    scale = (controls.find("input[name='carouselImageScale']").length ? controls.find("input[name='carouselImageScale']").val() : "");
+
     if($(this).attr("name").split("carouselImage")[1] == "Horizontal") {
-        horz = $(this).val();
-        vert = (controls.find("input[name='carouselImageVertical']").length ? controls.find("input[name='carouselImageVertical']").val() : "");
+        horz = $(this).val();   
     }
     else if($(this).attr("name").split("carouselImage")[1] == "Vertical") {
-        horz = (controls.find("input[name='carouselImageHorizontal']").length ? controls.find("input[name='carouselImageHorizontal']").val() : "");
         vert = $(this).val();
+    }
+    else if($(this).attr("name").split("carouselImage")[1] == "Scale") {
+        scale = $(this).val();
     }
     
     horz = (horz.length ? horz : "50%");
     vert = (vert.length ? vert : "50%");
+    scale = (scale.length ? scale : "100%");
     
-    carousel_imageposition($(this).parents(".carousel-item").first().find("img.background"), horz, vert);
+    carousel_imageposition($(this).parents(".carousel-item").first(), horz, vert, scale);
 });
 
 $(document).keydown(function(e) {
-    if($(".carousel.builder input[name='carouselImageHorizontal'],.carousel.builder input[name='carouselImageVertical']").is(":focus")) {
+    if($(".carousel.builder input[name='carouselImageHorizontal'],.carousel.builder input[name='carouselImageVertical'],.carousel.builder input[name='carouselImageScale']").is(":focus")) {
         var input = $(":focus");
         
         if(/^(\-?)[\d]+(px|pt|em|rem|\%){1}$/.test(input.val())) {
