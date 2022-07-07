@@ -383,6 +383,12 @@ body#tinymce {
     background-repeat: no-repeat;
 }
 
+@include media-breakpoint-down(md) {
+    .carousel-inner > .carousel-item {
+        background-size: cover !important;
+    }
+}
+
 .carousel-item-inner {
     display: flex;
     flex-direction: column;
@@ -392,18 +398,6 @@ body#tinymce {
     margin: auto;
     padding-left: map-get($spacers, 2);
     padding-right: map-get($spacers, 2);
-}
-
-.carousel-item img.background {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 0;
 }
 
 .carousel-item .carouselTitle,

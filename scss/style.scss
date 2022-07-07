@@ -328,6 +328,12 @@ li.nav-item > .dropdown-toggle:after {
     background-repeat: no-repeat;
 }
 
+@include media-breakpoint-down(md) {
+    .carousel-inner > .carousel-item {
+        background-size: cover !important;
+    }
+}
+
 .carousel-item-inner {
     display: flex;
     flex-direction: column;
