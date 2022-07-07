@@ -14,6 +14,17 @@ tinymce.init({
 	content_css: 'css/style.min.css',
 	font_formats: 'Roboto=roboto,Open Sans=open-sans,Arial=arial,helvetica,sans-serif; Times new Roman=times new roman,serif; Courier New=courier new,courier,monospace; AkrutiKndPadmini=Akpdmi-n',
 	end_container_on_empty_block: true,
+	extended_valid_elements: "iframe[src|frameborder|style|scrolling|class|width|height|name|align]",
+	media_url_resolver: function(data, resolve) {
+		if(data.url.indexOf(".pdf") !== -1) {
+			var embedHtml = 
+				"<iframe src='" + data.url + "' width='100%' height='1000'></iframe>";
+			resolve({html: embedHtml});
+		}
+		else {
+			resolve({html: ""});
+		}
+	},
 	templates: [
 		{
 			title: 'Two Columns',
