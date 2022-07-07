@@ -791,7 +791,7 @@ function carousel_save(carousel) {
         var i = 0;
         
         carousel.find(".carousel-item:not(.additionalSlide)").each(function() {
-            var image = $(this).css("background-image").replace(/(url\((\"|')|(\"|')\))/g, "").split(location.protocol + "//" + location.hostname + root_dir)[1].trim();
+            var image = $(this).css("background-image").replace(/(url\((\"|')|(\"|')\))/g, "").split(location.protocol + "//" + location.hostname + root_dir)[1];
             var title = $(this).find("input[name='carouselTitle']").val();
             var tagline = $(this).find("input[name='carouselTagline']").val();
             var titlecolor = $(this).find("input[name='carouselTitle']").css("color");
