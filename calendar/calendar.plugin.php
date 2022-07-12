@@ -358,8 +358,11 @@
             $eventArray = [];
             $i = 0;
             
-            $getEvents = $mysqli->prepare("SELECT * FROM `events` WHERE state >= ?");
-            $getEvents->bind_param('i', $state);
+            $calStart = date('Y-m-d 00:00:00', strtotime($this->firstOfMonth . ' -' . $this->firstDayOffset . 'days'));
+            $calEnd = date('Y-m-d 00:00:00', strtotime($this->lastOfMonth . ' +' . $this->lastDayOffset . 'days'));
+            
+            $getEvents = $mysqli->prepare("SELECT * FROM `events` WHERE state >= ? AND start_date >= ? AND end_date <= ?");
+            $getEvents->bind_param('iss', $state, $calStart, $calEnd);
             $getEvents->execute();
             $eventResult = $getEvents->get_result();
             
