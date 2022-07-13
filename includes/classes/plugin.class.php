@@ -24,7 +24,7 @@
         public function loadcss($type = '') {
             if(!empty($this->cssFiles) && is_array($this->cssFiles)) {
                 $output = '';
-                print_r($this->cssFiles);
+                
                 foreach($this->cssFiles as $cssFile) {
                     if($type == $cssFile['type']) {
                         $output .=
