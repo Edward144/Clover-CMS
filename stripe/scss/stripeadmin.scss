@@ -26,6 +26,7 @@ $stripeTest: #EC6805;
 
 .btn-stripe {
     background-color: $stripe;
+    white-space: nowrap;
     color: $white;
     transition: background-color 0.35 ease-in-out;
 }

@@ -6,7 +6,7 @@
     checkaccess(basename(__FILE__));
 	$title = 'Manage Customers';
 
-    //Get lists of customers
+    //Get list of customers
     $customers = $stripeClient->customers->all();
     $customerList = [];
 
@@ -32,6 +32,45 @@
             header('Location: ' . explode('?', $_SERVER['REQUEST_URI'])[0]);
             exit();
         }
+
+        //Get subscriptions
+        try {
+            $subscriptions = $stripeClient->subscriptions->all([
+                'customer' => $customer->id
+            ]);
+
+            $si = 1;
+
+            function statuscolour($status) {
+                switch($status) {
+                    case 'past_due':
+                    case 'unpaid':
+                    case 'canceled':
+                        $colour = 'danger';
+                        break;
+                    case 'incomplete':
+                    case 'incomplete_expired':
+                    case 'ended':
+                        $colour = 'warning';
+                        break;
+                    case 'active':
+                        $colour = 'success';
+                        break;
+                    default:
+                        $colour = 'info';
+                        break;
+                }
+
+                return $colour;
+            }
+        }
+        catch(Exception $e) {
+
+        }
+
+        //Get payments
+
+        //Get invoices
     ?>
 
     <div class="col-lg-3 bg-light py-3">
@@ -230,13 +269,23 @@
 
                                         <td class="shorten text-center">
                                             <?php 
-                                                echo ($card->id === $customer->invoice_settings->default_payment_method ? '<span class="alert alert-info rounded px-2 py-1 m-0">default</span>' : ''); 
+                                                echo ($card->id === $customer->invoice_settings->default_payment_method || $card->id === $customer->default_source ? '<span class="alert alert-info rounded px-2 py-1 m-0">default</span>' : ''); 
                                                 echo (time() >= strtotime($card->card->exp_year . '-' . sprintf("%02d", $card->card->exp_month) . '-01') ? '<span class="alert alert-danger rounded px-2 py-1 m-0">expired</span>' : '')
                                             ?>                                            
                                         </td>
 
-                                       <td class="shorten">
+                                        <td class="shorten">
+                                            <div class="d-flex align-items-center mb-n1">
+                                                <?php if($card->id !== $customer->invoice_settings->default_payment_method && $card->id !== $customer->default_source) : ?>
+                                                    <form id="removeMethod" mehtod="post">
+                                                        <input type="submit" class="btn btn-danger mb-1 me-1" name="removeMethod" value="Remove">
+                                                    </form>
 
+                                                    <form id="defaultMethod" method="post">
+                                                        <input type="submit" class="btn btn-secondary mb-1" name="setDefault" value="Set Default">
+                                                    </form>
+                                                <?php endif; ?>
+                                            </div>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -260,7 +309,52 @@
 
         <div class="section collapse" id="subscriptions">
             <div class="sectionInner">
-                
+                <?php if(!empty($subscriptions->data)) : ?>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="shorten text-center">#</th>
+                                    <th>Product</th>
+                                    <th class="shorten text-center">Start Date</th>
+                                    <th class="shorten text-center">Next Billing Date</th>
+                                    <th class="shorten text-center">Status</th>
+                                    <th class="shorten">Actions</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <?php foreach($subscriptions->data as $subscription) : ?>
+                                    <tr>
+                                        <td><span><?php echo $si; $si++; ?></span></td>
+
+                                        <td>
+                                            <?php foreach($subscription->items->data as $lineItem) : ?>
+                                                <span><?php echo $stripeClient->products->retrieve($lineItem->price->product)->name; ?></span>
+                                                <span class="mx-3">|</span>
+                                                <small><?php echo number_format($lineItem->price->unit_amount / 100, 2) . ' (' . $lineItem->price->currency . ') ' . $lineItem->price->recurring->interval . 'ly'; ?></small><br>
+                                            <?php endforeach; ?>
+                                        </td>
+
+                                        <td class="shorten text-center">
+                                            <span><?php echo date('d/m/Y', $subscription->start_date); ?></span>
+                                        </td>
+
+                                        <td class="shorten text-center">
+                                            <span><?php echo date('d/m/Y', $subscription->current_period_end); ?></span>
+                                        </td>
+
+                                        <td>
+                                            <span class="alert alert-<?php echo statuscolour($subscription->status); ?> rounded px-2 py-1 m-0"><?php echo $subscription->status; ?></span>
+                                        </td>
+
+                                        <td><?php echo stripeExternalLink('subscriptions/' . $subscription->id, 'Manage'); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
 
