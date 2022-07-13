@@ -321,6 +321,10 @@
                 '<a href="https://dashboard.stripe.com/' . $mode . $url . '" target="_blank" class="btn btn-stripe mb-1"><span class="fab fa-stripe me-2"></span>' . $value . '</a>';
         }
 
+        //Load CSS
+        $__pluginManager->storecss(dirname(__FILE__) . '/css/stripe.min.css');
+        $__pluginManager->storecss(dirname(__FILE__) . '/css/stripeadmin.min.css', 'admin');
+
         //Create stripe tables
             //Create products table
             //Create subscriptions table?
