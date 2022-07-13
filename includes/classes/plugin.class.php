@@ -5,7 +5,7 @@
         private $baseDir;
 
         public function __construct() {
-            $this->baseDir = explode('://', BASE_DIR)[1];
+            $this->baseDir = $_SERVER['DOCUMENT_ROOT'] . ROOT_DIR;
         }
 
         public function storecss($path, $type = '') {
@@ -24,7 +24,7 @@
         public function loadcss($type = '') {
             if(!empty($this->cssFiles) && is_array($this->cssFiles)) {
                 $output = '';
-
+                print_r($this->cssFiles);
                 foreach($this->cssFiles as $cssFile) {
                     if($type == $cssFile['type']) {
                         $output .=
