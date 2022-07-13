@@ -99,5 +99,6 @@
 	</body>
 
     <script src="js/main.min.js"></script>
+    <?php echo $__pluginManager->loadjs(); ?>
     <script src="js/retina.min.js"></script>
 </html>

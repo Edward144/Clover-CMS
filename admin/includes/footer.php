@@ -9,6 +9,7 @@
 
         <script src="js/css_colors.js"></script>
 		<script src="js/admin.min.js"></script>
+        <?php echo $__pluginManager->loadjs('admin'); ?>
 		<script src="js/tinyConfig.min.js"></script>
 
         <?php if(!empty($_POST)) : ?>
