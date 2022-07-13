@@ -499,8 +499,8 @@
         'filename' => 'manage-events.php'
     ]], 1);
 
-    if(isset($_GET['url']) && substr($_GET['url'], 0, strlen(EVENT_PREFIX)) === EVENT_PREFIX) {
-        $url = explode(EVENT_PREFIX, $_GET['url'])[1];
+    if(isset($_GET['url']) && substr($_GET['url'], 0, strlen(EVENTS_PREFIX)) === EVENTS_PREFIX) {
+        $url = explode(EVENTS_PREFIX, $_GET['url'])[1];
 
         $checkEvent = $mysqli->prepare("SELECT * FROM `events` AS posts WHERE url = ? AND posts.state >= ? LIMIT 1");
         $checkEvent->bind_param('si', $url, $state);
