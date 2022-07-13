@@ -525,4 +525,10 @@
         }
     }
 
+    //Load CSS
+    $__pluginManager->storecss(dirname(__FILE__) . '/css/calendar.min.css');
+
+    //Load JS
+    $__pluginManager->storejs(dirname(__FILE__) . '/js/calendar.min.js');
+
 ?>
