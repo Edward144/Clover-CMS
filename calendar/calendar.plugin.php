@@ -1,6 +1,6 @@
 <?php
 
-    //V1.0.5
+    //v1.1.0
     define('EVENTS_PREFIX', 'events/');
     
     class calendar {
