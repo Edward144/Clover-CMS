@@ -385,7 +385,7 @@
                     foreach($period as $day) {
                         $eventArray[$day->format('Y-m-d')][$i] = [
                             'name' => $event['name'],
-                            'link' => (substr($event['url'], 0, 4) === 'http' ? $event['url'] : EVENT_PREFIX . $event['url']),
+                            'link' => (substr($event['url'], 0, 4) === 'http' ? $event['url'] : EVENTS_PREFIX . $event['url']),
                             'excerpt' => $event['excerpt'],
                             'background_colour' => $styles['background'],
                             'text_colour' => $styles['text'],
