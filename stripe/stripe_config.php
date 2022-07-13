@@ -10,8 +10,8 @@
     define('STRIPE_LIVE_SECRET', '');
 
     //Test API Key
-    define('STRIPE_TEST_PUBLIC', 'pk_test_51Gs49zE479KZUyCP1WnaheM7tiN8iHGwgUYcW0qDTiSPYkdexEb7iFsI5uMZw2QZNzrYNiCx7jiEhkQXJad5BYHm00G7zjYSsJ');
-    define('STRIPE_TEST_SECRET', 'sk_test_51Gs49zE479KZUyCPxDoDvwLnB69fdEm7wD0XCjRx12DvAsLX8CKSIW19REb5WGLfSdbgLZQ7kBMiwYDCWxe94eKa004VxcRvYR');
+    define('STRIPE_TEST_PUBLIC', '');
+    define('STRIPE_TEST_SECRET', '');
 
     //Initialize Client
     define('STRIPE_SECRET_KEY', (STRIPE_LIVE === true ? STRIPE_LIVE_SECRET : STRIPE_TEST_SECRET));
