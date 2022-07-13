@@ -1,0 +1,23 @@
+@import "../node_modules/bootstrap/scss/_functions.scss";
+@import "../node_modules/bootstrap/scss/_variables.scss";
+@import "../node_modules/bootstrap/scss/_mixins.scss";
+
+$enable-negative-margins: true;
+
+$primary: #009688;
+$secondary: #005996;
+
+$theme-colors: (
+	"primary" : $primary,
+	"secondary" : $secondary,
+	"success" : $success,
+	"info" : $info,
+	"warning" : $warning,
+	"danger" : $danger,
+	"light" : $light,
+	"dark" : $dark
+);
+
+$pagination-color: $primary;
+$pagination-active-bg: $primary;
+$pagination-active-border-color: $pagination-active-bg;

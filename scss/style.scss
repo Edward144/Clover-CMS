@@ -1,26 +1,4 @@
-@import "../node_modules/bootstrap/scss/_functions.scss";
-@import "../node_modules/bootstrap/scss/_variables.scss";
-
-$enable-negative-margins: true;
-
-$primary: #009688;
-$secondary: #005996;
-
-$theme-colors: (
-	"primary" : $primary,
-	"secondary" : $secondary,
-	"success" : $success,
-	"info" : $info,
-	"warning" : $warning,
-	"danger" : $danger,
-	"light" : $light,
-	"dark" : $dark
-);
-
-$pagination-color: $primary;
-$pagination-active-bg: $primary;
-$pagination-active-border-color: $pagination-active-bg;
-
+@import "_variables.scss";
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
 /* GENERAL */
@@ -468,7 +446,7 @@ li.nav-item > .dropdown-toggle:after {
     color: $danger;
 }
 
-.calendar *::-webkit-scrollbar {
+/*.calendar *::-webkit-scrollbar {
     width: 5px;
     height: 5px;
 }
@@ -693,7 +671,6 @@ li.nav-item > .dropdown-toggle:after {
     margin-top: -1px;
 }
 
-
 @include media-breakpoint-down(lg) {
     .calendar th,
     .calendar td {
@@ -721,4 +698,4 @@ li.nav-item > .dropdown-toggle:after {
         margin-left: 0;
         margin-top: -1px;
     }
-}
+}*/
