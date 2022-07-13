@@ -6,7 +6,7 @@
         session_start();
     }
     
-    define('CMS_VERSION', 'v1.4.6');
+    define('CMS_VERSION', 'v1.5.0');
 
     $setupLoc = (!empty($_SERVER['HTTPS']) ? 'https://' : 'http://') . $_SERVER['SERVER_NAME'] . '/' . explode($_SERVER['DOCUMENT_ROOT'] . '/', dirname(__DIR__))[1] . '/admin/setup';
 
