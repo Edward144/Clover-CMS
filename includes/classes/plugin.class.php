@@ -2,6 +2,7 @@
 
     class plugin {
         private $cssFiles = [];
+        private $jsFiles = [];
         private $baseDir;
 
         public function __construct() {
@@ -29,6 +30,34 @@
                     if($type == $cssFile['type']) {
                         $output .=
                             '<link href="' . $cssFile['path'] . '" rel="stylesheet">';
+                    }
+                }
+
+                return $output;
+            }
+        }
+
+        public function storejs($path, $type = '') {
+            if(file_exists($path) && pathinfo($path)['extension'] == 'js') {
+                $relativePath = explode($this->baseDir, $path)[1];
+
+                if(!in_array($relativePath, $this->jsFiles)) {
+                    $this->jsFiles[] =[
+                        'path' => $relativePath,
+                        'type' => $type
+                    ];
+                }
+            }
+        }
+
+        public function loadjs($type = '') {
+            if(!empty($this->jsFiles) && is_array($this->jsFiles)) {
+                $output = '';
+                
+                foreach($this->jsFiles as $jsFile) {
+                    if($type == $jsFile['type']) {
+                        $output .=
+                            '<script src="' . $jsFile['path'] . '"></script>';
                     }
                 }
 
