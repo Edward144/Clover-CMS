@@ -94,7 +94,7 @@
                     "INSERT IGNORE INTO `roles` (id, name, access) VALUES(1, 'Admin', 'ALL'), (2, 'Standard', NULL)",
                     "CREATE TABLE IF NOT EXISTS `password_reset` (
                         id INT AUTO_INCREMENT PRIMARY KEY,
-                        email VARCHAR(191) UNIQUE,
+                        email VARCHAR(191),
                         token VARCHAR(191) UNIQUE,
                         date_generated DATETIME DEFAULT CURRENT_TIMESTAMP(),
                         expired INT DEFAULT 0
