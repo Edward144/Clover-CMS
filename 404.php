@@ -1,5 +1,6 @@
 <?php 
     $title = '404 - This page could not be found';
+    $content = [];
     http_response_code(404);
     require_once(dirname(__FILE__) . '/includes/header.php'); 
 ?>
