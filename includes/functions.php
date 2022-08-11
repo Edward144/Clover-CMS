@@ -310,6 +310,11 @@
                 }
             }
         }
+        elseif(is_string($attachments)) { 
+            for($i = 0; $i < count($_FILES[$attachments]['tmp_name']); $i++) {
+                $mail->addAttachment($_FILES[$attachments]['tmp_name'][$i], $_FILES[$attachments]['name'][$i]);
+            }
+        }
         
         $sendEmailDebug = '';
         $mail->SMTPDebug = 3;
