@@ -4,6 +4,8 @@ Options All -Indexes
 	RewriteEngine On
 	RewriteBase /
 	
+	RedirectMatch 404 /\.git
+	
 	#Remove Trailing Slash
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^(.*)/$ $1 [L,R=301]
