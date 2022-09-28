@@ -31,16 +31,16 @@
             }
             
             if(!empty($this->createlevel())) {
-            $this->output =
-                '<nav class="navbar navbar-expand-xl navbar-dark py-0" id="navbar' . $this->menuId . '">
-                    <button class="navbar-toggler ms-auto me-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse' . $this->menuId . '" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+                $this->output =
+                    '<nav class="navbar navbar-expand-xl navbar-dark py-0" id="navbar' . $this->menuId . '">
+                        <button class="navbar-toggler ms-auto me-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse' . $this->menuId . '" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
 
-                    <div class="collapse navbar-collapse" id="navbarCollapse' . $this->menuId . '">'
-                        . $this->createlevel() .
-                    '</div>
-                </nav>';
+                        <div class="collapse navbar-collapse" id="navbarCollapse' . $this->menuId . '">'
+                            . $this->createlevel() .
+                        '</div>
+                    </nav>';
             }
             else {
                 $this->output = '';
